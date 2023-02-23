@@ -14,8 +14,8 @@ namespace LibMath
 						Vector3();
 		explicit		Vector3(float);									// set all the component to the same value
 						Vector3(float, float, float);					// set all component individually
-						Vector3(Vector3 const& other);
-						Vector3(Vector3&& other);
+						Vector3(Vector3 const& other) = default;
+						Vector3(Vector3&& other) = default;
 						~Vector3() = default;
 
 		static Vector3	zero();											// return a vector with all its component set to 0
@@ -27,8 +27,8 @@ namespace LibMath
 		static Vector3	front();										// return a unit vector pointing forward
 		static Vector3	back();											// return a unit vector pointing backward
 
-		Vector3&		operator=(Vector3 const& other);
-		Vector3&		operator=(Vector3&& other);
+		Vector3&		operator=(Vector3 const& other) = default;
+		Vector3&		operator=(Vector3&& other) = default;
 
 		float&			operator[](int);								// return this vector component value
 		float			operator[](int) const;							// return this vector component value

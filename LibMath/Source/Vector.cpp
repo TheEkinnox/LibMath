@@ -45,29 +45,7 @@ namespace LibMath
 
 	Vector2::operator Vector3() const
 	{
-		return Vector3(m_x, m_y, 0);
-	}
-
-	Vector2& Vector2::operator=(Vector2 const& other)
-	{
-		if (this == &other)
-			return *this;
-
-		this->m_x = other.m_x;
-		this->m_y = other.m_y;
-
-		return *this;
-	}
-
-	Vector2& Vector2::operator=(Vector2&& other) noexcept
-	{
-		if (this == &other)
-			return *this;
-
-		this->m_x = other.m_x;
-		this->m_y = other.m_y;
-
-		return *this;
+		return { m_x, m_y, 0 };
 	}
 
 	float& Vector2::operator[](const int index)
@@ -367,19 +345,11 @@ namespace LibMath
 		return stream;
 	}
 
-	Vector3::Vector3() : Vector3(0)
-	{
-	}
-
 	Vector3::Vector3(float value) : Vector3(value, value, value)
 	{
 	}
 
 	Vector3::Vector3(float x, float y, float z) : m_x(x), m_y(y), m_z(z)
-	{
-	}
-
-	Vector3::Vector3(Vector3 const& other) : Vector3(other.m_x, other.m_y, other.m_z)
 	{
 	}
 
@@ -421,30 +391,6 @@ namespace LibMath
 	Vector3 Vector3::back()
 	{
 		return {0.f, 0.f, -1.f};
-	}
-
-	Vector3& Vector3::operator=(Vector3 const& other)
-	{
-		if (this == &other)
-			return *this;
-
-		this->m_x = other.m_x;
-		this->m_y = other.m_y;
-		this->m_z = other.m_z;
-
-		return *this;
-	}
-
-	Vector3& Vector3::operator=(Vector3&& other)
-	{
-		if (this == &other)
-			return *this;
-
-		this->m_x = other.m_x;
-		this->m_y = other.m_y;
-		this->m_z = other.m_z;
-
-		return *this;
 	}
 
 	float& Vector3::operator[](const int index)

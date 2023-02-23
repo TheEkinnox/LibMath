@@ -29,8 +29,8 @@ namespace LibMath
 
 						operator Vector3() const;						// Vector3 vect = Vector2{ 0.5, 3 };		// implicit conversion from Vector2 to Vector3
 
-		Vector2&		operator=(Vector2 const&);
-		Vector2&		operator=(Vector2&&) noexcept;
+		Vector2&		operator=(Vector2 const&) = default;
+		Vector2&		operator=(Vector2&&) noexcept = default;
 
 		float&			operator[](int);								// return this vector component value
 		float			operator[](int) const;							// return this vector component value
