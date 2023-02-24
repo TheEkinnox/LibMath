@@ -1,4 +1,5 @@
 #include <Vector/Vector3.h>
+#include <Angle//Radian.h>
 
 #define GLM_FORCE_XYZW_ONLY
 #include <glm/glm.hpp>
@@ -11,7 +12,7 @@
 
 using namespace LibMath::Literal;
 
-#define CHECK_VECTOR3(vector, vectorGlm) CHECK(vector.m_x == Catch::Approx(vectorGlm.x)); CHECK(vector.m_y == Catch::Approx(vectorGlm.y)); CHECK(vector.m_z == Catch::Approx(vectorGlm.z))
+#define CHECK_VECTOR3(vector, vectorGlm) CHECK((vector).m_x == Catch::Approx((vectorGlm).x)); CHECK((vector).m_y == Catch::Approx((vectorGlm).y)); CHECK((vector).m_z == Catch::Approx((vectorGlm).z))
 
 TEST_CASE("Vector3", "[.all][vector][Vector3]")
 {
@@ -58,18 +59,18 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
 		{
 			LibMath::Vector3 const& vectorConst = vector;
-			CHECK(vectorConst[0] == x);
-			CHECK(vectorConst[1] == y);
-			CHECK(vectorConst[2] == z);
+			CHECK(vectorConst[0] == Catch::Approx(x));
+			CHECK(vectorConst[1] == Catch::Approx(y));
+			CHECK(vectorConst[2] == Catch::Approx(z));
 		}
 
 		{
 			vector[0] += 1.f;
 			vector[1] += 1.f;
 			vector[2] += 1.f;
-			CHECK(vector[0] == x + 1.f);
-			CHECK(vector[1] == y + 1.f);
-			CHECK(vector[2] == z + 1.f);
+			CHECK(vector[0] == Catch::Approx(x + 1.f));
+			CHECK(vector[1] == Catch::Approx(y + 1.f));
+			CHECK(vector[2] == Catch::Approx(z + 1.f));
 		}
 	}
 
@@ -318,7 +319,7 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
 			float dotGlm = glm::dot(baseGlm, otherGlm);
 
-			CHECK(dot == dotGlm);
+			CHECK(dot == Catch::Approx(dotGlm));
 		}
 
 		SECTION("Distance")

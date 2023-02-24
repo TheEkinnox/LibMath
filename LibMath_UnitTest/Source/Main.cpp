@@ -59,10 +59,10 @@ int main(int argc, char* argv[])
 {
 	// transfers command line argument to dynamic collection so we can add our own arguments easily
 	std::vector<char const*> arguments;
+	arguments.reserve(argc);
+
 	for (int i = 0; i < argc; i++)
-	{
 		arguments.push_back(argv[i]);
-	}
 
 	/************************************\
 	*                                    *
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 	arguments.push_back("[arithmetic],");
 	arguments.push_back("[trigonometry],");
 	arguments.push_back("[angle],");
-	//arguments.push_back("[vector],");
+	arguments.push_back("[vector],");
 	arguments.push_back("[matrix],");
 
 
@@ -104,6 +104,9 @@ int main(int argc, char* argv[])
 	//arguments.push_back("Vector2,");
 	//arguments.push_back("Vector3,");
 	//arguments.push_back("Vector4,");
+	//arguments.push_back("Matrix2,");
+	//arguments.push_back("Matrix3,");
+	//arguments.push_back("Matrix4,");
 
 
 	/************************************\
@@ -136,9 +139,9 @@ int main(int argc, char* argv[])
 	*                                    *
 	\************************************/
 	// https://github.com/catchorg/Catch2/blob/devel/docs/command-line.md
-	//arguments.push_back("-o test file.txt"); // catch2 will output the test result to "test file.txt" instead of the console
+	//arguments.push_back("-o test_results.txt"); // catch2 will output the test result to "test_results.txt" instead of the console
 	/*
-	std::string argument = std::string("-o ") + __DATE__ + ' ' + __TIME__ + ".txt";
+	std::string argument = std::string("-o ") + __DATE__ + '-' + __TIME__ + ".txt";
 	std::replace(argument.begin(), argument.end(), ':', '.');
 	arguments.push_back(argument.c_str()); // catch2 will output the test result to a file name after the current date instead of the console
 	*/

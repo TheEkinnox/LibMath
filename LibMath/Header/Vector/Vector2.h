@@ -4,10 +4,9 @@
 #include <iostream>
 #include <string>
 
-#include "Angle/Radian.h"
-
 namespace LibMath
 {
+	class Radian;
 	class Vector3;
 
 	class Vector2
@@ -64,6 +63,7 @@ namespace LibMath
 		float			magnitudeSquared() const;						// return square value of the vector magnitude
 
 		void			normalize();									// scale this vector to have a magnitude of 1
+		Vector2			normalized() const;								// returns this vector scaled to have a magnitude of 1
 
 		void			projectOnto(Vector2 const&);					// project this vector onto an other
 
@@ -78,8 +78,8 @@ namespace LibMath
 
 		void			translate(Vector2 const&);						// offset this vector by a given distance
 
-		float m_x;
-		float m_y;
+		float m_x = 0;
+		float m_y = 0;
 	};
 
 	bool			operator==(Vector2 const&, Vector2 const&);			// Vector2{ 1 } == Vector2::one()				// true				// return whether 2 vectors have the same component
