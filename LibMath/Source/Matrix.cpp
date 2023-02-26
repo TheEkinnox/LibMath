@@ -613,9 +613,7 @@ namespace LibMath
 		// The multiplier is (-1)^(i+j) so 1 when i + j is pair and -1 otherwise
 		const float multiplier = (row + column) % 2 == 0 ? 1.f : -1.f;
 
-		const auto minor = this->minor(row, column);
-
-		return multiplier * minor.determinant();
+		return multiplier * minor(row, column).determinant();
 	}
 
 	Matrix Matrix::minor(const length_t row, const length_t column) const
