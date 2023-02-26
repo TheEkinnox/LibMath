@@ -46,29 +46,34 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 		CHECK_MATRIX(empty, emptyGlm);
 	}
 
-	//SECTION("Accessor")
-	//{
-	//	float const x = 2.5f;
-	//	float const y = .5f;
-	//	float const z = 2.f;
-	//	LibMath::Matrix3 matrix{ x, y, z };
+	SECTION("Accessor")
+	{
+		LibMath::Matrix3 mat;
+		mat[0] = 3.75f;
+		mat[1] = 3.f;
+		mat[2] = .75f;
+		mat[3] = 4.5f;
+		mat[4] = 2.5f;
+		mat[5] = 4.f;
+		mat[6] = 6.5f;
+		mat[7] = 4.5f;
+		mat[8] = 6.f;
 
-	//	{
-	//		LibMath::Matrix3 const& matrixConst = matrix;
-	//		CHECK(matrixConst[0] == x);
-	//		CHECK(matrixConst[1] == y);
-	//		CHECK(matrixConst[2] == z);
-	//	}
+		glm::mat3 matGlm{};
+		matGlm[0][0] = 3.75f;
+		matGlm[0][1] = 3.f;
+		matGlm[0][2] = .75f;
+		matGlm[1][0] = 4.5f;
+		matGlm[1][1] = 2.5f;
+		matGlm[1][2] = 4.f;
+		matGlm[2][0] = 6.5f;
+		matGlm[2][1] = 4.5f;
+		matGlm[2][2] = 6.f;
 
-	//	{
-	//		matrix[0] += 1.f;
-	//		matrix[1] += 1.f;
-	//		matrix[2] += 1.f;
-	//		CHECK(matrix[0] == x + 1.f);
-	//		CHECK(matrix[1] == y + 1.f);
-	//		CHECK(matrix[2] == z + 1.f);
-	//	}
-	//}
+		for (LibMath::Matrix::length_t i = 0; i < mat.getRowCount(); i++)
+			for (LibMath::Matrix::length_t j = 0; j < mat.getColumnCount(); j++)
+				CHECK(mat[mat.getIndex(i, j)] == Catch::Approx(matGlm[i][j]));
+	}
 
 	SECTION("Comparator")
 	{
@@ -103,25 +108,6 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 		CHECK_FALSE(self.isIdentity());
 		CHECK(LibMath::Matrix3{ 1.f }.isIdentity());
 	}
-
-	//SECTION("Constant")
-	//{
-	//	CHECK_MATRIX(LibMath::Matrix3::back(), glm::mat3(0.f, 0.f, -1.f));
-
-	//	CHECK_MATRIX(LibMath::Matrix3::down(), glm::mat3(0.f, -1.f, 0.f));
-
-	//	CHECK_MATRIX(LibMath::Matrix3::front(), glm::mat3(0.f, 0.f, 1.f));
-
-	//	CHECK_MATRIX(LibMath::Matrix3::left(), glm::mat3(-1.f, 0.f, 0.f));
-
-	//	CHECK_MATRIX(LibMath::Matrix3::one(), glm::mat3(1.f, 1.f, 1.f));
-
-	//	CHECK_MATRIX(LibMath::Matrix3::right(), glm::mat3(1.f, 0.f, 0.f));
-
-	//	CHECK_MATRIX(LibMath::Matrix3::up(), glm::mat3(0.f, 1.f, 0.f));
-
-	//	CHECK_MATRIX(LibMath::Matrix3::zero(), glm::mat3(0.f, 0.f, 0.f));
-	//}
 
 	SECTION("Arithmetic")
 	{
@@ -294,7 +280,6 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 				LibMath::Matrix3 quotientAssignment = small;
 				quotientAssignment /= big;
 
-				// Todo: rework test to account for glm matrices being column major unlike ours
 				glm::mat3 quotientAssignmentGlm = glm::transpose(smallGlm);
 				quotientAssignmentGlm /= glm::transpose(bigGlm);
 
@@ -304,7 +289,6 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 			{
 				LibMath::Matrix3 quotient = small / big;
 
-				// Todo: rework test to account for glm matrices being column major unlike ours
 				glm::mat3 quotientGlm = glm::transpose(smallGlm) / glm::transpose(bigGlm);
 
 				CHECK_MATRIX(quotient, glm::transpose(quotientGlm));
@@ -394,29 +378,31 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 			CHECK(determinant == Catch::Approx(determinantGlm));
 		}
 
+		SECTION("Transpose")
+		{
+			LibMath::Matrix3 transposed = big.transposed();
+			glm::mat3 transposedGlm = glm::transpose(bigGlm);
+
+			CHECK_MATRIX(transposed, transposedGlm);
+		}
+
 		SECTION("Cofactor")
 		{
-			// Todo: rework test to account for glm matrices being column major unlike ours
 			glm::mat3 cofactorMatGlm = glm::transpose(glm::inverse(bigGlm) * glm::determinant(bigGlm));
 
 			for (LibMath::Matrix::length_t row = 0; row < big.getRowCount(); row++)
 			{
 				for (LibMath::Matrix::length_t col = 0; col < big.getColumnCount(); col++)
 				{
-					float cofactor = big.cofactor(row, col);
+					const float cofactor = big.cofactor(row, col);
 
-					float cofactorGlm = cofactorMatGlm[row][col];
-
-					CHECK(cofactor == Catch::Approx(cofactorGlm));
+					CHECK(cofactor == Catch::Approx(cofactorMatGlm[row][col]));
 				}
 			}
 		}
 
 		SECTION("CofactorMatrix")
 		{
-			// Small should not have a cofactor matrix (non-invertible)
-			CHECK_THROWS(small.coMatrix());
-
 			LibMath::Matrix3 cofactorMat = big.coMatrix();
 			glm::mat3 cofactorMatGlm = glm::transpose(glm::inverse(bigGlm) * glm::determinant(bigGlm));
 			
@@ -425,43 +411,29 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 
 		SECTION("Inverse")
 		{
-			// Small should be non-invertible
-			CHECK_THROWS(small.inverse());
+			{
+				LibMath::Matrix3 inverse = big.inverse();
+				glm::mat3 inverseGlm = glm::inverse(bigGlm);
 
-			LibMath::Matrix3 inverse = big.inverse();
+				CHECK_MATRIX(inverse, inverseGlm);
+			}
 
-			// Todo: rework test to account for glm matrices being column major unlike ours
-			glm::mat3 inverseGlm = glm::inverse(glm::transpose(bigGlm));
+			{
+				LibMath::Matrix3 nonInvertible;
+				nonInvertible[0] = 1;
+				nonInvertible[1] = 6.f;
+				nonInvertible[2] = 4.f;
+				nonInvertible[3] = 2.f;
+				nonInvertible[4] = 4.f;
+				nonInvertible[5] = -1.f;
+				nonInvertible[6] = -1.f;
+				nonInvertible[7] = 2.f;
+				nonInvertible[8] = 5.f;
 
-			CHECK_MATRIX(inverse, glm::transpose(inverseGlm));
+				CHECK_THROWS(nonInvertible.inverse());
+			}
 		}
 	}
-
-	//SECTION("Extra")
-	//{
-	//	LibMath::Matrix3 const input{ 2.5f, -.5f, 2.f };
-	//	{
-	//		std::stringstream buffer;
-	//		buffer << input;
-	//		CHECK(buffer.str() == "{2.5,-0.5,2}");
-
-	//		buffer << " extra";
-
-	//		LibMath::Matrix3 output;
-	//		buffer >> output;
-	//		CHECK(output == input);
-
-	//		std::string extra;
-	//		buffer >> extra;
-	//		CHECK(extra == "extra");
-	//	}
-
-	//	{
-	//		CHECK(input.string() == "{2.5,-0.5,2}");
-
-	//		CHECK(input.stringLong() == "Matrix3{ x:2.5, y:-0.5, z:2 }");
-	//	}
-	//}
 
 	SECTION("Debug")
 	{
@@ -483,9 +455,9 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 {
 	SECTION("Transformation")
 	{
-		LibMath::Vector3 const transformation{ -2.f, 0.f, 1.25f };
+		const LibMath::Vector3 transformation{ -2.f, 0.f, 1.25f };
 
-		glm::vec3 const transformationGlm{ -2.f, 0.f, 1.25f };
+		constexpr glm::vec3 transformationGlm{ -2.f, 0.f, 1.25f };
 
 		SECTION("Translation")
 		{
