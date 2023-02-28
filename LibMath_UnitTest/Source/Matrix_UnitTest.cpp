@@ -9,6 +9,9 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
+#include "Angle/Degree.h"
+#include "Vector/Vector2.h"
+
 using namespace LibMath::Literal;
 
 #define CHECK_MATRIX(matrix, matrixGlm) \
@@ -498,6 +501,38 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 
 				// Transpose since glm matrices are column major unlike ours
 				CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
+			}
+		}
+
+		SECTION("Projection")
+		{
+			constexpr float near = 0.f;
+			constexpr float far = 2.f;
+
+			SECTION("Orthographic")
+			{
+				constexpr float top = 1.f;
+				constexpr float bottom = -1.f;
+				constexpr float left = -1.f;
+				constexpr float right = 1.f;
+
+				LibMath::Matrix4 projection = LibMath::Matrix4::orthographicProjection(left, right, bottom, top, near, far);
+				glm::mat4 projectionGlm = glm::ortho(left, right, bottom, top, near, far);
+
+				// Transpose since glm matrices are column major unlike ours
+				CHECK_MATRIX(projection, glm::transpose(projectionGlm));
+			}
+
+			SECTION("Perspective")
+			{
+				constexpr float fovY = 60.f;
+				constexpr float aspect = 16.f / 9.f;
+
+				LibMath::Matrix4 projection = LibMath::Matrix4::perspectiveProjection(LibMath::Degree(fovY), aspect, near, far);
+				glm::mat4 projectionGlm = glm::perspective(glm::radians(fovY), aspect, near, far);
+
+				// Transpose since glm matrices are column major unlike ours
+				CHECK_MATRIX(projection, glm::transpose(projectionGlm));
 			}
 		}
 	}
