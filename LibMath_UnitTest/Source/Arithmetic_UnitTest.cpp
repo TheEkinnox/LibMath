@@ -36,6 +36,14 @@ TEST_CASE("Arithmetic", "[.all][arithmetic]")
 	CHECK(LibMath::squareRoot(val * .25f) == Catch::Approx(glm::sqrt(val * .25f)));
 	CHECK(LibMath::squareRoot(val * .01f) == Catch::Approx(glm::sqrt(val * .01f)));
 	CHECK(LibMath::squareRoot(val * .001f) == Catch::Approx(glm::sqrt(val * .001f)));
+	
+	CHECK(LibMath::pow(val, 3) == Catch::Approx(glm::pow(val, 3)));
+	CHECK(LibMath::pow(val, 2) == Catch::Approx(glm::pow(val, 2)));
+	CHECK(LibMath::pow(val, 1) == Catch::Approx(glm::pow(val, 1)));
+	CHECK(LibMath::pow(val, 0) == Catch::Approx(glm::pow(val, 0)));
+	CHECK(LibMath::pow(val, -1) == Catch::Approx(glm::pow(val, -1)));
+	CHECK(LibMath::pow(val, -2) == Catch::Approx(glm::pow(val, -2)));
+	CHECK(LibMath::pow(val, -3) == Catch::Approx(glm::pow(val, -3)));
 
 	CHECK(LibMath::wrap(90.f, -180.f, 180.f) == Catch::Approx(90.f));
 	CHECK(LibMath::wrap(270.f, -180.f, 180.f) == Catch::Approx(-90.f));
