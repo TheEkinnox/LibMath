@@ -286,6 +286,48 @@ namespace LibMath
 		return rotation(zAngle, xAngle, yAngle);
 	}
 
+	// Adapted from https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724
+	Matrix4x4 Matrix4x4::rotationFromTo(const Vector3& from, const Vector3& to)
+	{
+		const auto& fromDir = from.normalized();
+		const auto& toDir = to.normalized();
+
+		if (toDir == fromDir)
+			return Matrix4x4(1.f);
+
+		if (toDir == -fromDir)
+			return scaling(-1.f, -1.f, -1.f);
+
+		const Vector3 axis = from.cross(to);
+
+		const float cosA = from.dot(to);
+		const float k = 1.0f / (1.0f + cosA);
+
+		Matrix4x4 rotationMat;
+
+		rotationMat[rotationMat.getIndex(0, 0)] = (axis.m_x * axis.m_x * k) + cosA;
+		rotationMat[rotationMat.getIndex(0, 1)] = (axis.m_y * axis.m_x * k) - axis.m_z;
+		rotationMat[rotationMat.getIndex(0, 2)] = (axis.m_z * axis.m_x * k) + axis.m_y;
+		rotationMat[rotationMat.getIndex(0, 3)] = 0.f;
+
+		rotationMat[rotationMat.getIndex(1, 0)] = (axis.m_x * axis.m_y * k) + axis.m_z;
+		rotationMat[rotationMat.getIndex(1, 1)] = (axis.m_y * axis.m_y * k) + cosA;
+		rotationMat[rotationMat.getIndex(1, 2)] = (axis.m_z * axis.m_y * k) - axis.m_x;
+		rotationMat[rotationMat.getIndex(1, 3)] = 0.f;
+
+		rotationMat[rotationMat.getIndex(2, 0)] = (axis.m_x * axis.m_z * k) - axis.m_y;
+		rotationMat[rotationMat.getIndex(2, 1)] = (axis.m_y * axis.m_z * k) + axis.m_x;
+		rotationMat[rotationMat.getIndex(2, 2)] = (axis.m_z * axis.m_z * k) + cosA;
+		rotationMat[rotationMat.getIndex(2, 3)] = 0.f;
+
+		rotationMat[rotationMat.getIndex(3, 0)] = 0.f;
+		rotationMat[rotationMat.getIndex(3, 1)] = 0.f;
+		rotationMat[rotationMat.getIndex(3, 2)] = 0.f;
+		rotationMat[rotationMat.getIndex(3, 3)] = 1.f;
+
+		return rotationMat;
+	}
+
 	Matrix4x4 Matrix4x4::orthographicProjection(const float left, const float right,
 		const float bottom, const float top, const float near, const float far)
 	{
