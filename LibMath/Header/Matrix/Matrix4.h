@@ -47,6 +47,7 @@ namespace LibMath
 		static Matrix4x4	rotationEuler(const Radian& xAngle, const Radian& yAngle, const Radian& zAngle);
 		static Matrix4x4	orthographicProjection(float left, float right, float bottom, float top, float near, float far);
 		static Matrix4x4	perspectiveProjection(const Radian& fovY, float aspect, float near, float far);
+		static Matrix4x4	lookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
 	};
 
 	typedef Matrix4x4 Matrix4;

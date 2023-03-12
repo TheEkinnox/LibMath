@@ -314,9 +314,37 @@ namespace LibMath
 
 		mat[mat.getIndex(0, 0)] = 1.f / (aspect * tanHalfFovY);
 		mat[mat.getIndex(1, 1)] = 1.f / tanHalfFovY;
-		mat[mat.getIndex(2, 2)] = -(far + near) / (far - near);
-		mat[mat.getIndex(2, 3)] = -(2.f * far * near) / (far - near);
+		mat[mat.getIndex(2, 2)] = (far + near) / (near - far);
+		mat[mat.getIndex(2, 3)] = (2.f * far * near) / (near - far);
 		mat[mat.getIndex(3, 2)] = -1.f;
+
+		return mat;
+	}
+
+	Matrix4x4 Matrix4x4::lookAt(const Vector3& eye, const Vector3& center, const Vector3& up)
+	{
+		const Vector3 f = (center - eye).normalized();
+		const Vector3 s = f.cross(up).normalized();
+		const Vector3 u = s.cross(f);
+
+		Matrix4x4 mat;
+
+		mat[mat.getIndex(0, 0)] = s.m_x;
+		mat[mat.getIndex(0, 1)] = s.m_y;
+		mat[mat.getIndex(0, 2)] = s.m_z;
+		mat[mat.getIndex(0, 3)] = -s.dot(eye);
+
+		mat[mat.getIndex(1, 0)] = u.m_x;
+		mat[mat.getIndex(1, 1)] = u.m_y;
+		mat[mat.getIndex(1, 2)] = u.m_z;
+		mat[mat.getIndex(1, 3)] = -u.dot(eye);
+
+		mat[mat.getIndex(2, 0)] = -f.m_x;
+		mat[mat.getIndex(2, 1)] = -f.m_y;
+		mat[mat.getIndex(2, 2)] = -f.m_z;
+		mat[mat.getIndex(2, 3)] = f.dot(eye);
+
+		mat[mat.getIndex(3, 3)] = 1.f;
 
 		return mat;
 	}

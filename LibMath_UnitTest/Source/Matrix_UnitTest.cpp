@@ -525,7 +525,7 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 
 			SECTION("Perspective")
 			{
-				constexpr float fovY = 60.f;
+				constexpr float fovY = 180.f;
 				constexpr float aspect = 16.f / 9.f;
 
 				LibMath::Matrix4 projection = LibMath::Matrix4::perspectiveProjection(LibMath::Degree(fovY), aspect, near, far);
@@ -534,6 +534,15 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 				// Transpose since glm matrices are column major unlike ours
 				CHECK_MATRIX(projection, glm::transpose(projectionGlm));
 			}
+		}
+
+		SECTION("LookAt")
+		{
+			LibMath::Matrix4 lookAt = LibMath::Matrix4::lookAt(transformation, transformation + LibMath::Vector3::front(), LibMath::Vector3::up());
+			glm::mat4 lookAtGlm = glm::lookAt(transformationGlm, transformationGlm + glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 1, 0 });
+
+			// Transpose since glm matrices are column major unlike ours
+			CHECK_MATRIX(lookAt, glm::transpose(lookAtGlm));
 		}
 	}
 }
