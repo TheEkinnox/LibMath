@@ -57,8 +57,12 @@ namespace LibMath
 		switch (index)
 		{
 		case 0:
+		case 'x':
+		case 'X':
 			return this->m_x;
 		case 1:
+		case 'y':
+		case 'Y':
 			return this->m_y;
 		default:
 			throw std::out_of_range("Invalid index \"" + std::to_string(index) + "\" received");
@@ -70,8 +74,12 @@ namespace LibMath
 		switch (index)
 		{
 		case 0:
+		case 'x':
+		case 'X':
 			return this->m_x;
 		case 1:
+		case 'y':
+		case 'Y':
 			return this->m_y;
 		default:
 			throw std::out_of_range("Invalid index \"" + std::to_string(index) + "\" received");
@@ -415,10 +423,16 @@ namespace LibMath
 		switch (index)
 		{
 		case 0:
+		case 'x':
+		case 'X':
 			return this->m_x;
 		case 1:
+		case 'y':
+		case 'Y':
 			return this->m_y;
 		case 2:
+		case 'z':
+		case 'Z':
 			return this->m_z;
 		default:
 			throw std::out_of_range("Invalid index \"" + std::to_string(index) + "\" received");
@@ -430,10 +444,16 @@ namespace LibMath
 		switch (index)
 		{
 		case 0:
+		case 'x':
+		case 'X':
 			return this->m_x;
 		case 1:
+		case 'y':
+		case 'Y':
 			return this->m_y;
 		case 2:
+		case 'z':
+		case 'Z':
 			return this->m_z;
 		default:
 			throw std::out_of_range("Invalid index \"" + std::to_string(index) + "\" received");
@@ -775,6 +795,11 @@ namespace LibMath
 	{
 	}
 
+	Vector4::Vector4(Vector3 const& other, float w) :
+		Vector3(other), m_w(w)
+	{
+	}
+
 	Vector4 Vector4::zero()
 	{
 		return { 0.f, 0.f, 0.f, 0.f };
@@ -820,12 +845,20 @@ namespace LibMath
 		switch (index)
 		{
 		case 0:
+		case 'x':
+		case 'X':
 			return this->m_x;
 		case 1:
+		case 'y':
+		case 'Y':
 			return this->m_y;
 		case 2:
+		case 'z':
+		case 'Z':
 			return this->m_z;
 		case 3:
+		case 'w':
+		case 'W':
 			return this->m_w;
 		default:
 			throw std::out_of_range("Invalid index \"" + std::to_string(index) + "\" received");
@@ -1003,9 +1036,9 @@ namespace LibMath
 		return left *= right;
 	}
 
-	Vector4 operator/(Vector4 vector, Vector4 const& value)
+	Vector4 operator/(Vector4 left, Vector4 const& right)
 	{
-		return vector /= value;
+		return left /= right;
 	}
 
 	Vector4 operator+(Vector4 vector, float const& value)
