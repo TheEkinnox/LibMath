@@ -4,17 +4,6 @@
 #include <catch2/catch_approx.hpp>
 #include <glm/glm.hpp>
 
-/*
-	float	ceil(float);				// Return lowest integer value higher than or equal to the parameter
-	float	clamp(float, float, float);	// Return parameter limited by the given range
-	float	floor(float);				// Return highest integer value lower than or equal to the parameter
-	float	squareRoot(float);			// Return square root of the parameter
-	float	wrap(float, float, float);	// Return parameter as value inside the given range
-	float	min(float, float);			// Return smallest parameter
-	float	max(float, float);			// Return largest parameter
-	float	abs(float);
-*/
-
 TEST_CASE("Arithmetic", "[.all][arithmetic]")
 {
 	float val{ 1.2f };
