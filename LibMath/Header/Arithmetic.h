@@ -19,6 +19,13 @@ namespace LibMath
 	float	ceil(float value);
 
 	/**
+	 * \brief Rounds a given value to the nearest integer
+	 * \param value The value to round
+	 * \return The received value rounded to the nearest integer
+	 */
+	float	round(float value);
+
+	/**
 	 * \brief Returns the received value limited to the given range
 	 * \param value The value to clamp
 	 * \param a The first value of the range

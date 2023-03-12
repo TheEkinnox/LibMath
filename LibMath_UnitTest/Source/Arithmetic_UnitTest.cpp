@@ -19,14 +19,18 @@ TEST_CASE("Arithmetic", "[.all][arithmetic]")
 {
 	float val{ 1.2f };
 
+	CHECK(LibMath::floor(val) == Catch::Approx(glm::floor(val)));
+	CHECK(LibMath::floor(val + .5f) == Catch::Approx(glm::floor(val + .5f)));
+
 	CHECK(LibMath::ceil(val) == Catch::Approx(glm::ceil(val)));
+	CHECK(LibMath::ceil(val + .5f) == Catch::Approx(glm::ceil(val + .5f)));
+
+	CHECK(LibMath::round(val) == Catch::Approx(glm::round(val)));
+	CHECK(LibMath::round(val + .5f) == Catch::Approx(glm::round(val + .5f)));
 
 	CHECK(LibMath::clamp(val, 0.f, 1.f) == Catch::Approx(glm::clamp(val, 0.f, 1.f)));
 	CHECK(LibMath::clamp(val, 1.f, 1.5f) == Catch::Approx(glm::clamp(val, 1.f, 1.5f)));
 	CHECK(LibMath::clamp(val, 1.5f, 2.f) == Catch::Approx(glm::clamp(val, 1.5f, 2.f)));
-
-	CHECK(LibMath::floor(val / 2) == Catch::Approx(glm::floor(val / 2)));
-	CHECK(LibMath::floor(val) == Catch::Approx(glm::floor(val)));
 
 	CHECK(LibMath::squareRoot(val) == Catch::Approx(glm::sqrt(val)));
 	CHECK(LibMath::squareRoot(val * 2.f) == Catch::Approx(glm::sqrt(val * 2.f)));
