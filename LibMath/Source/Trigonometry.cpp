@@ -4,8 +4,6 @@
 
 namespace LibMath
 {
-	constexpr float g_pi = 3.14159265358979323846264338327950288f;
-
 	float sin(const Radian& angle)
 	{
 		return sinf(angle.radian());
