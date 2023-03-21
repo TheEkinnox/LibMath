@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
@@ -435,6 +436,14 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 
 				CHECK_THROWS(nonInvertible.inverse());
 			}
+		}
+
+		SECTION("Array")
+		{
+			const size_t matSize = static_cast<size_t>(big.getColumnCount()) * big.getRowCount();
+
+			for (size_t i = 0; i < matSize; i++)
+				CHECK(big.getArray()[i] == Catch::Approx(glm::value_ptr(bigGlm)[i]));
 		}
 	}
 
