@@ -6,9 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # set solution
 project(LibMath LANGUAGES CXX)
 
-add_subdirectory(LibMath)
-add_subdirectory(LibMath_UnitTest)
+# setup options
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(LIBMATH_BUILD_TESTS "Build the LibMath test programs" ON)
 
-if(MSVC)
-  set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT LibMath_UnitTest)
+# include subdirectories
+add_subdirectory(LibMath)
+
+if (LIBMATH_BUILD_TESTS)
+  add_subdirectory(LibMath_UnitTest)
+
+  if(MSVC)
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT LibMath_UnitTest)
+  endif()
 endif()
