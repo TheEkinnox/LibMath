@@ -9,21 +9,21 @@ namespace LibMath
 	 * \param value The value to floor
 	 * \return The highest integer value lower than or equal to the received value
 	 */
-	float	floor(float value);
+	constexpr float	floor(float value);
 
 	/**
 	 * \brief Returns the lowest integer greater than or equal to the received value
 	 * \param value The value to ceil
 	 * \return The highest integer value lower than or equal to the received value
 	 */
-	float	ceil(float value);
+	constexpr float	ceil(float value);
 
 	/**
 	 * \brief Rounds a given value to the nearest integer
 	 * \param value The value to round
 	 * \return The received value rounded to the nearest integer
 	 */
-	float	round(float value);
+	constexpr float	round(float value);
 
 	/**
 	 * \brief Returns the received value limited to the given range
@@ -32,7 +32,8 @@ namespace LibMath
 	 * \param b The second value of the range
 	 * \return The received value limited to the given range
 	 */
-	float	clamp(float value, float a, float b);	// Return parameter limited by the given range
+	template <typename T>
+	constexpr T		clamp(T value, T a, T b);
 
 	/**
 	 * \brief Wraps the given value inside a given range
@@ -41,7 +42,7 @@ namespace LibMath
 	 * \param b The second value of the range
 	 * \return value wrapped between min and max
 	 */
-	float	wrap(float value, float a, float b);
+	constexpr float	wrap(float value, float a, float b);
 
 	/**
 	 * \brief Approximates the square root of a value up to the given precision.
@@ -50,7 +51,7 @@ namespace LibMath
 	 * \param maxSteps The maximum number of babylonian steps to perform
 	 * \return An approximation of the square root of the given value
 	 */
-	float	squareRoot(float value, float precision = std::numeric_limits<float>::epsilon(), size_t maxSteps = 16);
+	constexpr float	squareRoot(float value, float precision = std::numeric_limits<float>::epsilon(), size_t maxSteps = 16);
 
 	/**
 	 * \brief Raises the received value to the given exponent
@@ -58,7 +59,7 @@ namespace LibMath
 	 * \param exponent The exponent to which the value must be raised
 	 * \return The received value raised to the given exponent
 	 */
-	float	pow(float value, int exponent);
+	constexpr float	pow(float value, int exponent);
 
 	/**
 	 * \brief Returns the smallest of two given values
@@ -66,7 +67,8 @@ namespace LibMath
 	 * \param b The second value
 	 * \return a if a < b. b otherwise
 	 */
-	float	min(float a, float b);
+	template <typename T>
+	constexpr T		min(T a, T b);
 
 	/**
 	 * \brief Returns the largest of two given values
@@ -74,14 +76,15 @@ namespace LibMath
 	 * \param b The second value
 	 * \return a if a > b. b otherwise
 	 */
-	float	max(float a, float b);
+	template <typename T>
+	constexpr T		max(T a, T b);
 
 	/**
 	 * \brief Returns the absolute value of the given number
 	 * \paran value The number whose absolute value must be returned
 	 * \return The absolute value of the received number
 	 */
-	float	abs(float value);
+	constexpr float	abs(float value);
 
 	/**
 	 * \brief Checks whether two floats can be considered equal
@@ -89,7 +92,9 @@ namespace LibMath
 	 * \param b The second value to check
 	 * \return True if a can be considered equal to b. False otherwise.
 	 */
-	bool	floatEquals(float a, float b);
+	constexpr bool	floatEquals(float a, float b);
 }
+
+#include "Arithmetic.inl"
 
 #endif // !__LIBMATH__ARITHMETIC_H__

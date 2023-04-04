@@ -1,10 +1,11 @@
-#include "Arithmetic.h"
+#ifndef __LIBMATH__ARITHMETIC_INL__
+#define __LIBMATH__ARITHMETIC_INL__
 
-#include <limits>
+#include "Arithmetic.h"
 
 namespace LibMath
 {
-	float floor(const float value)
+	constexpr float floor(const float value)
 	{
 		const float intPart = static_cast<float>(static_cast<int>(value));
 
@@ -14,7 +15,7 @@ namespace LibMath
 		return intPart;
 	}
 
-	float ceil(const float value)
+	constexpr float ceil(const float value)
 	{
 		const auto intPart = static_cast<float>(static_cast<int>(value));
 
@@ -24,7 +25,7 @@ namespace LibMath
 		return intPart;
 	}
 
-	float round(const float value)
+	constexpr float round(const float value)
 	{
 		const auto intPart = static_cast<float>(static_cast<int>(value));
 		const float decimalPart = value - intPart;
@@ -35,21 +36,13 @@ namespace LibMath
 		return intPart + 1;
 	}
 
-	float clamp(const float value, const float a, const float b)
+	template <typename T>
+	constexpr T	clamp(T value, T a, T b)
 	{
-		const float min = a < b ? a : b;
-		const float max = a > b ? a : b;
-
-		if (value < min)
-			return min;
-
-		if (value > max)
-			return max;
-
-		return value;
+		return max(a, min(value, b));
 	}
 
-	float wrap(const float value, const float a, const float b)
+	constexpr float wrap(const float value, const float a, const float b)
 	{
 		const float min = a < b ? a : b;
 		const float max = a > b ? a : b;
@@ -57,7 +50,7 @@ namespace LibMath
 		return value - (max - min) * floor((value - min) / (max - min));
 	}
 
-	float squareRoot(const float value, float precision, const size_t maxSteps)
+	constexpr float squareRoot(const float value, float precision, const size_t maxSteps)
 	{
 		if (value < 0)
 			return NAN;
@@ -81,7 +74,7 @@ namespace LibMath
 		return sqrt;
 	}
 
-	float pow(const float value, const int exponent)
+	constexpr float pow(const float value, const int exponent)
 	{
 		if (floatEquals(value, 1.f) || exponent == 0)
 			return 1.f;
@@ -109,26 +102,30 @@ namespace LibMath
 		return result;
 	}
 
-	float min(const float a, const float b)
+	template <typename T>
+	constexpr T	min(T a, T b)
 	{
 		return a < b ? a : b;
 	}
 
-	float max(const float a, const float b)
+	template <typename T>
+	constexpr T	max(T a, T b)
 	{
 		return a > b ? a : b;
 	}
 
-	float abs(const float value)
+	constexpr float abs(const float value)
 	{
 		return value < 0 ? -value : value;
 	}
 
 	// adapted from https://stackoverflow.com/a/15012792
-	bool floatEquals(const float a, const float b)
+	constexpr bool floatEquals(const float a, const float b)
 	{
-		const float maxXYOne = max(max(1.0f, abs(a)),	abs(b));
+		const float maxXYOne = max(max(1.0f, abs(a)), abs(b));
 
 		return abs(a - b) <= std::numeric_limits<float>::epsilon() * maxXYOne;
 	}
 }
+
+#endif // !__LIBMATH__ARITHMETIC_INL__
