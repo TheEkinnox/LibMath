@@ -127,6 +127,11 @@ namespace LibMath
 		return value < 0 ? -value : value;
 	}
 
+	constexpr float sign(const float value)
+	{
+		return value < 0 ? -1.f : 1.f;
+	}
+
 	// adapted from https://stackoverflow.com/a/15012792
 	constexpr bool floatEquals(const float a, const float b)
 	{

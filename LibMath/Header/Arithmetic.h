@@ -97,6 +97,13 @@ namespace LibMath
 	constexpr float	abs(float value);
 
 	/**
+	 * \brief Returns the sign of the given number
+	 * \paran value The number whose absolute value must be returned
+	 * \return -1 if the number is negative, 1 otherwise
+	 */
+	constexpr float	sign(float value);
+
+	/**
 	 * \brief Checks whether two floats can be considered equal
 	 * \param a The first value to check
 	 * \param b The second value to check
