@@ -1,44 +1,24 @@
 #ifndef __LIBMATH__MATRIX__MATRIX3_H__
 #define __LIBMATH__MATRIX__MATRIX3_H__
 
-#include "MatrixInternal.h"
+#include "TMatrix.h"
 
 namespace LibMath
 {
-	class Matrix3x2 : public Matrix
+	template<typename DataT>
+	struct Details::Determinant<3, 3, DataT>
 	{
-	public:
-					Matrix3x2(length_t, length_t) = delete;
-					Matrix3x2(length_t, length_t, float) = delete;
-					Matrix3x2();
-		explicit	Matrix3x2(float scalar);
-					Matrix3x2(const Matrix& other);
-					Matrix3x2(Matrix&& other);
+		static DataT	compute(const TMatrix<3, 3, DataT>& mat);
 	};
 
-	class Matrix3x3 : public Matrix
-	{
-	public:
-					Matrix3x3(length_t, length_t) = delete;
-					Matrix3x3(length_t, length_t, float) = delete;
-					Matrix3x3();
-		explicit	Matrix3x3(float scalar);
-					Matrix3x3(const Matrix& other);
-					Matrix3x3(Matrix&& other);
-	};
+	typedef TMatrix<3, 2, float> Matrix3x2;
 
-	class Matrix3x4 : public Matrix
-	{
-	public:
-					Matrix3x4(length_t, length_t) = delete;
-					Matrix3x4(length_t, length_t, float) = delete;
-					Matrix3x4();
-		explicit	Matrix3x4(float scalar);
-					Matrix3x4(const Matrix& other);
-					Matrix3x4(Matrix&& other);
-	};
-
+	typedef TMatrix<3, 3, float> Matrix3x3;
 	typedef Matrix3x3 Matrix3;
+
+	typedef TMatrix<3, 4, float> Matrix3x4;
 }
+
+#include "Matrix3.inl"
 
 #endif // !__LIBMATH__MATRIX__MATRIX3_H__

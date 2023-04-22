@@ -676,7 +676,7 @@ namespace LibMath
 
 	void Vector3::rotate(const Radian& xAngle, const Radian& yAngle, const Radian& zAngle)
 	{
-		const Matrix4 rotationMat = Matrix4::rotationEuler(xAngle, yAngle, zAngle);
+		const Matrix4 rotationMat = rotationEuler(xAngle, yAngle, zAngle);
 		const Vector4 vec4 = rotationMat * Vector4( m_x, m_y, m_z, 1 );
 
 		m_x = vec4.m_x;
@@ -686,7 +686,7 @@ namespace LibMath
 
 	void Vector3::rotate(const Radian& angle, Vector3 const& axis)
 	{
-		const Matrix4 rotationMat = Matrix4::rotation(angle, axis);
+		const Matrix4 rotationMat = rotation(angle, axis);
 		const Vector4 vec4 = rotationMat * Vector4(m_x, m_y, m_z, 1);
 
 		m_x = vec4.m_x;

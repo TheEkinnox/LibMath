@@ -8,7 +8,7 @@ namespace LibMath
 {
 	inline Vector4 operator*(Matrix4 const& operation, Vector4 const& operand)
 	{
-		Matrix vec4Mat(4, 1);
+		TMatrix<4, 1, float> vec4Mat;
 		vec4Mat[0] = operand.m_x;
 		vec4Mat[1] = operand.m_y;
 		vec4Mat[2] = operand.m_z;

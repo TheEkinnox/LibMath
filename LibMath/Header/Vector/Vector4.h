@@ -1,7 +1,6 @@
 #ifndef __LIBMATH__VECTOR__VECTOR4_H__
 #define __LIBMATH__VECTOR__VECTOR4_H__
 
-#include <iostream>
 #include <string>
 
 #include "Vector3.h"

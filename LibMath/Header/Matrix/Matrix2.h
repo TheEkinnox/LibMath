@@ -1,44 +1,24 @@
 #ifndef __LIBMATH__MATRIX__MATRIX2_H__
 #define __LIBMATH__MATRIX__MATRIX2_H__
 
-#include "MatrixInternal.h"
+#include "TMatrix.h"
 
 namespace LibMath
 {
-	class Matrix2x2 : public Matrix
+	template<typename DataT>
+	struct Details::Determinant<2, 2, DataT>
 	{
-	public:
-					Matrix2x2(length_t, length_t) = delete;
-					Matrix2x2(length_t, length_t, float) = delete;
-					Matrix2x2();
-		explicit	Matrix2x2(float scalar);
-					Matrix2x2(const Matrix& other);
-					Matrix2x2(Matrix&& other);
+		static DataT	compute(const TMatrix<2, 2, DataT>& mat);
 	};
 
-	class Matrix2x3 : public Matrix
-	{
-	public:
-					Matrix2x3(length_t, length_t) = delete;
-					Matrix2x3(length_t, length_t, float) = delete;
-					Matrix2x3();
-		explicit	Matrix2x3(float scalar);
-					Matrix2x3(const Matrix& other);
-					Matrix2x3(Matrix&& other);
-	};
-
-	class Matrix2x4 : public Matrix
-	{
-	public:
-					Matrix2x4(length_t, length_t) = delete;
-					Matrix2x4(length_t, length_t, float) = delete;
-					Matrix2x4();
-		explicit	Matrix2x4(float scalar);
-					Matrix2x4(const Matrix& other);
-					Matrix2x4(Matrix&& other);
-	};
-
+	typedef TMatrix<2, 2, float> Matrix2x2;
 	typedef Matrix2x2 Matrix2;
+
+	typedef TMatrix<2, 3, float> Matrix2x3;
+
+	typedef TMatrix<2, 4, float> Matrix2x4;
 }
+
+#include "Matrix2.inl"
 
 #endif // !__LIBMATH__MATRIX__MATRIX2_H__

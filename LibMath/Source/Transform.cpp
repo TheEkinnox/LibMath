@@ -183,8 +183,8 @@ namespace LibMath
 
 	void Transform::onChange()
 	{
-		m_matrix = Matrix4::translation(m_position)
-			* Matrix4::rotation(m_rotation, false)
-			* Matrix4::scaling(m_scale);
+		m_matrix = translation(m_position)
+			* rotation(m_rotation, false)
+			* scaling(m_scale);
 	}
 }
