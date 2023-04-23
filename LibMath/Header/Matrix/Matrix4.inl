@@ -12,7 +12,7 @@ namespace LibMath
 	template <class DataT>
 	constexpr TMatrix<4, 4, DataT> translation(const DataT x, const DataT y, const DataT z)
 	{
-		TMatrix<4, 4, DataT> translationMatrix(1.f);
+		TMatrix<4, 4, DataT> translationMatrix(1);
 
 		translationMatrix[translationMatrix.getIndex(0, 3)] = x;
 		translationMatrix[translationMatrix.getIndex(1, 3)] = y;
@@ -35,7 +35,7 @@ namespace LibMath
 		scalingMatrix[scalingMatrix.getIndex(0, 0)] = x;
 		scalingMatrix[scalingMatrix.getIndex(1, 1)] = y;
 		scalingMatrix[scalingMatrix.getIndex(2, 2)] = z;
-		scalingMatrix[scalingMatrix.getIndex(3, 3)] = 1.f;
+		scalingMatrix[scalingMatrix.getIndex(3, 3)] = 1;
 
 		return scalingMatrix;
 	}
@@ -50,30 +50,30 @@ namespace LibMath
 	constexpr TMatrix<4, 4, DataT> rotation(const Radian& angle, const Vector3& axis)
 	{
 		const Vector3 dir = axis.normalized();
-		const float cos = LibMath::cos(angle);
-		const float sin = LibMath::sin(angle);
+		const DataT cos = LibMath::cos(angle);
+		const DataT sin = LibMath::sin(angle);
 
 		TMatrix<4, 4, DataT> mat;
 
-		mat[mat.getIndex(0, 0)] = cos + dir.m_x * dir.m_x * (1.f - cos);
+		mat[mat.getIndex(0, 0)] = cos + dir.m_x * dir.m_x * (1 - cos);
 		mat[mat.getIndex(0, 1)] = dir.m_x * dir.m_y * (1 - cos) - dir.m_z * sin;
 		mat[mat.getIndex(0, 2)] = dir.m_x * dir.m_z * (1 - cos) + dir.m_y * sin;
-		mat[mat.getIndex(0, 3)] = 0.f;
+		mat[mat.getIndex(0, 3)] = 0;
 
 		mat[mat.getIndex(1, 0)] = dir.m_y * dir.m_x * (1 - cos) + dir.m_z * sin;
-		mat[mat.getIndex(1, 1)] = cos + dir.m_y * dir.m_y * (1.f - cos);
+		mat[mat.getIndex(1, 1)] = cos + dir.m_y * dir.m_y * (1 - cos);
 		mat[mat.getIndex(1, 2)] = dir.m_y * dir.m_z * (1 - cos) - dir.m_x * sin;
-		mat[mat.getIndex(1, 3)] = 0.f;
+		mat[mat.getIndex(1, 3)] = 0;
 
 		mat[mat.getIndex(2, 0)] = dir.m_z * dir.m_x * (1 - cos) - dir.m_y * sin;
 		mat[mat.getIndex(2, 1)] = dir.m_z * dir.m_y * (1 - cos) + dir.m_x * sin;
-		mat[mat.getIndex(2, 2)] = cos + dir.m_z * dir.m_z * (1.f - cos);
-		mat[mat.getIndex(2, 3)] = 0.f;
+		mat[mat.getIndex(2, 2)] = cos + dir.m_z * dir.m_z * (1 - cos);
+		mat[mat.getIndex(2, 3)] = 0;
 
-		mat[mat.getIndex(3, 0)] = 0.f;
-		mat[mat.getIndex(3, 1)] = 0.f;
-		mat[mat.getIndex(3, 2)] = 0.f;
-		mat[mat.getIndex(3, 3)] = 1.f;
+		mat[mat.getIndex(3, 0)] = 0;
+		mat[mat.getIndex(3, 1)] = 0;
+		mat[mat.getIndex(3, 2)] = 0;
+		mat[mat.getIndex(3, 3)] = 1;
 
 		return mat;
 	}
@@ -82,36 +82,36 @@ namespace LibMath
 	constexpr TMatrix<4, 4, DataT> rotation(const Radian& yaw, const Radian& pitch,
 		const Radian& roll)
 	{
-		const float cosYaw = cos(yaw);
-		const float sinYaw = sin(yaw);
+		const DataT cosYaw = cos(yaw);
+		const DataT sinYaw = sin(yaw);
 
-		const float cosPitch = cos(pitch);
-		const float sinPitch = sin(pitch);
+		const DataT cosPitch = cos(pitch);
+		const DataT sinPitch = sin(pitch);
 
-		const float cosRoll = cos(roll);
-		const float sinRoll = sin(roll);
+		const DataT cosRoll = cos(roll);
+		const DataT sinRoll = sin(roll);
 
 		TMatrix<4, 4, DataT> rotationMat;
 
 		rotationMat[rotationMat.getIndex(0, 0)] = cosYaw * cosRoll + sinYaw * sinPitch * sinRoll;
 		rotationMat[rotationMat.getIndex(0, 1)] = -cosYaw * sinRoll + sinYaw * sinPitch * cosRoll;
 		rotationMat[rotationMat.getIndex(0, 2)] = sinYaw * cosPitch;
-		rotationMat[rotationMat.getIndex(0, 3)] = 0.f;
+		rotationMat[rotationMat.getIndex(0, 3)] = 0;
 
 		rotationMat[rotationMat.getIndex(1, 0)] = sinRoll * cosPitch;
 		rotationMat[rotationMat.getIndex(1, 1)] = cosRoll * cosPitch;
 		rotationMat[rotationMat.getIndex(1, 2)] = -sinPitch;
-		rotationMat[rotationMat.getIndex(1, 3)] = 0.f;
+		rotationMat[rotationMat.getIndex(1, 3)] = 0;
 
 		rotationMat[rotationMat.getIndex(2, 0)] = -sinYaw * cosRoll + cosYaw * sinPitch * sinRoll;
 		rotationMat[rotationMat.getIndex(2, 1)] = sinRoll * sinYaw + cosYaw * sinPitch * cosRoll;
 		rotationMat[rotationMat.getIndex(2, 2)] = cosYaw * cosPitch;
-		rotationMat[rotationMat.getIndex(2, 3)] = 0.f;
+		rotationMat[rotationMat.getIndex(2, 3)] = 0;
 
-		rotationMat[rotationMat.getIndex(3, 0)] = 0.f;
-		rotationMat[rotationMat.getIndex(3, 1)] = 0.f;
-		rotationMat[rotationMat.getIndex(3, 2)] = 0.f;
-		rotationMat[rotationMat.getIndex(3, 3)] = 1.f;
+		rotationMat[rotationMat.getIndex(3, 0)] = 0;
+		rotationMat[rotationMat.getIndex(3, 1)] = 0;
+		rotationMat[rotationMat.getIndex(3, 2)] = 0;
+		rotationMat[rotationMat.getIndex(3, 3)] = 1;
 
 		return rotationMat;
 	}
@@ -149,37 +149,37 @@ namespace LibMath
 		const auto& toDir = to.normalized();
 
 		if (toDir == fromDir)
-			return TMatrix<4, 4, DataT>(1.f);
+			return TMatrix<4, 4, DataT>(1);
 
 		if (toDir == -fromDir)
-			return scaling<DataT>(-1.f, -1.f, -1.f);
+			return scaling<DataT>(-1, -1, -1);
 
 		const Vector3 axis = from.cross(to);
 
-		const float cosA = from.dot(to);
-		const float k = 1.0f / (1.0f + cosA);
+		const DataT cosA = from.dot(to);
+		const DataT k = static_cast<DataT>(1) / (static_cast<DataT>(1) + cosA);
 
 		TMatrix<4, 4, DataT> rotationMat;
 
 		rotationMat[rotationMat.getIndex(0, 0)] = (axis.m_x * axis.m_x * k) + cosA;
 		rotationMat[rotationMat.getIndex(0, 1)] = (axis.m_y * axis.m_x * k) - axis.m_z;
 		rotationMat[rotationMat.getIndex(0, 2)] = (axis.m_z * axis.m_x * k) + axis.m_y;
-		rotationMat[rotationMat.getIndex(0, 3)] = 0.f;
+		rotationMat[rotationMat.getIndex(0, 3)] = static_cast<DataT>(0);
 
 		rotationMat[rotationMat.getIndex(1, 0)] = (axis.m_x * axis.m_y * k) + axis.m_z;
 		rotationMat[rotationMat.getIndex(1, 1)] = (axis.m_y * axis.m_y * k) + cosA;
 		rotationMat[rotationMat.getIndex(1, 2)] = (axis.m_z * axis.m_y * k) - axis.m_x;
-		rotationMat[rotationMat.getIndex(1, 3)] = 0.f;
+		rotationMat[rotationMat.getIndex(1, 3)] = static_cast<DataT>(0);
 
 		rotationMat[rotationMat.getIndex(2, 0)] = (axis.m_x * axis.m_z * k) - axis.m_y;
 		rotationMat[rotationMat.getIndex(2, 1)] = (axis.m_y * axis.m_z * k) + axis.m_x;
 		rotationMat[rotationMat.getIndex(2, 2)] = (axis.m_z * axis.m_z * k) + cosA;
-		rotationMat[rotationMat.getIndex(2, 3)] = 0.f;
+		rotationMat[rotationMat.getIndex(2, 3)] = static_cast<DataT>(0);
 
-		rotationMat[rotationMat.getIndex(3, 0)] = 0.f;
-		rotationMat[rotationMat.getIndex(3, 1)] = 0.f;
-		rotationMat[rotationMat.getIndex(3, 2)] = 0.f;
-		rotationMat[rotationMat.getIndex(3, 3)] = 1.f;
+		rotationMat[rotationMat.getIndex(3, 0)] = static_cast<DataT>(0);
+		rotationMat[rotationMat.getIndex(3, 1)] = static_cast<DataT>(0);
+		rotationMat[rotationMat.getIndex(3, 2)] = static_cast<DataT>(0);
+		rotationMat[rotationMat.getIndex(3, 3)] = static_cast<DataT>(1);
 
 		return rotationMat;
 	}
@@ -190,16 +190,16 @@ namespace LibMath
 	{
 		TMatrix<4, 4, DataT> mat;
 
-		mat[mat.getIndex(0, 0)] = 2.f / (right - left);
+		mat[mat.getIndex(0, 0)] = static_cast<DataT>(2) / (right - left);
 		mat[mat.getIndex(0, 3)] = (right + left) / (left - right);
 
-		mat[mat.getIndex(1, 1)] = 2.f / (top - bottom);
+		mat[mat.getIndex(1, 1)] = static_cast<DataT>(2) / (top - bottom);
 		mat[mat.getIndex(1, 3)] = (top + bottom) / (bottom - top);
 
-		mat[mat.getIndex(2, 2)] = 2.f / (near - far);
+		mat[mat.getIndex(2, 2)] = static_cast<DataT>(2) / (near - far);
 		mat[mat.getIndex(2, 3)] = (far + near) / (near - far);
 
-		mat[mat.getIndex(3, 3)] = 1.f;
+		mat[mat.getIndex(3, 3)] = static_cast<DataT>(1);
 
 		return mat;
 	}
@@ -212,11 +212,11 @@ namespace LibMath
 
 		TMatrix<4, 4, DataT> mat;
 
-		mat[mat.getIndex(0, 0)] = 1.f / (aspect * tanHalfFovY);
-		mat[mat.getIndex(1, 1)] = 1.f / tanHalfFovY;
+		mat[mat.getIndex(0, 0)] = static_cast<DataT>(1) / (aspect * tanHalfFovY);
+		mat[mat.getIndex(1, 1)] = static_cast<DataT>(1) / tanHalfFovY;
 		mat[mat.getIndex(2, 2)] = (far + near) / (near - far);
-		mat[mat.getIndex(2, 3)] = (2.f * far * near) / (near - far);
-		mat[mat.getIndex(3, 2)] = -1.f;
+		mat[mat.getIndex(2, 3)] = (static_cast<DataT>(2) * far * near) / (near - far);
+		mat[mat.getIndex(3, 2)] = static_cast<DataT>(-1);
 
 		return mat;
 	}
@@ -246,7 +246,7 @@ namespace LibMath
 		mat[mat.getIndex(2, 2)] = -f.m_z;
 		mat[mat.getIndex(2, 3)] = f.dot(eye);
 
-		mat[mat.getIndex(3, 3)] = 1.f;
+		mat[mat.getIndex(3, 3)] = 1;
 
 		return mat;
 	}

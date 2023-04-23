@@ -46,9 +46,12 @@ namespace LibMath
 		constexpr						TMatrix(TMatrix const& other);
 		constexpr						TMatrix(TMatrix&& other) noexcept;
 										~TMatrix() = default;
-
+										
 		TMatrix&						operator=(TMatrix const& other);
 		TMatrix&						operator=(TMatrix&& other) noexcept;
+
+										template <typename T>
+										operator TMatrix<Rows, Cols, T>();
 
 		constexpr DataT					operator[](size_t index) const;
 		DataT&							operator[](size_t index);

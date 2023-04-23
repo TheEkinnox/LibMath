@@ -11,11 +11,11 @@ namespace LibMath::Details
 		// 0 1 2
 		// 3 4 5
 		// 6 7 8
-		const float positive = mat[0] * mat[4] * mat[8] +
+		const DataT positive = mat[0] * mat[4] * mat[8] +
 			mat[1] * mat[5] * mat[6] +
 			mat[2] * mat[3] * mat[7];
 
-		const float negative = mat[2] * mat[4] * mat[6] +
+		const DataT negative = mat[2] * mat[4] * mat[6] +
 			mat[1] * mat[3] * mat[8] +
 			mat[0] * mat[5] * mat[7];
 

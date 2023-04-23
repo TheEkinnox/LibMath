@@ -13,7 +13,7 @@ namespace LibMath
 			throw std::invalid_argument("Invalid matrix size");
 
 		// Builds a matrix filled with zeros
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] = 0;
 	}
 
@@ -29,42 +29,54 @@ namespace LibMath
 				m_values[getIndex(row, col)] = row == col ? scalar : 0;
 	}
 
-	template <length_t Rows, length_t Cols, class DataT>
+	template <length_t Rows, length_t Cols, typename DataT>
 	constexpr TMatrix<Rows, Cols, DataT>::TMatrix(TMatrix const& other)
 	{
-		for (length_t i = 0; i < other.getSize(); i++)
-			m_values[i] = other.m_values[i];
+		for (size_t i = 0; i < other.getSize(); i++)
+			m_values[i] = other[i];
 	}
 
-	template <length_t Rows, length_t Cols, class DataT>
+	template <length_t Rows, length_t Cols, typename DataT>
 	constexpr TMatrix<Rows, Cols, DataT>::TMatrix(TMatrix&& other) noexcept
 	{
-		for (length_t i = 0; i < other.getSize(); i++)
-			m_values[i] = other.m_values[i];
+		for (size_t i = 0; i < other.getSize(); i++)
+			m_values[i] = other[i];
 	}
 
-	template <length_t Rows, length_t Cols, class DataT>
+	template <length_t Rows, length_t Cols, typename DataT>
 	TMatrix<Rows, Cols, DataT>& TMatrix<Rows, Cols, DataT>::operator=(TMatrix const& other)
 	{
 		if (this == &other)
 			return *this;
 
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] = other[i];
 
 		return *this;
 	}
 
-	template <length_t Rows, length_t Cols, class DataT>
+	template <length_t Rows, length_t Cols, typename DataT>
 	TMatrix<Rows, Cols, DataT>& TMatrix<Rows, Cols, DataT>::operator=(TMatrix&& other) noexcept
 	{
 		if (this == &other)
 			return *this;
 
-		for (length_t i = 0; i < other.getSize(); i++)
-			m_values[i] = other.m_values[i];
+		for (size_t i = 0; i < other.getSize(); i++)
+			m_values[i] = other[i];
 
 		return *this;
+	}
+
+	template <length_t Rows, length_t Cols, typename DataT>
+	template <typename T>
+	TMatrix<Rows, Cols, DataT>::operator TMatrix<Rows, Cols, T>()
+	{
+		TMatrix<Rows, Cols, T> mat;
+
+		for (size_t i = 0; i < getSize(); i++)
+			mat[i] = static_cast<T>(m_values[i]);
+
+		return mat;
 	}
 
 	template <length_t Rows, length_t Cols, class DataT>
@@ -91,7 +103,7 @@ namespace LibMath
 		if (other.getColumnCount() != Cols || other.getRowCount() != Rows)
 			throw Exceptions::IncompatibleMatrix();
 
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] += other[i];
 
 		return *this;
@@ -103,7 +115,7 @@ namespace LibMath
 		if (other.getColumnCount() != Cols || other.getRowCount() != Rows)
 			throw Exceptions::IncompatibleMatrix();
 
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] -= other[i];
 
 		return *this;
@@ -127,7 +139,7 @@ namespace LibMath
 	template <length_t Rows, length_t Cols, class DataT>
 	TMatrix<Rows, Cols, DataT>& TMatrix<Rows, Cols, DataT>::operator+=(DataT scalar)
 	{
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] += scalar;
 
 		return *this;
@@ -136,7 +148,7 @@ namespace LibMath
 	template <length_t Rows, length_t Cols, class DataT>
 	TMatrix<Rows, Cols, DataT>& TMatrix<Rows, Cols, DataT>::operator-=(DataT scalar)
 	{
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] -= scalar;
 
 		return *this;
@@ -145,7 +157,7 @@ namespace LibMath
 	template <length_t Rows, length_t Cols, class DataT>
 	TMatrix<Rows, Cols, DataT>& TMatrix<Rows, Cols, DataT>::operator*=(DataT scalar)
 	{
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] *= scalar;
 
 		return *this;
@@ -154,7 +166,7 @@ namespace LibMath
 	template <length_t Rows, length_t Cols, class DataT>
 	TMatrix<Rows, Cols, DataT>& TMatrix<Rows, Cols, DataT>::operator/=(DataT scalar)
 	{
-		for (length_t i = 0; i < getSize(); i++)
+		for (size_t i = 0; i < getSize(); i++)
 			m_values[i] /= scalar;
 
 		return *this;
@@ -187,7 +199,7 @@ namespace LibMath
 		{
 			for (length_t row = 0; row < Rows; row++)
 			{
-				float scalar = 0;
+				DataT scalar = 0;
 
 				for (length_t col = 0; col < Cols; col++)
 				{
@@ -328,7 +340,7 @@ namespace LibMath
 			return m_values[0];
 
 		// The multiplier is (-1)^(i+j) so 1 when i + j is pair and -1 otherwise
-		const float multiplier = (row + column) % 2 == 0 ? 1.f : -1.f;
+		const DataT multiplier = (row + column) % 2 == static_cast<DataT>(0) ? static_cast<DataT>(1) : static_cast<DataT>(-1);
 
 		return multiplier * minor(row, column).determinant();
 	}
@@ -402,7 +414,7 @@ namespace LibMath
 		if constexpr (Rows != Cols)
 			throw Exceptions::NonSquareMatrix();
 
-		const float det = determinant();
+		const DataT det = determinant();
 
 		if (det == 0.f)
 			throw Exceptions::NonInvertibleMatrix();
@@ -419,7 +431,7 @@ namespace LibMath
 		if constexpr (Rows == 1)
 			return mat[0];
 
-		float determinant = 0;
+		DataT determinant = 0;
 
 		for (length_t col = 0; col < Cols; col++)
 			determinant += mat[col] * mat.cofactor(0, col);
