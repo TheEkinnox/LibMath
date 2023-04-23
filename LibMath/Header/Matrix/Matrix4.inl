@@ -10,7 +10,7 @@ namespace LibMath
 {
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> translation(const DataT x, const DataT y, const DataT z)
+	constexpr TMatrix<4, 4, DataT> translation(const DataT x, const DataT y, const DataT z)
 	{
 		TMatrix<4, 4, DataT> translationMatrix(1.f);
 
@@ -22,13 +22,13 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> translation(const Vector3& translation)
+	constexpr TMatrix<4, 4, DataT> translation(const Vector3& translation)
 	{
 		return LibMath::translation(translation.m_x, translation.m_y, translation.m_z);
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> scaling(const DataT x, const DataT y, const DataT z)
+	constexpr TMatrix<4, 4, DataT> scaling(const DataT x, const DataT y, const DataT z)
 	{
 		TMatrix<4, 4, DataT> scalingMatrix;
 
@@ -41,13 +41,13 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> scaling(const Vector3& scale)
+	constexpr TMatrix<4, 4, DataT> scaling(const Vector3& scale)
 	{
 		return scaling<DataT>(scale.m_x, scale.m_y, scale.m_z);
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> rotation(const Radian& angle, const Vector3& axis)
+	constexpr TMatrix<4, 4, DataT> rotation(const Radian& angle, const Vector3& axis)
 	{
 		const Vector3 dir = axis.normalized();
 		const float cos = LibMath::cos(angle);
@@ -79,7 +79,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> rotation(const Radian& yaw, const Radian& pitch,
+	constexpr TMatrix<4, 4, DataT> rotation(const Radian& yaw, const Radian& pitch,
 		const Radian& roll)
 	{
 		const float cosYaw = cos(yaw);
@@ -117,7 +117,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> rotation(const Vector3& angles, const bool isRadian)
+	constexpr TMatrix<4, 4, DataT> rotation(const Vector3& angles, const bool isRadian)
 	{
 		if (isRadian)
 			return rotation<DataT>(Radian(angles.m_y), Radian(angles.m_x), Radian(angles.m_z));
@@ -126,14 +126,14 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> rotationEuler(const Radian& xAngle, const Radian& yAngle,
+	constexpr TMatrix<4, 4, DataT> rotationEuler(const Radian& xAngle, const Radian& yAngle,
 		const Radian& zAngle)
 	{
 		return rotation(zAngle, xAngle, yAngle);
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> rotationEuler(const Vector3& angles, const bool isRadian)
+	constexpr TMatrix<4, 4, DataT> rotationEuler(const Vector3& angles, const bool isRadian)
 	{
 		if (isRadian)
 			return rotationEuler<DataT>(Radian(angles.m_x), Radian(angles.m_y), Radian(angles.m_z));
@@ -143,7 +143,7 @@ namespace LibMath
 
 	// Adapted from https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724
 	template <class DataT>
-	TMatrix<4, 4, DataT> rotationFromTo(const Vector3& from, const Vector3& to)
+	constexpr TMatrix<4, 4, DataT> rotationFromTo(const Vector3& from, const Vector3& to)
 	{
 		const auto& fromDir = from.normalized();
 		const auto& toDir = to.normalized();
@@ -185,7 +185,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> orthographicProjection(const DataT left, const DataT right,
+	constexpr TMatrix<4, 4, DataT> orthographicProjection(const DataT left, const DataT right,
 		const DataT bottom, const DataT top, const DataT near, const DataT far)
 	{
 		TMatrix<4, 4, DataT> mat;
@@ -205,7 +205,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> perspectiveProjection(const Radian& fovY,
+	constexpr TMatrix<4, 4, DataT> perspectiveProjection(const Radian& fovY,
 		const DataT aspect, const DataT near, const DataT far)
 	{
 		const DataT tanHalfFovY = tan(fovY * .5f);
@@ -222,7 +222,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	TMatrix<4, 4, DataT> lookAt(const Vector3& eye, const Vector3& center,
+	constexpr TMatrix<4, 4, DataT> lookAt(const Vector3& eye, const Vector3& center,
 		const Vector3& up)
 	{
 		const Vector3 f = (center - eye).normalized();
