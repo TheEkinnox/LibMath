@@ -77,35 +77,39 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 		for (LibMath::length_t i = 0; i < mat.getRowCount(); i++)
 			for (LibMath::length_t j = 0; j < mat.getColumnCount(); j++)
 				CHECK(mat[mat.getIndex(i, j)] == Catch::Approx(matGlm[i][j]));
+
+		for (LibMath::length_t i = 0; i < mat.getRowCount(); i++)
+			for (LibMath::length_t j = 0; j < mat.getColumnCount(); j++)
+				CHECK(mat(i, j) == Catch::Approx(matGlm[i][j]));
 	}
 
 	SECTION("Comparator")
 	{
 		// compare with self
 		LibMath::Matrix3 self;
-		self[self.getIndex(0, 0)] = 2.5f;
-		self[self.getIndex(0, 1)] = .5f;
-		self[self.getIndex(0, 2)] = 2.f;
-		self[self.getIndex(1, 0)] = 1.5f;
-		self[self.getIndex(1, 1)] = -.5f;
-		self[self.getIndex(1, 2)] = 1.f;
-		self[self.getIndex(2, 0)] = 3.5f;
-		self[self.getIndex(2, 1)] = 1.5f;
-		self[self.getIndex(2, 2)] = 3.f;
+		self(0, 0) = 2.5f;
+		self(0, 1) = .5f;
+		self(0, 2) = 2.f;
+		self(1, 0) = 1.5f;
+		self(1, 1) = -.5f;
+		self(1, 2) = 1.f;
+		self(2, 0) = 3.5f;
+		self(2, 1) = 1.5f;
+		self(2, 2) = 3.f;
 
 		CHECK(self == self);
 
 		// compare with same
 		LibMath::Matrix3 same;
-		same[same.getIndex(0, 0)] = 2.5f;
-		same[same.getIndex(0, 1)] = .5f;
-		same[same.getIndex(0, 2)] = 2.f;
-		same[same.getIndex(1, 0)] = 1.5f;
-		same[same.getIndex(1, 1)] = -.5f;
-		same[same.getIndex(1, 2)] = 1.f;
-		same[same.getIndex(2, 0)] = 3.5f;
-		same[same.getIndex(2, 1)] = 1.5f;
-		same[same.getIndex(2, 2)] = 3.f;
+		same(0, 0) = 2.5f;
+		same(0, 1) = .5f;
+		same(0, 2) = 2.f;
+		same(1, 0) = 1.5f;
+		same(1, 1) = -.5f;
+		same(1, 2) = 1.f;
+		same(2, 0) = 3.5f;
+		same(2, 1) = 1.5f;
+		same(2, 2) = 3.f;
 
 		CHECK(self == same);
 
@@ -116,26 +120,26 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 	SECTION("Arithmetic")
 	{
 		LibMath::Matrix3 big;
-		big[big.getIndex(0, 0)] = 3.75f;
-		big[big.getIndex(0, 1)] = 3.f;
-		big[big.getIndex(0, 2)] = .75f;
-		big[big.getIndex(1, 0)] = 4.5f;
-		big[big.getIndex(1, 1)] = 2.5f;
-		big[big.getIndex(1, 2)] = 4.f;
-		big[big.getIndex(2, 0)] = 6.5f;
-		big[big.getIndex(2, 1)] = 4.5f;
-		big[big.getIndex(2, 2)] = 6.f;
+		big(0, 0) = 3.75f;
+		big(0, 1) = 3.f;
+		big(0, 2) = .75f;
+		big(1, 0) = 4.5f;
+		big(1, 1) = 2.5f;
+		big(1, 2) = 4.f;
+		big(2, 0) = 6.5f;
+		big(2, 1) = 4.5f;
+		big(2, 2) = 6.f;
 
 		LibMath::Matrix3 small;
-		small[small.getIndex(0, 0)] = 2.5f;
-		small[small.getIndex(0, 1)] = .5f;
-		small[small.getIndex(0, 2)] = 2.f;
-		small[small.getIndex(1, 0)] = 1.5f;
-		small[small.getIndex(1, 1)] = -.5f;
-		small[small.getIndex(1, 2)] = 1.f;
-		small[small.getIndex(2, 0)] = 3.5f;
-		small[small.getIndex(2, 1)] = 1.5f;
-		small[small.getIndex(2, 2)] = 3.f;
+		small(0, 0) = 2.5f;
+		small(0, 1) = .5f;
+		small(0, 2) = 2.f;
+		small(1, 0) = 1.5f;
+		small(1, 1) = -.5f;
+		small(1, 2) = 1.f;
+		small(2, 0) = 3.5f;
+		small(2, 1) = 1.5f;
+		small(2, 2) = 3.f;
 
 		glm::mat3 bigGlm{};
 		bigGlm[0][0] = 3.75f;
@@ -330,26 +334,26 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 	SECTION("Functionality")
 	{
 		LibMath::Matrix3 big;
-		big[big.getIndex(0, 0)] = 3.75f;
-		big[big.getIndex(0, 1)] = 3.f;
-		big[big.getIndex(0, 2)] = .75f;
-		big[big.getIndex(1, 0)] = 4.5f;
-		big[big.getIndex(1, 1)] = 2.5f;
-		big[big.getIndex(1, 2)] = 4.f;
-		big[big.getIndex(2, 0)] = 6.5f;
-		big[big.getIndex(2, 1)] = 4.5f;
-		big[big.getIndex(2, 2)] = 6.f;
+		big(0, 0) = 3.75f;
+		big(0, 1) = 3.f;
+		big(0, 2) = .75f;
+		big(1, 0) = 4.5f;
+		big(1, 1) = 2.5f;
+		big(1, 2) = 4.f;
+		big(2, 0) = 6.5f;
+		big(2, 1) = 4.5f;
+		big(2, 2) = 6.f;
 
 		LibMath::Matrix3 small;
-		small[small.getIndex(0, 0)] = 2.5f;
-		small[small.getIndex(0, 1)] = .5f;
-		small[small.getIndex(0, 2)] = 2.f;
-		small[small.getIndex(1, 0)] = 1.5f;
-		small[small.getIndex(1, 1)] = -.5f;
-		small[small.getIndex(1, 2)] = 1.f;
-		small[small.getIndex(2, 0)] = 3.5f;
-		small[small.getIndex(2, 1)] = 1.5f;
-		small[small.getIndex(2, 2)] = 3.f;
+		small(0, 0) = 2.5f;
+		small(0, 1) = .5f;
+		small(0, 2) = 2.f;
+		small(1, 0) = 1.5f;
+		small(1, 1) = -.5f;
+		small(1, 2) = 1.f;
+		small(2, 0) = 3.5f;
+		small(2, 1) = 1.5f;
+		small(2, 2) = 3.f;
 
 		glm::mat3 bigGlm{};
 		bigGlm[0][0] = 3.75f;

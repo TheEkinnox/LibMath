@@ -56,6 +56,9 @@ namespace LibMath
 		constexpr DataT					operator[](size_t index) const;
 		DataT&							operator[](size_t index);
 
+		float							operator()(length_t row, length_t column) const;
+		float&							operator()(length_t row, length_t column);
+
 		TMatrix&						operator+=(TMatrix const& other);
 		TMatrix&						operator-=(TMatrix const& other);
 

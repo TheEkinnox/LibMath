@@ -26,7 +26,7 @@ namespace LibMath
 		// Builds a diagonal matrix with the given scalar
 		for (length_t row = 0; row < Rows; row++)
 			for (length_t col = 0; col < Cols; col++)
-				m_values[getIndex(row, col)] = row == col ? scalar : 0;
+				(*this)(row, col) = row == col ? scalar : 0;
 	}
 
 	template <length_t Rows, length_t Cols, typename DataT>
@@ -95,6 +95,18 @@ namespace LibMath
 			throw std::out_of_range("Index out of range");
 
 		return m_values[index];
+	}
+
+	template <length_t Rows, length_t Cols, typename DataT>
+	float TMatrix<Rows, Cols, DataT>::operator()(length_t row, length_t column) const
+	{
+		return (*this)[getIndex(row, column)];
+	}
+
+	template <length_t Rows, length_t Cols, typename DataT>
+	float& TMatrix<Rows, Cols, DataT>::operator()(const length_t row, const length_t column)
+	{
+		return (*this)[getIndex(row, column)];
 	}
 
 	template <length_t Rows, length_t Cols, class DataT>
@@ -202,15 +214,9 @@ namespace LibMath
 				DataT scalar = 0;
 
 				for (length_t col = 0; col < Cols; col++)
-				{
-					const length_t curIndex = getIndex(row, col);
-					const length_t otherIndex = other.getIndex(col, otherCol);
+					scalar += (*this)(row, col) * other(col, otherCol);
 
-					scalar += m_values[curIndex] * other[otherIndex];
-				}
-
-				const length_t resultIndex = result.getIndex(row, otherCol);
-				result[resultIndex] = scalar;
+				result(row, otherCol) = scalar;
 			}
 		}
 
@@ -363,7 +369,7 @@ namespace LibMath
 				if (j == column)
 					continue;
 
-				minor[minor.getIndex(minorLine, minorCol++)] = m_values[getIndex(i, j)];
+				minor(minorLine, minorCol++) = (*this)(i, j);
 			}
 
 			minorLine++;
@@ -382,7 +388,7 @@ namespace LibMath
 
 		for (length_t i = 0; i < Rows; i++)
 			for (length_t j = 0; j < Cols; j++)
-				transposed[transposed.getIndex(j, i)] = m_values[getIndex(i, j)];
+				transposed(j, i) = (*this)(i, j);
 
 		return transposed;
 	}
@@ -397,7 +403,7 @@ namespace LibMath
 
 		for (length_t row = 0; row < Rows; row++)
 			for (length_t col = 0; col < Cols; col++)
-				coMatrix[getIndex(row, col)] = cofactor(row, col);
+				coMatrix(row, col) = cofactor(row, col);
 
 		return coMatrix;
 	}
