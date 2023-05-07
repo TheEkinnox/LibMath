@@ -93,7 +93,7 @@ namespace LibMath
 		static size_t					getSize();
 		static length_t					getIndex(length_t row, length_t column);
 		DataT*							getArray();
-		DataT*							getArray() const;
+		const DataT*					getArray() const;
 
 		DataT							determinant() const;
 		DataT							cofactor(length_t row, length_t column) const;

@@ -325,7 +325,7 @@ namespace LibMath
 	}
 
 	template <length_t Rows, length_t Cols, class DataT>
-	DataT* TMatrix<Rows, Cols, DataT>::getArray() const
+	const DataT* TMatrix<Rows, Cols, DataT>::getArray() const
 	{
 		return m_values;
 	}
