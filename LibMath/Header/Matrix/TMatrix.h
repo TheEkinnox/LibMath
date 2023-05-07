@@ -39,7 +39,10 @@ namespace LibMath
 	template<length_t Rows, length_t Cols, typename DataT>
 	class TMatrix
 	{
-		static_assert(std::is_arithmetic_v<DataT>);
+		static_assert(std::is_arithmetic_v<DataT>, "Invalid matrix - data type should be an arithmetic type");
+		static_assert(Rows > 0, "Invalid matrix - row count should be greater than or equal to zero");
+		static_assert(Cols > 0, "Invalid matrix - column count should be greater than or equal to zero");
+
 	public:
 		constexpr						TMatrix();
 		explicit constexpr				TMatrix(DataT scalar);
