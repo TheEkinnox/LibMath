@@ -186,7 +186,7 @@ namespace LibMath
 
 	template <class DataT>
 	constexpr TMatrix<4, 4, DataT> orthographicProjection(const DataT left, const DataT right,
-		const DataT bottom, const DataT top, const DataT near, const DataT far)
+		const DataT bottom, const DataT top, const DataT zNear, const DataT zFar)
 	{
 		TMatrix<4, 4, DataT> mat;
 
@@ -196,8 +196,8 @@ namespace LibMath
 		mat[mat.getIndex(1, 1)] = static_cast<DataT>(2) / (top - bottom);
 		mat[mat.getIndex(1, 3)] = (top + bottom) / (bottom - top);
 
-		mat[mat.getIndex(2, 2)] = static_cast<DataT>(2) / (near - far);
-		mat[mat.getIndex(2, 3)] = (far + near) / (near - far);
+		mat[mat.getIndex(2, 2)] = static_cast<DataT>(2) / (zNear - zFar);
+		mat[mat.getIndex(2, 3)] = (zFar + zNear) / (zNear - zFar);
 
 		mat[mat.getIndex(3, 3)] = static_cast<DataT>(1);
 
@@ -206,7 +206,7 @@ namespace LibMath
 
 	template <class DataT>
 	constexpr TMatrix<4, 4, DataT> perspectiveProjection(const Radian& fovY,
-		const DataT aspect, const DataT near, const DataT far)
+		const DataT aspect, const DataT zNear, const DataT zFar)
 	{
 		const DataT tanHalfFovY = tan(fovY * .5f);
 
@@ -214,8 +214,8 @@ namespace LibMath
 
 		mat[mat.getIndex(0, 0)] = static_cast<DataT>(1) / (aspect * tanHalfFovY);
 		mat[mat.getIndex(1, 1)] = static_cast<DataT>(1) / tanHalfFovY;
-		mat[mat.getIndex(2, 2)] = (far + near) / (near - far);
-		mat[mat.getIndex(2, 3)] = (static_cast<DataT>(2) * far * near) / (near - far);
+		mat[mat.getIndex(2, 2)] = (zFar + zNear) / (zNear - zFar);
+		mat[mat.getIndex(2, 3)] = (static_cast<DataT>(2) * zFar * zNear) / (zNear - zFar);
 		mat[mat.getIndex(3, 2)] = static_cast<DataT>(-1);
 
 		return mat;

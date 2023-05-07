@@ -39,10 +39,10 @@ namespace LibMath
 	constexpr TMatrix<4, 4, DataT>	rotationFromTo(const Vector3& from, const Vector3& to);
 
 	template <class DataT = float>
-	constexpr TMatrix<4, 4, DataT>	orthographicProjection(DataT left, DataT right, DataT bottom, DataT top, DataT near, DataT far);
+	constexpr TMatrix<4, 4, DataT>	orthographicProjection(DataT left, DataT right, DataT bottom, DataT top, DataT zNear, DataT zFar);
 
 	template <class DataT = float>
-	constexpr TMatrix<4, 4, DataT>	perspectiveProjection(const Radian& fovY, DataT aspect, DataT near, DataT far);
+	constexpr TMatrix<4, 4, DataT>	perspectiveProjection(const Radian& fovY, DataT aspect, DataT zNear, DataT zFar);
 
 	template <class DataT = float>
 	constexpr TMatrix<4, 4, DataT>	lookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
