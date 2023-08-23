@@ -21,7 +21,7 @@ namespace LibMath
 
 	Radian::operator Degree() const
 	{
-		return Degree(m_value * 180 / g_pi);
+		return Degree(m_value * g_rad2Deg);
 	}
 
 	Radian& Radian::operator=(Radian const& other)
@@ -152,7 +152,7 @@ namespace LibMath
 
 	Degree::operator Radian() const
 	{
-		return Radian(m_value * g_pi / 180);
+		return Radian(m_value * g_deg2Rad);
 	}
 
 	Degree& Degree::operator=(Degree const& other)
