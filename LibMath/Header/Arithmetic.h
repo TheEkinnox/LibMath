@@ -110,7 +110,7 @@ namespace LibMath
 	 * \param scale The comparison's epsilon's scale
 	 * \return True if a can be considered equal to b. False otherwise.
 	 */
-	constexpr bool	floatEquals(float a, float b, float scale = 10.f);
+	constexpr bool	floatEquals(float a, float b, float scale = 100.f);
 
 	/**
 	 * \brief Checks whether a given value is in the given range.

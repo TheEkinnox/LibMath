@@ -58,9 +58,9 @@ TEST_CASE("Arithmetic", "[.all][arithmetic]")
 	CHECK(LibMath::floatEquals(1.00001f, 1.00001f));
 	CHECK(LibMath::floatEquals(1.000001f, 1.000001f));
 	CHECK(LibMath::floatEquals(1.000001f, 1.0000001f));
-	CHECK(!LibMath::floatEquals(1.00001f, 1.000001f));
-	CHECK(!LibMath::floatEquals(10.0001f, 10.00001f));
-	CHECK(!LibMath::floatEquals(100.001f, 100.0001f));
+	CHECK(!LibMath::floatEquals(1.0001f, 1.00001f));
+	CHECK(!LibMath::floatEquals(10.001f, 10.0001f));
+	CHECK(!LibMath::floatEquals(100.01f, 100.001f));
 	CHECK(!LibMath::floatEquals(1.000001f, 1.0000001f, 1.f));
 	CHECK(!LibMath::floatEquals(10.00001f, 10.000001f, 1.f));
 	CHECK(!LibMath::floatEquals(100.0001f, 100.00001f, 1.f));
