@@ -133,11 +133,11 @@ namespace LibMath
 	}
 
 	// adapted from https://stackoverflow.com/a/15012792
-	constexpr bool floatEquals(const float a, const float b)
+	constexpr bool floatEquals(const float a, const float b, const float scale)
 	{
 		const float maxXYOne = max(max(1.0f, abs(a)), abs(b));
 
-		return abs(a - b) <= std::numeric_limits<float>::epsilon() * maxXYOne;
+		return abs(a - b) <= std::numeric_limits<float>::epsilon() * scale * maxXYOne;
 	}
 
 	template <typename T>

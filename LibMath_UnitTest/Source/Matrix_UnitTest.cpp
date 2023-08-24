@@ -31,7 +31,7 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 
 		// destructor
 		{
-			LibMath::Matrix3 temp;
+			[[maybe_unused]] LibMath::Matrix3 temp;
 		}
 
 		// basic constructor
@@ -413,7 +413,7 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 		{
 			LibMath::Matrix3 cofactorMat = big.coMatrix();
 			glm::mat3 cofactorMatGlm = glm::transpose(glm::inverse(bigGlm) * glm::determinant(bigGlm));
-			
+
 			CHECK_MATRIX(cofactorMat, cofactorMatGlm);
 		}
 
@@ -424,6 +424,9 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 				glm::mat3 inverseGlm = glm::inverse(bigGlm);
 
 				CHECK_MATRIX(inverse, inverseGlm);
+
+				CHECK(inverse * big == big * inverse);
+				CHECK((inverse * big).isIdentity());
 			}
 
 			{

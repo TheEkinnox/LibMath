@@ -2,6 +2,7 @@
 #define __LIBMATH__MATRIX__TMATRIX_INL__
 #include <stdexcept>
 
+#include "Arithmetic.h"
 #include "TMatrix.h"
 
 namespace LibMath
@@ -270,7 +271,7 @@ namespace LibMath
 			return false;
 
 		for (size_t i = 0; i < getSize(); i++)
-			if (m_values[i] != other[i])
+			if (!floatEquals(m_values[i], other[i]))
 				return false;
 
 		return true;

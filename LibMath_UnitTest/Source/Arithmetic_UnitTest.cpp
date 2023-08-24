@@ -29,7 +29,7 @@ TEST_CASE("Arithmetic", "[.all][arithmetic]")
 	CHECK(LibMath::squareRoot(val * .25f) == Catch::Approx(glm::sqrt(val * .25f)));
 	CHECK(LibMath::squareRoot(val * .01f) == Catch::Approx(glm::sqrt(val * .01f)));
 	CHECK(LibMath::squareRoot(val * .001f) == Catch::Approx(glm::sqrt(val * .001f)));
-	
+
 	CHECK(LibMath::pow(val, 3) == Catch::Approx(glm::pow(val, 3)));
 	CHECK(LibMath::pow(val, 2) == Catch::Approx(glm::pow(val, 2)));
 	CHECK(LibMath::pow(val, 1) == Catch::Approx(glm::pow(val, 1)));
@@ -49,4 +49,19 @@ TEST_CASE("Arithmetic", "[.all][arithmetic]")
 	CHECK(LibMath::max(2.f * val, val) == Catch::Approx(glm::max(2.f * val, val)));
 
 	CHECK(LibMath::abs(-val) == Catch::Approx(glm::abs(-val)));
+
+	CHECK(LibMath::floatEquals(1.0f, 1.0f));
+	CHECK(LibMath::floatEquals(1.1f, 1.1f));
+	CHECK(LibMath::floatEquals(1.01f, 1.01f));
+	CHECK(LibMath::floatEquals(1.001f, 1.001f));
+	CHECK(LibMath::floatEquals(1.0001f, 1.0001f));
+	CHECK(LibMath::floatEquals(1.00001f, 1.00001f));
+	CHECK(LibMath::floatEquals(1.000001f, 1.000001f));
+	CHECK(LibMath::floatEquals(1.000001f, 1.0000001f));
+	CHECK(!LibMath::floatEquals(1.00001f, 1.000001f));
+	CHECK(!LibMath::floatEquals(10.0001f, 10.00001f));
+	CHECK(!LibMath::floatEquals(100.001f, 100.0001f));
+	CHECK(!LibMath::floatEquals(1.000001f, 1.0000001f, 1.f));
+	CHECK(!LibMath::floatEquals(10.00001f, 10.000001f, 1.f));
+	CHECK(!LibMath::floatEquals(100.0001f, 100.00001f, 1.f));
 }
