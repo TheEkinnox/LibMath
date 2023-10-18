@@ -9,21 +9,24 @@ namespace LibMath
 	 * \param value The value to floor
 	 * \return The highest integer value lower than or equal to the received value
 	 */
-	constexpr float	floor(float value);
+    template <typename T>
+	constexpr T	floor(T value);
 
 	/**
 	 * \brief Returns the lowest integer greater than or equal to the received value
 	 * \param value The value to ceil
 	 * \return The highest integer value lower than or equal to the received value
 	 */
-	constexpr float	ceil(float value);
+    template <typename T>
+	constexpr T	ceil(T value);
 
 	/**
 	 * \brief Rounds a given value to the nearest integer
 	 * \param value The value to round
 	 * \return The received value rounded to the nearest integer
 	 */
-	constexpr float	round(float value);
+    template <typename T>
+	constexpr T	round(T value);
 
 	/**
 	 * \brief Returns the received value limited to the given range
@@ -52,7 +55,8 @@ namespace LibMath
 	 * \param b The second value of the range
 	 * \return value wrapped between min and max
 	 */
-	constexpr float	wrap(float value, float a, float b);
+    template <typename T>
+	constexpr T	wrap(T value, T a, T b);
 
 	/**
 	 * \brief Approximates the square root of a value up to the given precision.
@@ -69,7 +73,8 @@ namespace LibMath
 	 * \param exponent The exponent to which the value must be raised
 	 * \return The received value raised to the given exponent
 	 */
-	constexpr float	pow(float value, int exponent);
+    template <typename T>
+	constexpr T	pow(T value, int exponent);
 
 	/**
 	 * \brief Returns the smallest of two given values
@@ -94,14 +99,16 @@ namespace LibMath
 	 * \paran value The number whose absolute value must be returned
 	 * \return The absolute value of the received number
 	 */
-	constexpr float	abs(float value);
+    template <typename T>
+	constexpr T	abs(T value);
 
 	/**
 	 * \brief Returns the sign of the given number
 	 * \paran value The number whose absolute value must be returned
 	 * \return -1 if the number is negative, 1 otherwise
 	 */
-	constexpr float	sign(float value);
+    template <typename T>
+	constexpr T	sign(T value);
 
 	/**
 	 * \brief Checks whether two floats can be considered equal
@@ -110,7 +117,8 @@ namespace LibMath
 	 * \param scale The comparison's epsilon's scale
 	 * \return True if a can be considered equal to b. False otherwise.
 	 */
-	constexpr bool	floatEquals(float a, float b, float scale = 100.f);
+    template <typename T>
+	constexpr bool	floatEquals(T a, T b, T scale = 100);
 
 	/**
 	 * \brief Checks whether a given value is in the given range.

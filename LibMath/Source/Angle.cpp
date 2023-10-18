@@ -67,7 +67,7 @@ namespace LibMath
 		if (useNegative)
 			this->m_value = LibMath::wrap(this->m_value, -g_pi, g_pi);
 		else
-			this->m_value = LibMath::wrap(this->m_value, 0, 2 * g_pi);
+			this->m_value = LibMath::wrap(this->m_value, 0.f, 2.f * g_pi);
 	}
 
 	float Radian::degree(const bool useNegative) const
@@ -196,9 +196,9 @@ namespace LibMath
 	void Degree::wrap(const bool useNegative)
 	{
 		if (useNegative)
-			this->m_value = LibMath::wrap(this->m_value, -180, 180);
+			this->m_value = LibMath::wrap(this->m_value, -180.f, 180.f);
 		else
-			this->m_value = LibMath::wrap(this->m_value, 0, 360);
+			this->m_value = LibMath::wrap(this->m_value, 0.f, 360.f);
 	}
 
 	float Degree::degree(const bool useNegative) const

@@ -5,9 +5,15 @@
 
 namespace LibMath
 {
-	constexpr float floor(const float value)
+    template <typename T>
+	constexpr T floor(const T value)
 	{
-		const float intPart = static_cast<float>(static_cast<int>(value));
+        static_assert(std::is_arithmetic_v<T>);
+
+        if constexpr (std::is_integral_v<T>)
+            return value;
+
+		const T intPart = static_cast<T>(static_cast<int>(value));
 
 		if (intPart > value)
 			return intPart - 1;
@@ -15,9 +21,15 @@ namespace LibMath
 		return intPart;
 	}
 
-	constexpr float ceil(const float value)
+    template <typename T>
+	constexpr T ceil(const T value)
 	{
-		const auto intPart = static_cast<float>(static_cast<int>(value));
+        static_assert(std::is_arithmetic_v<T>);
+
+        if constexpr (std::is_integral_v<T>)
+            return value;
+
+		const auto intPart = static_cast<T>(static_cast<int>(value));
 
 		if (intPart < value)
 			return intPart + 1;
@@ -25,10 +37,16 @@ namespace LibMath
 		return intPart;
 	}
 
-	constexpr float round(const float value)
+    template <typename T>
+	constexpr T round(const T value)
 	{
-		const auto intPart = static_cast<float>(static_cast<int>(value));
-		const float decimalPart = value - intPart;
+        static_assert(std::is_arithmetic_v<T>);
+
+        if constexpr (std::is_integral_v<T>)
+            return value;
+
+		const auto intPart = static_cast<T>(static_cast<int>(value));
+		const T decimalPart = value - intPart;
 
 		if (decimalPart < .5f)
 			return intPart;
@@ -39,8 +57,8 @@ namespace LibMath
 	template <typename T>
 	constexpr T	clamp(T value, T a, T b)
 	{
-		const float minVal = min(a, b);
-		const float maxVal = max(a, b);
+		const T minVal = min(a, b);
+		const T maxVal = max(a, b);
 		return max(minVal, min(value, maxVal));
 	}
 
@@ -50,10 +68,13 @@ namespace LibMath
 		return abs(value - a) < abs(value - b) ? a : b;
 	}
 
-	constexpr float wrap(const float value, const float a, const float b)
+    template <typename T>
+	constexpr T wrap(const T value, const T a, const T b)
 	{
-		const float min = a < b ? a : b;
-		const float max = a > b ? a : b;
+        static_assert(std::is_arithmetic_v<T>);
+
+		const T min = a < b ? a : b;
+		const T max = a > b ? a : b;
 
 		return value - (max - min) * floor((value - min) / (max - min));
 	}
@@ -82,15 +103,18 @@ namespace LibMath
 		return sqrt;
 	}
 
-	constexpr float pow(const float value, const int exponent)
+    template <typename T>
+	constexpr T pow(const T value, const int exponent)
 	{
-		if (floatEquals(value, 1.f) || exponent == 0)
-			return 1.f;
+        static_assert(std::is_arithmetic_v<T>);
 
-		if (floatEquals(value, 0))
-			return 0.f;
+        if (floatEquals(value, static_cast<T>(0)))
+            return 0;
 
-		float result;
+		if (floatEquals(value, static_cast<T>(1)) || exponent == 0)
+			return 1;
+
+		T result;
 
 		if (exponent > 0)
 		{
@@ -101,7 +125,7 @@ namespace LibMath
 		}
 		else
 		{
-			result = 1.f;
+			result = 1.;
 
 			for (int i = 0; i > exponent; i--)
 				result /= value;
@@ -122,29 +146,39 @@ namespace LibMath
 		return a > b ? a : b;
 	}
 
-	constexpr float abs(const float value)
+    template<typename T>
+	constexpr T abs(const T value)
 	{
+        static_assert(std::is_arithmetic_v<T>);
 		return value < 0 ? -value : value;
 	}
 
-	constexpr float sign(const float value)
+    template<typename T>
+	constexpr T sign(const T value)
 	{
-		return value < 0 ? -1.f : 1.f;
+        static_assert(std::is_arithmetic_v<T>);
+		return value < 0 ? -1 : 1;
 	}
 
 	// adapted from https://stackoverflow.com/a/15012792
-	constexpr bool floatEquals(const float a, const float b, const float scale)
+    template <typename T>
+	constexpr bool floatEquals(const T a, const T b, const T scale)
 	{
-		const float maxXYOne = max(max(1.0f, abs(a)), abs(b));
+        static_assert(std::is_arithmetic_v<T>);
 
-		return abs(a - b) <= std::numeric_limits<float>::epsilon() * scale * maxXYOne;
+        if constexpr (std::is_integral_v<T>)
+            return a == b;
+
+		const T maxXYOne = max(max(static_cast<T>(1), abs(a)), abs(b));
+
+		return abs(a - b) <= std::numeric_limits<T>::epsilon() * scale * maxXYOne;
 	}
 
 	template <typename T>
 	constexpr bool isInRange(T value, T a, T b)
 	{
-		const float minVal = min(a, b);
-		const float maxVal = max(a, b);
+		const T minVal = min(a, b);
+		const T maxVal = max(a, b);
 
 		return minVal <= value && value <= maxVal;
 	}
