@@ -22,7 +22,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	constexpr TMatrix<4, 4, DataT> translation(const Vector3& translation)
+	constexpr TMatrix<4, 4, DataT> translation(const TVector3<DataT>& translation)
 	{
 		return LibMath::translation(translation.m_x, translation.m_y, translation.m_z);
 	}
@@ -41,15 +41,15 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	constexpr TMatrix<4, 4, DataT> scaling(const Vector3& scale)
+	constexpr TMatrix<4, 4, DataT> scaling(const TVector3<DataT>& scale)
 	{
 		return scaling<DataT>(scale.m_x, scale.m_y, scale.m_z);
 	}
 
 	template <class DataT>
-	constexpr TMatrix<4, 4, DataT> rotation(const Radian& angle, const Vector3& axis)
+	constexpr TMatrix<4, 4, DataT> rotation(const Radian& angle, const TVector3<DataT>& axis)
 	{
-		const Vector3 dir = axis.normalized();
+		const TVector3<DataT> dir = axis.normalized();
 		const DataT cos = LibMath::cos(angle);
 		const DataT sin = LibMath::sin(angle);
 
@@ -117,7 +117,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	constexpr TMatrix<4, 4, DataT> rotation(const Vector3& angles, const bool isRadian)
+	constexpr TMatrix<4, 4, DataT> rotation(const TVector3<DataT>& angles, const bool isRadian)
 	{
 		if (isRadian)
 			return rotation<DataT>(Radian(angles.m_y), Radian(angles.m_x), Radian(angles.m_z));
@@ -133,7 +133,7 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	constexpr TMatrix<4, 4, DataT> rotationEuler(const Vector3& angles, const bool isRadian)
+	constexpr TMatrix<4, 4, DataT> rotationEuler(const TVector3<DataT>& angles, const bool isRadian)
 	{
 		if (isRadian)
 			return rotationEuler<DataT>(Radian(angles.m_x), Radian(angles.m_y), Radian(angles.m_z));
@@ -143,7 +143,7 @@ namespace LibMath
 
 	// Adapted from https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724
 	template <class DataT>
-	constexpr TMatrix<4, 4, DataT> rotationFromTo(const Vector3& from, const Vector3& to)
+	constexpr TMatrix<4, 4, DataT> rotationFromTo(const TVector3<DataT>& from, const TVector3<DataT>& to)
 	{
 		const auto& fromDir = from.normalized();
 		const auto& toDir = to.normalized();
@@ -154,7 +154,7 @@ namespace LibMath
 		if (toDir == -fromDir)
 			return scaling<DataT>(-1, -1, -1);
 
-		const Vector3 axis = from.cross(to);
+		const TVector3<DataT> axis = from.cross(to);
 
 		const DataT cosA = from.dot(to);
 		const DataT k = static_cast<DataT>(1) / (static_cast<DataT>(1) + cosA);
@@ -222,12 +222,12 @@ namespace LibMath
 	}
 
 	template <class DataT>
-	constexpr TMatrix<4, 4, DataT> lookAt(const Vector3& eye, const Vector3& center,
-		const Vector3& up)
+	constexpr TMatrix<4, 4, DataT> lookAt(const TVector3<DataT>& eye, const TVector3<DataT>& center,
+		const TVector3<DataT>& up)
 	{
-		const Vector3 f = (center - eye).normalized();
-		const Vector3 s = f.cross(up).normalized();
-		const Vector3 u = s.cross(f);
+		const TVector3<DataT> f = (center - eye).normalized();
+		const TVector3<DataT> s = f.cross(up).normalized();
+		const TVector3<DataT> u = s.cross(f);
 
 		TMatrix<4, 4, DataT> mat;
 

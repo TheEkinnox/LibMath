@@ -6,9 +6,10 @@
 
 namespace LibMath
 {
-	inline Vector4 operator*(Matrix4 const& operation, Vector4 const& operand)
+	template <class T>
+	TVector4<T> operator*(TMatrix<4, 4, T> const& operation, TVector4<T> const& operand)
 	{
-		TMatrix<4, 1, float> vec4Mat;
+		TMatrix<4, 1, T> vec4Mat;
 		vec4Mat[0] = operand.m_x;
 		vec4Mat[1] = operand.m_y;
 		vec4Mat[2] = operand.m_z;
