@@ -157,7 +157,7 @@ namespace LibMath
 	constexpr T sign(const T value)
 	{
         static_assert(std::is_arithmetic_v<T>);
-		return value < 0 ? -1 : 1;
+		return static_cast<T>(value < 0 ? -1 : 1);
 	}
 
 	// adapted from https://stackoverflow.com/a/15012792
