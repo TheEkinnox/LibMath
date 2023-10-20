@@ -1,5 +1,5 @@
 #include <Vector/Vector3.h>
-#include <Angle//Radian.h>
+#include <Angle/Radian.h>
 
 #define GLM_FORCE_XYZW_ONLY
 #include <glm/glm.hpp>
@@ -42,9 +42,17 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 		glm::vec3 copyGlm{ allParamGlm };
 		CHECK_VECTOR3(copy, copyGlm);
 
+		LibMath::Vector3I iCopy{ allParam };
+		glm::ivec3 iCopyGlm{ allParamGlm };
+		CHECK_VECTOR3(iCopy, iCopyGlm);
+
 		// assignment operator
 		empty = allParam;
 		emptyGlm = allParamGlm;
+		CHECK_VECTOR3(empty, emptyGlm);
+
+		empty = iCopy;
+		emptyGlm = iCopyGlm;
 		CHECK_VECTOR3(empty, emptyGlm);
 
 		CHECK(sizeof LibMath::Vector3 == sizeof glm::vec3);
@@ -133,6 +141,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 		glm::vec3 const smallGlm{ 2.5f, .5f, 2.f };
 		glm::vec3 const bigGlm{ 3.75f, 3.f, .75f };
 
+		const float scalar = 3.75f;
+
 		SECTION("Addition")
 		{
 			{
@@ -203,6 +213,24 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
 				CHECK_VECTOR3(product, productGlm);
 			}
+
+			{
+				LibMath::Vector3 productAssignment = big;
+				productAssignment *= scalar;
+
+				glm::vec3 productAssignmentGlm = bigGlm;
+				productAssignmentGlm *= scalar;
+
+				CHECK_VECTOR3(productAssignment, productAssignmentGlm);
+			}
+
+			{
+				LibMath::Vector3 product = big * scalar;
+
+				glm::vec3 productGlm = bigGlm * scalar;
+
+				CHECK_VECTOR3(product, productGlm);
+			}
 		}
 
 		SECTION("Division")
@@ -221,6 +249,24 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 				LibMath::Vector3 quotient = big / small;
 
 				glm::vec3 quotientGlm = bigGlm / smallGlm;
+
+				CHECK_VECTOR3(quotient, quotientGlm);
+			}
+
+			{
+				LibMath::Vector3 quotientAssignment = big;
+				quotientAssignment /= scalar;
+
+				glm::vec3 quotientAssignmentGlm = bigGlm;
+				quotientAssignmentGlm /= scalar;
+
+				CHECK_VECTOR3(quotientAssignment, quotientAssignmentGlm);
+			}
+
+			{
+				LibMath::Vector3 quotient = big / scalar;
+
+				glm::vec3 quotientGlm = bigGlm / scalar;
 
 				CHECK_VECTOR3(quotient, quotientGlm);
 			}

@@ -16,14 +16,6 @@ namespace LibMath
     class TVector4
     {
     public:
-        TVector4() = default;
-        explicit TVector4(T value);              // set all the component to the same value
-        TVector4(T x, T y, T z, T w);            // set all components individually
-        TVector4(const TVector3<T>& other, T w); // copy x, y, z from vector3 and use given w
-        TVector4(const TVector4& other) = default;
-        TVector4(TVector4&& other) = default;
-        ~TVector4() = default;
-
         static TVector4 zero();  // return a vector with all its component set to 0
         static TVector4 one();   // return a vector with all its component set to 1
         static TVector4 up();    // return a unit vector pointing upward
@@ -33,21 +25,53 @@ namespace LibMath
         static TVector4 front(); // return a unit vector pointing forward
         static TVector4 back();  // return a unit vector pointing backward
 
-        TVector4& operator=(const TVector4& other) = default;
-        TVector4& operator=(TVector4&& other) = default;
+        TVector4() = default;
+        explicit TVector4(T value);   // set all the component to the same value
+        TVector4(T x, T y, T z, T w); // set all components individually
+
+        template <class U, class W>
+        TVector4(const TVector3<U>& other, W w); // copy x, y, z from vector3 and use given w
+
+        template <class U>
+        TVector4(const TVector4<U>& other);
+
+        template <class U>
+        TVector4(TVector4<U>&& other);
+
+        ~TVector4() = default;
+
+        template <class U>
+        TVector4& operator=(const TVector4<U>& other);
+
+        template <class U>
+        TVector4& operator=(TVector4<U>&& other);
 
         T& operator[](int index);       // return this vector component value
         T  operator[](int index) const; // return this vector component value
 
-        TVector4& operator+=(const TVector4& other); // addition component wise
-        TVector4& operator-=(const TVector4& other); // subtraction component wise
-        TVector4& operator*=(const TVector4& other); // multiplication component wise
-        TVector4& operator/=(const TVector4& other); // division component wise
+        template <class U>
+        TVector4& operator+=(const TVector4<U>& other); // addition component wise
 
-        TVector4& operator+=(const T& value); // add a value to all components
-        TVector4& operator-=(const T& value); // subtract a value from all components
-        TVector4& operator*=(const T& value); // multiply all components by a value
-        TVector4& operator/=(const T& value); // divide all components by a value
+        template <class U>
+        TVector4& operator-=(const TVector4<U>& other); // subtraction component wise
+
+        template <class U>
+        TVector4& operator*=(const TVector4<U>& other); // multiplication component wise
+
+        template <class U>
+        TVector4& operator/=(const TVector4<U>& other); // division component wise
+
+        template <class U>
+        TVector4& operator+=(U value); // add a value to all components
+
+        template <class U>
+        TVector4& operator-=(U value); // subtract a value from all components
+
+        template <class U>
+        TVector4& operator*=(U value); // multiply all components by a value
+
+        template <class U>
+        TVector4& operator/=(U value); // divide all components by a value
 
         T*       getArray();
         const T* getArray() const;
@@ -56,8 +80,11 @@ namespace LibMath
 
         T dot(const TVector4& other) const; // return dot product result
 
-        bool isLongerThan(const TVector4&) const;  // return true if this vector magnitude is greater than the other
-        bool isShorterThan(const TVector4&) const; // return true if this vector magnitude is less than the other
+        template <class U>
+        bool isLongerThan(const TVector4<U>&) const; // return true if this vector magnitude is greater than the other
+
+        template <class U>
+        bool isShorterThan(const TVector4<U>&) const; // return true if this vector magnitude is less than the other
 
         bool isUnitVector() const; // return true if this vector magnitude is 1
 
@@ -85,68 +112,68 @@ namespace LibMath
         T m_w = 0;
     };
 
-    template <class T>
-    bool operator==(const TVector4<T>& left, const TVector4<T>& right);
+    template <class T, class U>
+    bool operator==(const TVector4<T>& left, const TVector4<U>& right);
     // TVector4{ 1 } == TVector4::one()					// true						// return whether 2 vectors have the same components
 
-    template <class T>
-    bool operator!=(const TVector4<T>& left, const TVector4<T>& right);
+    template <class T, class U>
+    bool operator!=(const TVector4<T>& left, const TVector4<U>& right);
     // TVector4{ 1 } != TVector4::zero()					// true						// return whether 2 vectors have different components
 
-    template <class T>
-    bool operator>(const TVector4<T>& left, const TVector4<T>& right);
+    template <class T, class U>
+    bool operator>(const TVector4<T>& left, const TVector4<U>& right);
     // TVector4{ 2 } > TVector4::one()					// true						// return whether the left vector's magnitude is greater than the right vector's magnitude
 
-    template <class T>
-    bool operator<(const TVector4<T>& left, const TVector4<T>& right);
+    template <class T, class U>
+    bool operator<(const TVector4<T>& left, const TVector4<U>& right);
     // TVector4::zero() < TVector4{ 1 }					// true						// return whether the left vector's magnitude is smaller than the right vector's magnitude
 
-    template <class T>
-    bool operator>=(const TVector4<T>& left, const TVector4<T>& right);
+    template <class T, class U>
+    bool operator>=(const TVector4<T>& left, const TVector4<U>& right);
     // TVector4{ 1 } == TVector4::one()					// true						// return whether the left vector's magnitude is greater than or equal to the right vector's magnitude
 
-    template <class T>
-    bool operator<=(const TVector4<T>& left, const TVector4<T>& right);
+    template <class T, class U>
+    bool operator<=(const TVector4<T>& left, const TVector4<U>& right);
     // TVector4{ 1 } != TVector4::zero()					// true						// return whether the left vector's magnitude is smaller than or equal to the right vector's magnitude
 
     template <class T>
     TVector4<T> operator-(const TVector4<T>& vector);
     // -TVector4{ .5, 1.5, -2.5, 0 }						// { -.5, -1.5, 2.5, 0 }	// return a copy of a vector with all its component inverted
 
-    template <class T>
-    TVector4<T> operator+(TVector4<T> left, const TVector4<T>& right);
+    template <class T, class U>
+    TVector4<T> operator+(TVector4<T> left, const TVector4<U>& right);
     // TVector4{ .5, 1.5, -2.5, 0 } + TVector4::one()		// { 1.5, 2.5, -1.5, 1 }	// add 2 vectors component wise
 
-    template <class T>
-    TVector4<T> operator-(TVector4<T> left, const TVector4<T>& right);
+    template <class T, class U>
+    TVector4<T> operator-(TVector4<T> left, const TVector4<U>& right);
     // TVector4{ .5, 1.5, -2.5, 1 } - TVector4{ 1 }		// { -.5, .5, -3.5, 0 }		// subtract 2 vectors component wise
 
-    template <class T>
-    TVector4<T> operator*(TVector4<T> left, const TVector4<T>& right);
+    template <class T, class U>
+    TVector4<T> operator*(TVector4<T> left, const TVector4<U>& right);
     // TVector4{ .5, 1.5, -2.5, 1 } * TVector4::zero()	// { 0, 0, 0, 0 }			// multiply 2 vectors component wise
 
-    template <class T>
-    TVector4<T> operator/(TVector4<T> left, const TVector4<T>& right);
+    template <class T, class U>
+    TVector4<T> operator/(TVector4<T> left, const TVector4<U>& right);
     // TVector4{ .5, 1.5, -2.5, 0 } / TVector4{ 2 }		// { .25, .75, -1.25, 0 }	// divide 2 vectors component wise
 
-    template <class T>
-    TVector4<T> operator+(TVector4<T> vector, const T& value);
+    template <class T, class U>
+    TVector4<T> operator+(TVector4<T> vector, U value);
     // TVector4{ .5, 1.5, -2.5, 0 } + 1					// { 1.5, 2.5, -1.5, 1 }	// add a value to all components of a vector
 
-    template <class T>
-    TVector4<T> operator-(TVector4<T> vector, const T& value);
+    template <class T, class U>
+    TVector4<T> operator-(TVector4<T> vector, U value);
     // TVector4{ .5, 1.5, -2.5, 1 } - 1					// { -.5, .5, -3.5, 0 }		// subtract a value from all components of a vector
 
-    template <class T>
-    TVector4<T> operator*(TVector4<T> vector4, const T& scalar);
+    template <class T, class U>
+    TVector4<T> operator*(TVector4<T> vector, U scalar);
     // TVector4{ .5, 1.5, -2.5, 1 } * 0					// { 0, 0, 0, 0 }			// multiply all components of a vector by a value
 
-    template <class T>
-    TVector4<T> operator*(const T& scalar, TVector4<T> vector);
+    template <class T, class U>
+    TVector4<U> operator*(U scalar, TVector4<T> vector);
     // 0 * TVector4{ .5, 1.5, -2.5, 1 }					// { 0, 0, 0, 0 }			// multiply all components of a vector by a value
 
-    template <class T>
-    TVector4<T> operator/(TVector4<T> vector, const T& scalar);
+    template <class T, class U>
+    TVector4<T> operator/(TVector4<T> vector, U scalar);
     // TVector4{ .5, 1.5, -2.5, 0 } / 2					// { .25, .75, -1.25, 0 }	// divide all components of a vector by a value
 
     template <class T>

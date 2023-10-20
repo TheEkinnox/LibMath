@@ -3,8 +3,6 @@
 
 #include <sstream>
 
-#include "Angle/Radian.h"
-
 #include "Matrix/Matrix4.h"
 
 #include "Vector/Vector3.h"
@@ -12,18 +10,6 @@
 
 namespace LibMath
 {
-    template <class T>
-    TVector3<T>::TVector3(const T value)
-        : TVector3(value, value, value)
-    {
-    }
-
-    template <class T>
-    TVector3<T>::TVector3(const T x, const T y, const T z)
-        : m_x(x), m_y(y), m_z(z)
-    {
-    }
-
     template <class T>
     TVector3<T> TVector3<T>::zero()
     {
@@ -73,6 +59,60 @@ namespace LibMath
     }
 
     template <class T>
+    TVector3<T>::TVector3(const T value)
+        : TVector3(value, value, value)
+    {
+    }
+
+    template <class T>
+    TVector3<T>::TVector3(const T x, const T y, const T z)
+        : m_x(x), m_y(y), m_z(z)
+    {
+    }
+
+    template <class T>
+    template <class U>
+    TVector3<T>::TVector3(const TVector3<U>& other)
+        : TVector3(static_cast<T>(other.m_x), static_cast<T>(other.m_y), static_cast<T>(other.m_z))
+    {
+    }
+
+    template <class T>
+    template <class U>
+    TVector3<T>::TVector3(TVector3<U>&& other)
+        : TVector3(static_cast<T>(other.m_x), static_cast<T>(other.m_y), static_cast<T>(other.m_z))
+    {
+    }
+
+    template <class T>
+    template <class U>
+    TVector3<T>& TVector3<T>::operator=(const TVector3<U>& other)
+    {
+        if (reinterpret_cast<const TVector3*>(&other) == this)
+            return *this;
+
+        m_x = static_cast<T>(other.m_x);
+        m_y = static_cast<T>(other.m_y);
+        m_z = static_cast<T>(other.m_z);
+
+        return *this;
+    }
+
+    template <class T>
+    template <class U>
+    TVector3<T>& TVector3<T>::operator=(TVector3<U>&& other)
+    {
+        if (reinterpret_cast<const TVector3*>(&other) == this)
+            return *this;
+
+        m_x = static_cast<T>(other.m_x);
+        m_y = static_cast<T>(other.m_y);
+        m_z = static_cast<T>(other.m_z);
+
+        return *this;
+    }
+
+    template <class T>
     T& TVector3<T>::operator[](const int index)
     {
         switch (index)
@@ -117,81 +157,97 @@ namespace LibMath
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator+=(const TVector3& other)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator+=(const TVector3<U>& other)
     {
-        this->m_x += other.m_x;
-        this->m_y += other.m_y;
-        this->m_z += other.m_z;
+        this->m_x += static_cast<T>(other.m_x);
+        this->m_y += static_cast<T>(other.m_y);
+        this->m_z += static_cast<T>(other.m_z);
 
         return *this;
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator-=(const TVector3& other)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator-=(const TVector3<U>& other)
     {
-        this->m_x -= other.m_x;
-        this->m_y -= other.m_y;
-        this->m_z -= other.m_z;
+        this->m_x -= static_cast<T>(other.m_x);
+        this->m_y -= static_cast<T>(other.m_y);
+        this->m_z -= static_cast<T>(other.m_z);
 
         return *this;
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator*=(const TVector3& other)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator*=(const TVector3<U>& other)
     {
-        this->m_x *= other.m_x;
-        this->m_y *= other.m_y;
-        this->m_z *= other.m_z;
+        this->m_x *= static_cast<T>(other.m_x);
+        this->m_y *= static_cast<T>(other.m_y);
+        this->m_z *= static_cast<T>(other.m_z);
 
         return *this;
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator/=(const TVector3& other)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator/=(const TVector3<U>& other)
     {
-        this->m_x /= other.m_x;
-        this->m_y /= other.m_y;
-        this->m_z /= other.m_z;
+        this->m_x /= static_cast<T>(other.m_x);
+        this->m_y /= static_cast<T>(other.m_y);
+        this->m_z /= static_cast<T>(other.m_z);
 
         return *this;
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator+=(const T& value)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator+=(U value)
     {
-        this->m_x += value;
-        this->m_y += value;
-        this->m_z += value;
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
+        this->m_x += static_cast<T>(value);
+        this->m_y += static_cast<T>(value);
+        this->m_z += static_cast<T>(value);
 
         return *this;
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator-=(const T& value)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator-=(U value)
     {
-        this->m_x -= value;
-        this->m_y -= value;
-        this->m_z -= value;
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
+        this->m_x -= static_cast<T>(value);
+        this->m_y -= static_cast<T>(value);
+        this->m_z -= static_cast<T>(value);
 
         return *this;
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator*=(const T& value)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator*=(U value)
     {
-        this->m_x *= value;
-        this->m_y *= value;
-        this->m_z *= value;
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
+        this->m_x *= static_cast<T>(value);
+        this->m_y *= static_cast<T>(value);
+        this->m_z *= static_cast<T>(value);
 
         return *this;
     }
 
     template <class T>
-    TVector3<T>& TVector3<T>::operator/=(const T& value)
+    template <class U>
+    TVector3<T>& TVector3<T>::operator/=(U value)
     {
-        this->m_x /= value;
-        this->m_y /= value;
-        this->m_z /= value;
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
+        this->m_x /= static_cast<T>(value);
+        this->m_y /= static_cast<T>(value);
+        this->m_z /= static_cast<T>(value);
 
         return *this;
     }
@@ -270,15 +326,17 @@ namespace LibMath
     }
 
     template <class T>
-    bool TVector3<T>::isLongerThan(const TVector3& other) const
+    template <class U>
+    bool TVector3<T>::isLongerThan(const TVector3<U>& other) const
     {
-        return this->magnitudeSquared() > other.magnitudeSquared();
+        return this->magnitudeSquared() > static_cast<T>(other.magnitudeSquared());
     }
 
     template <class T>
-    bool TVector3<T>::isShorterThan(const TVector3& other) const
+    template <class U>
+    bool TVector3<T>::isShorterThan(const TVector3<U>& other) const
     {
-        return this->magnitudeSquared() < other.magnitudeSquared();
+        return this->magnitudeSquared() < static_cast<T>(other.magnitudeSquared());
     }
 
     template <class T>
@@ -379,40 +437,40 @@ namespace LibMath
         return oss.str();
     }
 
-    template <class T>
-    bool operator==(const TVector3<T>& lhs, const TVector3<T>& rhs)
+    template <class T, class U>
+    bool operator==(const TVector3<T>& lhs, const TVector3<U>& rhs)
     {
-        return floatEquals(lhs.m_x, rhs.m_x)
-            && floatEquals(lhs.m_y, rhs.m_y)
-            && floatEquals(lhs.m_z, rhs.m_z);
+        return floatEquals(lhs.m_x, static_cast<T>(rhs.m_x))
+            && floatEquals(lhs.m_y, static_cast<T>(rhs.m_y))
+            && floatEquals(lhs.m_z, static_cast<T>(rhs.m_z));
     }
 
-    template <class T>
-    bool operator!=(const TVector3<T>& lhs, const TVector3<T>& rhs)
+    template <class T, class U>
+    bool operator!=(const TVector3<T>& lhs, const TVector3<U>& rhs)
     {
         return !(lhs == rhs);
     }
 
-    template <class T>
-    bool operator>(const TVector3<T>& lhs, const TVector3<T>& rhs)
+    template <class T, class U>
+    bool operator>(const TVector3<T>& lhs, const TVector3<U>& rhs)
     {
         return lhs.isLongerThan(rhs);
     }
 
-    template <class T>
-    bool operator<(const TVector3<T>& lhs, const TVector3<T>& rhs)
+    template <class T, class U>
+    bool operator<(const TVector3<T>& lhs, const TVector3<U>& rhs)
     {
         return rhs > lhs;
     }
 
-    template <class T>
-    bool operator>=(const TVector3<T>& lhs, const TVector3<T>& rhs)
+    template <class T, class U>
+    bool operator>=(const TVector3<T>& lhs, const TVector3<U>& rhs)
     {
         return !(lhs < rhs);
     }
 
-    template <class T>
-    bool operator<=(const TVector3<T>& lhs, const TVector3<T>& rhs)
+    template <class T, class U>
+    bool operator<=(const TVector3<T>& lhs, const TVector3<U>& rhs)
     {
         return !(lhs > rhs);
     }
@@ -423,56 +481,56 @@ namespace LibMath
         return { -vect.m_x, -vect.m_y, -vect.m_z };
     }
 
-    template <class T>
-    TVector3<T> operator+(TVector3<T> left, const TVector3<T>& right)
+    template <class T, class U>
+    TVector3<T> operator+(TVector3<T> left, const TVector3<U>& right)
     {
         return left += right;
     }
 
-    template <class T>
-    TVector3<T> operator-(TVector3<T> left, const TVector3<T>& right)
+    template <class T, class U>
+    TVector3<T> operator-(TVector3<T> left, const TVector3<U>& right)
     {
         return left -= right;
     }
 
-    template <class T>
-    TVector3<T> operator*(TVector3<T> left, const TVector3<T>& right)
+    template <class T, class U>
+    TVector3<T> operator*(TVector3<T> left, const TVector3<U>& right)
     {
         return left *= right;
     }
 
-    template <class T>
-    TVector3<T> operator/(TVector3<T> left, const TVector3<T>& right)
+    template <class T, class U>
+    TVector3<T> operator/(TVector3<T> left, const TVector3<U>& right)
     {
         return left /= right;
     }
 
-    template <class T>
-    TVector3<T> operator+(TVector3<T> vect, const T& val)
+    template <class T, class U>
+    TVector3<T> operator+(TVector3<T> vect, U val)
     {
         return vect += val;
     }
 
-    template <class T>
-    TVector3<T> operator-(TVector3<T> vect, const T& val)
+    template <class T, class U>
+    TVector3<T> operator-(TVector3<T> vect, U val)
     {
         return vect -= val;
     }
 
-    template <class T>
-    TVector3<T> operator*(TVector3<T> vect, const T& val)
+    template <class T, class U>
+    TVector3<T> operator*(TVector3<T> vect, U val)
     {
         return vect *= val;
     }
 
-    template <class T>
-    TVector3<T> operator*(const T& val, TVector3<T> vect)
+    template <class T, class U>
+    TVector3<U> operator*(U val, TVector3<T> vect)
     {
         return vect *= val;
     }
 
-    template <class T>
-    TVector3<T> operator/(TVector3<T> vect, const T& val)
+    template <class T, class U>
+    TVector3<T> operator/(TVector3<T> vect, U val)
     {
         return vect /= val;
     }
