@@ -193,10 +193,10 @@ namespace LibMath
     template <class U>
     TVector4<T>& TVector4<T>::operator*=(const TVector4<U>& other)
     {
-        this->m_x *= static_cast<T>(other.m_x);
-        this->m_y *= static_cast<T>(other.m_y);
-        this->m_z *= static_cast<T>(other.m_z);
-        this->m_w *= static_cast<T>(other.m_w);
+        this->m_x = static_cast<T>(this->m_x * other.m_x);
+        this->m_y = static_cast<T>(this->m_y * other.m_y);
+        this->m_z = static_cast<T>(this->m_z * other.m_z);
+        this->m_w = static_cast<T>(this->m_w * other.m_w);
 
         return *this;
     }
@@ -205,10 +205,10 @@ namespace LibMath
     template <class U>
     TVector4<T>& TVector4<T>::operator/=(const TVector4<U>& other)
     {
-        this->m_x /= static_cast<T>(other.m_x);
-        this->m_y /= static_cast<T>(other.m_y);
-        this->m_z /= static_cast<T>(other.m_z);
-        this->m_w /= static_cast<T>(other.m_w);
+        this->m_x = static_cast<T>(this->m_x / other.m_x);
+        this->m_y = static_cast<T>(this->m_y / other.m_y);
+        this->m_z = static_cast<T>(this->m_z / other.m_z);
+        this->m_w = static_cast<T>(this->m_w / other.m_w);
 
         return *this;
     }
@@ -247,10 +247,10 @@ namespace LibMath
     {
         static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
 
-        this->m_x *= static_cast<T>(value);
-        this->m_y *= static_cast<T>(value);
-        this->m_z *= static_cast<T>(value);
-        this->m_w *= static_cast<T>(value);
+        this->m_x = static_cast<T>(this->m_x * value);
+        this->m_y = static_cast<T>(this->m_y * value);
+        this->m_z = static_cast<T>(this->m_z * value);
+        this->m_w = static_cast<T>(this->m_w * value);
 
         return *this;
     }
@@ -261,10 +261,10 @@ namespace LibMath
     {
         static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
 
-        this->m_x /= static_cast<T>(value);
-        this->m_y /= static_cast<T>(value);
-        this->m_z /= static_cast<T>(value);
-        this->m_w /= static_cast<T>(value);
+        this->m_x = static_cast<T>(this->m_x / value);
+        this->m_y = static_cast<T>(this->m_y / value);
+        this->m_z = static_cast<T>(this->m_z / value);
+        this->m_w = static_cast<T>(this->m_w / value);
 
         return *this;
     }

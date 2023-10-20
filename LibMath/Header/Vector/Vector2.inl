@@ -163,8 +163,8 @@ namespace LibMath
     template <class U>
     TVector2<T>& TVector2<T>::operator*=(const TVector2<U>& other)
     {
-        this->m_x *= static_cast<T>(other.m_x);
-        this->m_y *= static_cast<T>(other.m_y);
+        this->m_x = static_cast<T>(this->m_x * other.m_x);
+        this->m_y = static_cast<T>(this->m_y * other.m_y);
 
         return *this;
     }
@@ -173,8 +173,8 @@ namespace LibMath
     template <class U>
     TVector2<T>& TVector2<T>::operator/=(const TVector2<U>& other)
     {
-        this->m_x /= static_cast<T>(other.m_x);
-        this->m_y /= static_cast<T>(other.m_y);
+        this->m_x = static_cast<T>(this->m_x / other.m_x);
+        this->m_y = static_cast<T>(this->m_y / other.m_y);
 
         return *this;
     }
@@ -209,8 +209,8 @@ namespace LibMath
     {
         static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
 
-        this->m_x *= static_cast<T>(value);
-        this->m_y *= static_cast<T>(value);
+        this->m_x = static_cast<T>(this->m_x * value);
+        this->m_y = static_cast<T>(this->m_y * value);
 
         return *this;
     }
@@ -221,8 +221,8 @@ namespace LibMath
     {
         static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
 
-        this->m_x /= static_cast<T>(value);
-        this->m_y /= static_cast<T>(value);
+        this->m_x = static_cast<T>(this->m_x / value);
+        this->m_y = static_cast<T>(this->m_y / value);
 
         return *this;
     }
