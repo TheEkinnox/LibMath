@@ -217,6 +217,8 @@ namespace LibMath
     template <class U>
     TVector4<T>& TVector4<T>::operator+=(U value)
     {
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
         this->m_x += static_cast<T>(value);
         this->m_y += static_cast<T>(value);
         this->m_z += static_cast<T>(value);
@@ -229,6 +231,8 @@ namespace LibMath
     template <class U>
     TVector4<T>& TVector4<T>::operator-=(U value)
     {
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
         this->m_x -= static_cast<T>(value);
         this->m_y -= static_cast<T>(value);
         this->m_z -= static_cast<T>(value);
@@ -241,6 +245,8 @@ namespace LibMath
     template <class U>
     TVector4<T>& TVector4<T>::operator*=(U value)
     {
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
         this->m_x *= static_cast<T>(value);
         this->m_y *= static_cast<T>(value);
         this->m_z *= static_cast<T>(value);
@@ -253,6 +259,8 @@ namespace LibMath
     template <class U>
     TVector4<T>& TVector4<T>::operator/=(U value)
     {
+        static_assert(std::is_arithmetic_v<U>, "Invalid value - Data type should be an arithmetic type");
+
         this->m_x /= static_cast<T>(value);
         this->m_y /= static_cast<T>(value);
         this->m_z /= static_cast<T>(value);
