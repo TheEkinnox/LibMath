@@ -221,6 +221,28 @@ namespace LibMath
     }
 
     template <>
+    inline Vector4 min<Vector4>(const Vector4 a, const Vector4 b)
+    {
+        return {
+            min(a.m_x, b.m_x),
+            min(a.m_y, b.m_y),
+            min(a.m_z, b.m_z),
+            min(a.m_w, b.m_w)
+        };
+    }
+
+    template <>
+    inline Vector4 max<Vector4>(const Vector4 a, const Vector4 b)
+    {
+        return {
+            max(a.m_x, b.m_x),
+            max(a.m_y, b.m_y),
+            max(a.m_z, b.m_z),
+            max(a.m_w, b.m_w)
+        };
+    }
+
+    template <>
     inline Vector4I clamp<Vector4I>(const Vector4I value, const Vector4I a, const Vector4I b)
     {
         return
@@ -251,6 +273,28 @@ namespace LibMath
             && isInRange(value.m_y, a.m_y, b.m_y)
             && isInRange(value.m_z, a.m_z, b.m_z)
             && isInRange(value.m_w, a.m_w, b.m_w);
+    }
+
+    template <>
+    inline Vector4I min<Vector4I>(const Vector4I a, const Vector4I b)
+    {
+        return {
+            min(a.m_x, b.m_x),
+            min(a.m_y, b.m_y),
+            min(a.m_z, b.m_z),
+            min(a.m_w, b.m_w)
+        };
+    }
+
+    template <>
+    inline Vector4I max<Vector4I>(const Vector4I a, const Vector4I b)
+    {
+        return {
+            max(a.m_x, b.m_x),
+            max(a.m_y, b.m_y),
+            max(a.m_z, b.m_z),
+            max(a.m_w, b.m_w)
+        };
     }
 }
 

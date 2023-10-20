@@ -245,6 +245,24 @@ namespace LibMath
     }
 
     template <>
+    inline Vector2 min<Vector2>(const Vector2 a, const Vector2 b)
+    {
+        return {
+            min(a.m_x, b.m_x),
+            min(a.m_y, b.m_y)
+        };
+    }
+
+    template <>
+    inline Vector2 max<Vector2>(const Vector2 a, const Vector2 b)
+    {
+        return {
+            max(a.m_x, b.m_x),
+            max(a.m_y, b.m_y)
+        };
+    }
+
+    template <>
     inline Vector2I clamp<Vector2I>(const Vector2I value, const Vector2I a, const Vector2I b)
     {
         return
@@ -268,6 +286,24 @@ namespace LibMath
     constexpr bool isInRange<Vector2I>(const Vector2I value, const Vector2I a, const Vector2I b)
     {
         return isInRange(value.m_x, a.m_x, b.m_x) && isInRange(value.m_y, a.m_y, b.m_y);
+    }
+
+    template <>
+    inline Vector2I min<Vector2I>(const Vector2I a, const Vector2I b)
+    {
+        return {
+            min(a.m_x, b.m_x),
+            min(a.m_y, b.m_y)
+        };
+    }
+
+    template <>
+    inline Vector2I max<Vector2I>(const Vector2I a, const Vector2I b)
+    {
+        return {
+            max(a.m_x, b.m_x),
+            max(a.m_y, b.m_y)
+        };
     }
 }
 

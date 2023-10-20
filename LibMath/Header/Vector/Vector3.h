@@ -242,6 +242,26 @@ namespace LibMath
     }
 
     template <>
+    inline Vector3 min<Vector3>(const Vector3 a, const Vector3 b)
+    {
+        return {
+            min(a.m_x, b.m_x),
+            min(a.m_y, b.m_y),
+            min(a.m_z, b.m_z)
+        };
+    }
+
+    template <>
+    inline Vector3 max<Vector3>(const Vector3 a, const Vector3 b)
+    {
+        return {
+            max(a.m_x, b.m_x),
+            max(a.m_y, b.m_y),
+            max(a.m_z, b.m_z)
+        };
+    }
+
+    template <>
     inline Vector3I clamp<Vector3I>(const Vector3I value, const Vector3I a, const Vector3I b)
     {
         return
@@ -269,6 +289,26 @@ namespace LibMath
         return isInRange(value.m_x, a.m_x, b.m_x)
             && isInRange(value.m_y, a.m_y, b.m_y)
             && isInRange(value.m_z, a.m_z, b.m_z);
+    }
+
+    template <>
+    inline Vector3I min<Vector3I>(const Vector3I a, const Vector3I b)
+    {
+        return {
+            min(a.m_x, b.m_x),
+            min(a.m_y, b.m_y),
+            min(a.m_z, b.m_z)
+        };
+    }
+
+    template <>
+    inline Vector3I max<Vector3I>(const Vector3I a, const Vector3I b)
+    {
+        return {
+            max(a.m_x, b.m_x),
+            max(a.m_y, b.m_y),
+            max(a.m_z, b.m_z)
+        };
     }
 }
 
