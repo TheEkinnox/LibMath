@@ -15,6 +15,8 @@ namespace LibMath
     template <class T>
     class TVector4
     {
+        static_assert(std::is_arithmetic_v<T>, "Invalid vector - Data type should be an arithmetic type");
+
     public:
         static TVector4 zero();  // return a vector with all its component set to 0
         static TVector4 one();   // return a vector with all its component set to 1
