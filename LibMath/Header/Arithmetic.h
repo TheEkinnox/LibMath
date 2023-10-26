@@ -4,6 +4,9 @@
 
 namespace LibMath
 {
+	template <typename T>
+	using floating_t = std::conditional_t<std::is_floating_point_v<T>, T, double>;
+
 	/**
 	 * \brief Returns the highest integer lower than or equal to the received value
 	 * \param value The value to floor
@@ -65,7 +68,9 @@ namespace LibMath
 	 * \param maxSteps The maximum number of babylonian steps to perform
 	 * \return An approximation of the square root of the given value
 	 */
-	constexpr float	squareRoot(float value, float precision = std::numeric_limits<float>::epsilon(), size_t maxSteps = 16);
+	template <typename T>
+	constexpr T squareRoot(T value, floating_t<T> precision = std::numeric_limits<floating_t<T>>::epsilon(),
+		size_t maxSteps = 16);
 
 	/**
 	 * \brief Raises the received value to the given exponent

@@ -91,20 +91,30 @@ namespace LibMath
         return value - (max - min) * floor((value - min) / (max - min));
     }
 
-    constexpr float squareRoot(const float value, float precision, const size_t maxSteps)
+    template <typename T>
+    constexpr T squareRoot(const T value, floating_t<T> precision, const size_t maxSteps)
     {
         if (value < 0)
             return NAN;
 
-        if (value == 0.f)
-            return 0.f;
+        if (floatEquals<T>(value, static_cast<T>(0)))
+            return static_cast<floating_t<T>>(0);
+
+        if (floatEquals<T>(value, static_cast<T>(1)))
+            return static_cast<floating_t<T>>(1);
 
         if (precision == 0.f)
-            precision = std::numeric_limits<float>::epsilon();
+            precision = std::numeric_limits<T>::epsilon();
         else
             precision = abs(precision);
 
-        float sqrt = value >= 4.f ? value / 2.f : value < .5f ? 1.f / (1 - value) : value < 1.f ? 1.f / value : value;
+        floating_t<T> sqrt = value >= floating_t<T>(4)
+                                 ? value / floating_t<T>(2)
+                                 : value < floating_t<T>(.5)
+                                       ? floating_t<T>(1) / (1 - value)
+                                       : value < floating_t<T>(1)
+                                             ? floating_t<T>(1) / value
+                                             : floating_t<T>(value);
 
         // Keep repeating until the approximation is close enough to the real value
         for (size_t i = 0; (maxSteps == 0 || i < maxSteps) && abs(sqrt * sqrt - value) > precision; i++)
