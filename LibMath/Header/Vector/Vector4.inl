@@ -1,6 +1,8 @@
 #ifndef __LIBMATH__VECTOR__VECTOR4_INL__
 #define __LIBMATH__VECTOR__VECTOR4_INL__
 
+#include "Quaternion.h"
+
 #include "Angle/Radian.h"
 
 #include "Matrix/Matrix4.h"
@@ -12,49 +14,49 @@ namespace LibMath
     template <class T>
     TVector4<T> TVector4<T>::zero()
     {
-        return { 0, 0, 0, 0 };
+        return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0) };
     }
 
     template <class T>
     TVector4<T> TVector4<T>::one()
     {
-        return { 1, 1, 1, 1 };
+        return { static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1) };
     }
 
     template <class T>
     TVector4<T> TVector4<T>::up()
     {
-        return { 0, 1, 0, 0 };
+        return { static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0) };
     }
 
     template <class T>
     TVector4<T> TVector4<T>::down()
     {
-        return { 0, -1, 0, 0 };
+        return { static_cast<T>(0), static_cast<T>(-1), static_cast<T>(0), static_cast<T>(0) };
     }
 
     template <class T>
     TVector4<T> TVector4<T>::left()
     {
-        return { -1, 0, 0, 0 };
+        return { static_cast<T>(-1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0) };
     }
 
     template <class T>
     TVector4<T> TVector4<T>::right()
     {
-        return { 1, 0, 0, 0 };
+        return { static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0) };
     }
 
     template <class T>
     TVector4<T> TVector4<T>::front()
     {
-        return { 0, 0, 1, 0 };
+        return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0) };
     }
 
     template <class T>
     TVector4<T> TVector4<T>::back()
     {
-        return { 0, 0, -1, 0 };
+        return { static_cast<T>(0), static_cast<T>(0), static_cast<T>(-1), static_cast<T>(0) };
     }
 
     template <class T>
@@ -288,12 +290,13 @@ namespace LibMath
     }
 
     template <class T>
-    T TVector4<T>::dot(const TVector4& other) const
+    template <class U>
+    T TVector4<T>::dot(const TVector4<U>& other) const
     {
-        return this->m_x * other.m_x +
+        return static_cast<T>(this->m_x * other.m_x +
             this->m_y * other.m_y +
             this->m_z * other.m_z +
-            this->m_w * other.m_w;
+            this->m_w * other.m_w);
     }
 
     template <class T>
@@ -346,14 +349,14 @@ namespace LibMath
     template <class T>
     void TVector4<T>::rotate(const Radian& xAngle, const Radian& yAngle, const Radian& zAngle)
     {
-        const TMatrix<4, 4, T> rotationMat = rotationEuler(xAngle, yAngle, zAngle);
+        const TMatrix<4, 4, T> rotationMat = rotationEuler<T>(xAngle, yAngle, zAngle);
         *this = rotationMat * *this;
     }
 
     template <class T>
     void TVector4<T>::rotate(const Radian& angle, const TVector3<T>& axis)
     {
-        const TMatrix<4, 4, T> rotationMat = rotation(angle, axis);
+        const TMatrix<4, 4, T> rotationMat = rotation<T>(angle, axis);
         *this = rotationMat * *this;
     }
 

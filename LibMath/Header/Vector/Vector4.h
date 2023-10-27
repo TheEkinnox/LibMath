@@ -13,6 +13,9 @@ namespace LibMath
     class TVector3;
 
     template <class T>
+    class TQuaternion;
+
+    template <class T>
     class TVector4
     {
         static_assert(std::is_arithmetic_v<T>, "Invalid vector - Data type should be an arithmetic type");
@@ -80,7 +83,8 @@ namespace LibMath
 
         TVector3<T> xyz() const; // return the x, y and z components of the TVector4 (safe slicing)
 
-        T dot(const TVector4& other) const; // return dot product result
+        template <class U>
+        T dot(const TVector4<U>& other) const; // return dot product result
 
         template <class U>
         bool isLongerThan(const TVector4<U>&) const; // return true if this vector magnitude is greater than the other

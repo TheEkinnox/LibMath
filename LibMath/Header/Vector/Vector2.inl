@@ -12,37 +12,37 @@ namespace LibMath
     template <class T>
     TVector2<T> TVector2<T>::zero()
     {
-        return TVector2(0);
+        return { static_cast<T>(0), static_cast<T>(0) };
     }
 
     template <class T>
     TVector2<T> TVector2<T>::one()
     {
-        return TVector2(1);
+        return { static_cast<T>(1), static_cast<T>(1) };
     }
 
     template <class T>
     TVector2<T> TVector2<T>::up()
     {
-        return { 0, 1 };
+        return { static_cast<T>(0), static_cast<T>(1) };
     }
 
     template <class T>
     TVector2<T> TVector2<T>::down()
     {
-        return { 0, -1 };
+        return { static_cast<T>(0), static_cast<T>(-1) };
     }
 
     template <class T>
     TVector2<T> TVector2<T>::left()
     {
-        return { -1, 0 };
+        return { static_cast<T>(-1), static_cast<T>(0) };
     }
 
     template <class T>
     TVector2<T> TVector2<T>::right()
     {
-        return { 1, 0 };
+        return { static_cast<T>(1), static_cast<T>(0) };
     }
 
     template <class T>
@@ -274,9 +274,10 @@ namespace LibMath
     }
 
     template <class T>
-    T TVector2<T>::dot(const TVector2& other) const
+    template <class U>
+    T TVector2<T>::dot(const TVector2<U>& other) const
     {
-        return this->m_x * other.m_x + this->m_y * other.m_y;
+        return static_cast<T>(this->m_x * other.m_x + this->m_y * other.m_y);
     }
 
     template <class T>

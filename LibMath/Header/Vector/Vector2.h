@@ -97,7 +97,8 @@ namespace LibMath
         T distanceFrom(const TVector2&) const;        // return distance between 2 points
         T distanceSquaredFrom(const TVector2&) const; // return square value of the distance between 2 points
 
-        T dot(const TVector2&) const; // return dot product result
+        template <class U>
+        T dot(const TVector2<U>&) const; // return dot product result
 
         template <class U>
         bool isLongerThan(const TVector2<U>&) const; // return true if this vector magnitude is greater than the other
