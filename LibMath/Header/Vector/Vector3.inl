@@ -3,7 +3,7 @@
 
 #include <sstream>
 
-#include "Matrix/Matrix4.h"
+#include "Quaternion.h"
 
 #include "Vector/Vector3.h"
 #include "Vector/Vector4.h"
@@ -385,23 +385,21 @@ namespace LibMath
     template <class T>
     void TVector3<T>::rotate(const Radian& xAngle, const Radian& yAngle, const Radian& zAngle)
     {
-        const TMatrix<4, 4, T> rotationMat = rotationEuler(xAngle, yAngle, zAngle);
-        const TVector4<T>      vec4 = rotationMat * TVector4<T>(m_x, m_y, m_z, 1);
-
-        m_x = vec4.m_x;
-        m_y = vec4.m_y;
-        m_z = vec4.m_z;
+        rotate(TQuaternion<T>::fromEuler(xAngle, yAngle, zAngle));
     }
 
     template <class T>
     void TVector3<T>::rotate(const Radian& angle, const TVector3& axis)
     {
-        const TMatrix<4, 4, T> rotationMat = rotation(angle, axis);
-        const TVector4<T>      vec4 = rotationMat * TVector4<T>(m_x, m_y, m_z, 1);
+        rotate(TQuaternion<T>(angle, axis));
+    }
 
-        m_x = vec4.m_x;
-        m_y = vec4.m_y;
-        m_z = vec4.m_z;
+    template <class T>
+    template <class U>
+    void TVector3<T>::rotate(const TQuaternion<U>& quaternion)
+    {
+        TQuaternion<U> tmp{ 0, *this };
+        *this = quaternion * tmp * quaternion.inverse();
     }
 
     template <class T>

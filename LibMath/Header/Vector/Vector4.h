@@ -99,7 +99,9 @@ namespace LibMath
         void rotate(const Radian&, const Radian&, const Radian&);
         // rotate this vector using euler angle apply in the z, x, y order
         void rotate(const Radian&, const TVector3<T>&); // rotate this vector around an arbitrary axis
-        //void			rotate(Quaternion const&); todo quaternion		// rotate this vector using a quaternion rotor
+
+        template <class U>
+        void rotate(const TQuaternion<U>&); // rotate this vector using a quaternion rotor
 
         void scale(const TVector3<T>&); // scale this vector by a given factor
 
