@@ -511,9 +511,28 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 
 			SECTION("Euler Angle")
 			{
-				LibMath::Matrix4 rotate = LibMath::rotationEuler(LibMath::Radian{ transformation.m_x }, LibMath::Radian{ transformation.m_y }, LibMath::Radian{ transformation.m_z });
+				LibMath::Matrix4 rotate = LibMath::rotation(LibMath::Radian{ transformation.m_x }, LibMath::Radian{ transformation.m_y }, LibMath::Radian{ transformation.m_z });
 
-				glm::mat4 rotateGlm = glm::orientate4(transformationGlm);
+				glm::mat4 rotateGlm = glm::yawPitchRoll(transformationGlm.x, transformationGlm.y, transformationGlm.z);
+
+				// Transpose since glm matrices are column major unlike ours
+				CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
+
+				rotate = LibMath::rotation(transformation, true);
+
+				rotateGlm = glm::yawPitchRoll(transformationGlm.y, transformationGlm.x, transformationGlm.z);
+
+				// Transpose since glm matrices are column major unlike ours
+				CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
+
+				rotate = LibMath::rotationEuler(LibMath::Radian{ transformation.m_x }, LibMath::Radian{ transformation.m_y }, LibMath::Radian{ transformation.m_z });
+
+				rotateGlm = glm::orientate4(transformationGlm);
+
+				// Transpose since glm matrices are column major unlike ours
+				CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
+
+				rotate = LibMath::rotationEuler(transformation, true);
 
 				// Transpose since glm matrices are column major unlike ours
 				CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
