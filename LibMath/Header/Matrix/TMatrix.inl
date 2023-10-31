@@ -100,13 +100,13 @@ namespace LibMath
 	}
 
 	template <length_t Rows, length_t Cols, typename DataT>
-	float TMatrix<Rows, Cols, DataT>::operator()(length_t row, length_t column) const
+	DataT TMatrix<Rows, Cols, DataT>::operator()(length_t row, length_t column) const
 	{
 		return (*this)[getIndex(row, column)];
 	}
 
 	template <length_t Rows, length_t Cols, typename DataT>
-	float& TMatrix<Rows, Cols, DataT>::operator()(const length_t row, const length_t column)
+	DataT& TMatrix<Rows, Cols, DataT>::operator()(const length_t row, const length_t column)
 	{
 		return (*this)[getIndex(row, column)];
 	}
@@ -348,7 +348,7 @@ namespace LibMath
 			return m_values[0];
 
 		// The multiplier is (-1)^(i+j) so 1 when i + j is pair and -1 otherwise
-		const DataT multiplier = (row + column) % 2 == static_cast<DataT>(0) ? static_cast<DataT>(1) : static_cast<DataT>(-1);
+		const DataT multiplier = (row + column) % 2 == 0 ? static_cast<DataT>(1) : static_cast<DataT>(-1);
 
 		return multiplier * minor(row, column).determinant();
 	}

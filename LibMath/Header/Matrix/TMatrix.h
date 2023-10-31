@@ -50,7 +50,7 @@ namespace LibMath
 		constexpr						TMatrix(TMatrix const& other);
 		constexpr						TMatrix(TMatrix&& other) noexcept;
 										~TMatrix() = default;
-										
+
 		TMatrix&						operator=(TMatrix const& other);
 		TMatrix&						operator=(TMatrix&& other) noexcept;
 
@@ -60,8 +60,8 @@ namespace LibMath
 		constexpr DataT					operator[](size_t index) const;
 		DataT&							operator[](size_t index);
 
-		float							operator()(length_t row, length_t column) const;
-		float&							operator()(length_t row, length_t column);
+		DataT							operator()(length_t row, length_t column) const;
+		DataT&							operator()(length_t row, length_t column);
 
 		TMatrix&						operator+=(TMatrix const& other);
 		TMatrix&						operator-=(TMatrix const& other);
