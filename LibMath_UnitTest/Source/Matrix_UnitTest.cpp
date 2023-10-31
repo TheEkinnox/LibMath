@@ -454,6 +454,39 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 		}
 	}
 
+	SECTION("Extra")
+	{
+		LibMath::Matrix3x2 input;
+		input(0, 0) = 3.75f;
+		input(0, 1) = 3.f;
+		input(1, 0) = .75f;
+		input(1, 1) = 4.5f;
+		input(2, 0) = 2.5f;
+		input(2, 1) = 4.f;
+
+		{
+			std::stringstream buffer;
+			buffer << input;
+			CHECK(buffer.str() == "{3.75,3,0.75,4.5,2.5,4}");
+
+			buffer << " extra";
+
+			LibMath::Matrix3x2 output;
+			buffer >> output;
+			CHECK(output == input);
+
+			std::string extra;
+			buffer >> extra;
+			CHECK(extra == "extra");
+		}
+
+		{
+			CHECK(input.string() == "{3.75,3,0.75,4.5,2.5,4}");
+
+			CHECK(input.stringLong() == "Matrix3x2{ 0_0: 3.75, 0_1: 3, 1_0: 0.75, 1_1: 4.5, 2_0: 2.5, 2_1: 4 }");
+		}
+	}
+
 	SECTION("Debug")
 	{
 #if (defined _DEBUG) || (! defined NDEBUG)

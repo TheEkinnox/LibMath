@@ -1,5 +1,6 @@
 #ifndef __LIBMATH__MATRIX__TMATRIX_INL__
 #define __LIBMATH__MATRIX__TMATRIX_INL__
+#include <sstream>
 #include <stdexcept>
 
 #include "Arithmetic.h"
@@ -427,6 +428,88 @@ namespace LibMath
 			throw Exceptions::NonInvertibleMatrix();
 
 		return adjugate() / det;
+	}
+
+	template <length_t Rows, length_t Cols, typename DataT>
+	std::string TMatrix<Rows, Cols, DataT>::string() const
+	{
+		std::ostringstream oss;
+		oss << '{';
+
+		for (size_t i = 0; i < getSize(); ++i)
+		{
+			oss << m_values[i];
+
+			if (i + 1 < getSize())
+				oss << ',';
+		}
+
+		oss << '}';
+		return oss.str();
+	}
+
+	template <length_t Rows, length_t Cols, typename DataT>
+	std::string TMatrix<Rows, Cols, DataT>::stringLong() const
+	{
+		std::ostringstream oss;
+		oss << "Matrix" << Rows << 'x' << Cols << "{ ";
+
+		for (length_t row = 0; row < Rows; ++row)
+		{
+			for (length_t col = 0; col < Cols; ++col)
+			{
+				oss << row << '_' << col << ": " << (*this)(row, col);
+
+				if (row + 1 < Rows || col + 1 < Cols)
+					oss << ", ";
+			}
+		}
+
+		oss << " }";
+		return oss.str();
+	}
+
+	template <length_t Rows, length_t Cols, typename DataT>
+	std::ostream& operator<<(std::ostream& stream, const TMatrix<Rows, Cols, DataT>& mat)
+	{
+		return stream << mat.string();
+	}
+
+	template <length_t Rows, length_t Cols, typename DataT>
+	std::istream& operator>>(std::istream& stream, TMatrix<Rows, Cols, DataT>& mat)
+	{
+		std::string line;
+
+		std::getline(stream, line, '}');
+
+		int    component = 0;
+		size_t valStart = 0;
+
+		do
+		{
+			if (valStart == std::string::npos)
+				break;
+
+			if (line[valStart] == '{' || std::isspace(line[valStart]))
+			{
+				valStart++;
+				continue;
+			}
+
+			if (line[valStart] != '-' && !std::isdigit(line[valStart]))
+				break;
+
+			mat[component] = std::stof(line.substr(valStart));
+
+			valStart = line.find(',', valStart) + 1;
+			component++;
+		}
+		while (component < mat.getSize() && valStart != 0);
+
+		if (component != mat.getSize())
+			mat = TMatrix<Rows, Cols, DataT>(1);
+
+		return stream;
 	}
 
 	template <length_t Rows, length_t Cols, typename DataT>

@@ -1,6 +1,7 @@
 #ifndef __LIBMATH__MATRIX__TMATRIX_H__
 #define __LIBMATH__MATRIX__TMATRIX_H__
 #include <exception>
+#include <string>
 
 namespace LibMath
 {
@@ -107,9 +108,18 @@ namespace LibMath
 		TMatrix<Cols, Rows, DataT>		adjugate() const;
 		TMatrix<Rows, Cols, DataT>		inverse() const;
 
+		std::string string() const;
+		std::string stringLong() const;
+
 	private:
 		DataT							m_values[Rows * Cols];
 	};
+
+	template<length_t Rows, length_t Cols, typename DataT>
+	std::ostream& operator<<(std::ostream& stream, const TMatrix<Rows, Cols, DataT>& mat);
+
+	template<length_t Rows, length_t Cols, typename DataT>
+	std::istream& operator>>(std::istream& stream, TMatrix<Rows, Cols, DataT>& mat);
 
 	namespace Details
 	{
