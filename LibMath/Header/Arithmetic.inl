@@ -2,6 +2,7 @@
 #define __LIBMATH__ARITHMETIC_INL__
 
 #include "Arithmetic.h"
+#include <cmath>
 
 namespace LibMath
 {
@@ -95,7 +96,7 @@ namespace LibMath
     constexpr T squareRoot(const T value, floating_t<T> precision, const size_t maxSteps)
     {
         if (value < 0)
-            return NAN;
+            return static_cast<T>(NAN);
 
         if (floatEquals<T>(value, static_cast<T>(0)))
             return static_cast<floating_t<T>>(0);
@@ -103,7 +104,7 @@ namespace LibMath
         if (floatEquals<T>(value, static_cast<T>(1)))
             return static_cast<floating_t<T>>(1);
 
-        if (precision == 0.f)
+        if (floatEquals<floating_t<T>>(precision, static_cast<floating_t<T>>(0)))
             precision = std::numeric_limits<T>::epsilon();
         else
             precision = abs(precision);
