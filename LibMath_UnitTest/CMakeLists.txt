@@ -37,9 +37,9 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${TARGET_FILES})
 Include(FetchContent)
 
 FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.0.1 # or a later release
+	Catch2
+	GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+	GIT_TAG        v3.0.1 # or a later release
 )
 
 FetchContent_MakeAvailable(Catch2)
@@ -73,17 +73,22 @@ endif()
 ###############################
 
 add_executable(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
-include_directories(${TARGET_INCLUDE_DIR} ${LIBMATH_INCLUDE_DIR} ${glm_SOURCE_DIR})
+target_include_directories(${TARGET_NAME}
+	PRIVATE ${TARGET_INCLUDE_DIR} ${LIBMATH_INCLUDE_DIR}
+)
+
+target_include_directories(${TARGET_NAME} SYSTEM PRIVATE ${glm_SOURCE_DIR})
+
 target_link_libraries(${TARGET_NAME}
-    PRIVATE
-	${LIBMATH_NAME}
-	Catch2::Catch2)
+	PRIVATE ${LIBMATH_NAME} Catch2::Catch2
+)
+
 if(MSVC)
-  target_compile_options(${TARGET_NAME} PRIVATE /W4 /WX /Za)
-  # /Za disable compiler language extension (https://github.com/g-truc/glm/blob/master/doc/manual.pdf page 44)
-  target_link_options(${TARGET_NAME} PRIVATE /FORCE:UNRESOLVED)
+	target_compile_options(${TARGET_NAME} PRIVATE /W4 /WX /Za)
+	# /Za disable compiler language extension (https://github.com/g-truc/glm/blob/master/doc/manual.pdf page 44)
+	target_link_options(${TARGET_NAME} PRIVATE /FORCE:UNRESOLVED)
 else()
-  target_compile_options(${TARGET_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+	target_compile_options(${TARGET_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
 
 # ??? auto run all test on cmake build ??? # todo test
