@@ -11,27 +11,42 @@ namespace LibMath
 		{
 		public:
 			IncompatibleMatrix() noexcept
-				: exception("Incompatible matrix")
+				: exception()
 			{
 			}
+
+            [[nodiscard]] inline const char* what() const noexcept override
+            {
+                return "Incompatible matrix";
+            }
 		};
 
 		class NonSquareMatrix : public std::exception
 		{
 		public:
 			NonSquareMatrix() noexcept
-				: exception("Non-square matrix")
+				: exception()
 			{
 			}
+
+            [[nodiscard]] inline const char* what() const noexcept override
+            {
+                return "Non-square matrix";
+            }
 		};
 
 		class NonInvertibleMatrix : public std::exception
 		{
 		public:
 			NonInvertibleMatrix() noexcept
-				: exception("Non-invertible matrix")
+				: exception()
 			{
 			}
+
+            [[nodiscard]] inline const char* what() const noexcept override
+            {
+                return "Non-invertible matrix";
+            }
 		};
 	}
 

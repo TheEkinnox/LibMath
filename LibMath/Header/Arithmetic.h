@@ -1,6 +1,8 @@
 #ifndef __LIBMATH__ARITHMETIC_H__
 #define __LIBMATH__ARITHMETIC_H__
 #include <limits>
+#include <type_traits>
+#include <cstddef>
 
 namespace LibMath
 {

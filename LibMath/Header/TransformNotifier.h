@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <cstdint>
 
 namespace LibMath
 {
@@ -18,7 +19,7 @@ namespace LibMath
         using ActionMap = std::unordered_map<ListenerId, Action>;
 
         /**
-         * \brief Subscribes an action to the notifier and returns it's ListenerId
+         * \brief Subscribes an action to the notifier and returns its ListenerId
          * \param action The action to perform when a notification is broadcast
          * \return The listener id of the subscribed action
          */

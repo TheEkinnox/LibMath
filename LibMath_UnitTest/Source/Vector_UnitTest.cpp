@@ -55,7 +55,7 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 		emptyGlm = iCopyGlm;
 		CHECK_VECTOR3(empty, emptyGlm);
 
-		CHECK(sizeof LibMath::Vector3 == sizeof glm::vec3);
+		CHECK(sizeof(LibMath::Vector3) == sizeof(glm::vec3));
 	}
 
 	SECTION("Accessor")

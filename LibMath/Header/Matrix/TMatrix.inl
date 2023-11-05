@@ -84,7 +84,7 @@ namespace LibMath
 	template <length_t Rows, length_t Cols, class DataT>
 	constexpr DataT TMatrix<Rows, Cols, DataT>::operator[](size_t index) const
 	{
-		if (index < 0 || index >= getSize())
+		if (index >= getSize())
 			throw std::out_of_range("Index out of range");
 
 		return m_values[index];
@@ -93,7 +93,7 @@ namespace LibMath
 	template <length_t Rows, length_t Cols, class DataT>
 	DataT& TMatrix<Rows, Cols, DataT>::operator[](size_t index)
 	{
-		if (index < 0 || index >= getSize())
+		if (index >= getSize())
 			throw std::out_of_range("Index out of range");
 
 		return m_values[index];
@@ -482,7 +482,7 @@ namespace LibMath
 
 		std::getline(stream, line, '}');
 
-		int    component = 0;
+		size_t component = 0;
 		size_t valStart = 0;
 
 		do

@@ -149,7 +149,7 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
             * glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0));
         CHECK_QUATERNION(euler, eulerGlm);
 
-        CHECK(sizeof LibMath::Quaternion == sizeof glm::quat);
+        CHECK(sizeof(LibMath::Quaternion) == sizeof(glm::quat));
     }
 
     SECTION("Accessor")
