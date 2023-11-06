@@ -35,3 +35,5 @@ jobs:
           -DCMAKE_C_COMPILER=${{ matrix.info.cc }}
       - name: Build
         run: cmake --build "${{ github.workspace }}/build" --config ${{ matrix.type }}
+      - name: Test
+        run: ctest --output-on-failure --test-dir "${{ github.workspace }}/build"

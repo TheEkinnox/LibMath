@@ -91,8 +91,8 @@ else()
 	target_compile_options(${TARGET_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
 
-# ??? auto run all test on cmake build ??? # todo test
-#list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-#include(CTest)
-#include(Catch)
-#catch_discover_tests(${TARGET_NAME})
+# Setup ctest
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+include(CTest)
+include(Catch)
+catch_discover_tests(${TARGET_NAME})

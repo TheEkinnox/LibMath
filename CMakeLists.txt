@@ -14,6 +14,8 @@ option(LIBMATH_BUILD_TESTS "Build the LibMath test programs" ON)
 add_subdirectory(LibMath)
 
 if (LIBMATH_BUILD_TESTS)
+  enable_testing()
+
   add_subdirectory(LibMath_UnitTest)
 
   if(MSVC)
