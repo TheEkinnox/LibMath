@@ -240,35 +240,40 @@ namespace LibMath
     }
 
     template <class T>
-    Radian TVector2<T>::angleFrom(const TVector2& other) const
+    template <class U>
+    Radian TVector2<T>::angleFrom(const TVector2<U>& other) const
     {
-        return acos(this->dot(other) / squareRoot(this->magnitudeSquared() * other.magnitudeSquared()));
+        return acos(this->dot(other) / squareRoot(static_cast<T>(this->magnitudeSquared() * other.magnitudeSquared())));
     }
 
     template <class T>
-    Radian TVector2<T>::signedAngleFrom(const TVector2& other) const
+    template <class U>
+    Radian TVector2<T>::signedAngleFrom(const TVector2<U>& other) const
     {
         const Radian angle = angleFrom(other);
-        return angle * sign(other.cross(*this));
+        return angle * static_cast<T>(sign(other.cross(*this)));
     }
 
     template <class T>
-    T TVector2<T>::cross(const TVector2& other) const
+    template <class U>
+    T TVector2<T>::cross(const TVector2<U>& other) const
     {
-        return this->m_x * other.m_y - this->m_y * other.m_x;
+        return static_cast<T>(this->m_x * other.m_y - this->m_y * other.m_x);
     }
 
     template <class T>
-    T TVector2<T>::distanceFrom(const TVector2& other) const
+    template <class U>
+    T TVector2<T>::distanceFrom(const TVector2<U>& other) const
     {
         return squareRoot(this->distanceSquaredFrom(other));
     }
 
     template <class T>
-    T TVector2<T>::distanceSquaredFrom(const TVector2& other) const
+    template <class U>
+    T TVector2<T>::distanceSquaredFrom(const TVector2<U>& other) const
     {
-        const T xDist = other.m_x - this->m_x;
-        const T yDist = other.m_y - this->m_y;
+        const T xDist = static_cast<T>(other.m_x - this->m_x);
+        const T yDist = static_cast<T>(other.m_y - this->m_y);
 
         return xDist * xDist + yDist * yDist;
     }
@@ -373,52 +378,52 @@ namespace LibMath
     }
 
     template <class T>
-    void TVector2<T>::translate(const TVector2& vect)
+    void TVector2<T>::translate(const TVector2& other)
     {
-        *this += vect;
+        *this += other;
     }
 
     template <class T, class U>
-    bool operator==(const TVector2<T>& lhs, const TVector2<U>& rhs)
+    bool operator==(const TVector2<T>& left, const TVector2<U>& right)
     {
-        return floatEquals(lhs.m_x, rhs.m_x)
-            && floatEquals(lhs.m_y, rhs.m_y);
+        return floatEquals(left.m_x, right.m_x)
+            && floatEquals(left.m_y, right.m_y);
     }
 
     template <class T, class U>
-    bool operator!=(const TVector2<T>& lhs, const TVector2<U>& rhs)
+    bool operator!=(const TVector2<T>& left, const TVector2<U>& right)
     {
-        return !(lhs == rhs);
+        return !(left == right);
     }
 
     template <class T, class U>
-    bool operator>(const TVector2<T>& lhs, const TVector2<U>& rhs)
+    bool operator>(const TVector2<T>& left, const TVector2<U>& right)
     {
-        return lhs.isLongerThan(rhs);
+        return left.isLongerThan(right);
     }
 
     template <class T, class U>
-    bool operator<(const TVector2<T>& lhs, const TVector2<U>& rhs)
+    bool operator<(const TVector2<T>& left, const TVector2<U>& right)
     {
-        return rhs > lhs;
+        return right > left;
     }
 
     template <class T, class U>
-    bool operator>=(const TVector2<T>& lhs, const TVector2<U>& rhs)
+    bool operator>=(const TVector2<T>& left, const TVector2<U>& right)
     {
-        return !(lhs < rhs);
+        return !(left < right);
     }
 
     template <class T, class U>
-    bool operator<=(const TVector2<T>& lhs, const TVector2<U>& rhs)
+    bool operator<=(const TVector2<T>& left, const TVector2<U>& right)
     {
-        return !(lhs > rhs);
+        return !(left > right);
     }
 
     template <class T>
-    TVector2<T> operator-(const TVector2<T>& vect)
+    TVector2<T> operator-(const TVector2<T>& vector)
     {
-        return vect * -1;
+        return vector * -1;
     }
 
     template <class T, class U>
@@ -446,45 +451,45 @@ namespace LibMath
     }
 
     template <class T, class U>
-    TVector2<T> operator+(TVector2<T> vect, U val)
+    TVector2<T> operator+(TVector2<T> vector, U value)
     {
-        return vect += val;
+        return vector += value;
     }
 
     template <class T, class U>
-    TVector2<T> operator-(TVector2<T> vect, U val)
+    TVector2<T> operator-(TVector2<T> vector, U value)
     {
-        return vect -= val;
+        return vector -= value;
     }
 
     template <class T, class U>
-    TVector2<T> operator*(TVector2<T> vect, U val)
+    TVector2<T> operator*(TVector2<T> vector, U scalar)
     {
-        return vect *= val;
+        return vector *= scalar;
     }
 
     template <class T, class U>
-    TVector2<U> operator*(U val, TVector2<T> vect)
+    TVector2<U> operator*(U scalar, TVector2<T> vector)
     {
-        return vect *= static_cast<T>(val);
+        return vector *= static_cast<T>(scalar);
     }
 
     template <class T, class U>
-    TVector2<T> operator/(TVector2<T> vect, U val)
+    TVector2<T> operator/(TVector2<T> vector, U scalar)
     {
-        return vect /= val;
+        return vector /= scalar;
     }
 
     template <class T>
-    std::ostream& operator<<(std::ostream& stream, const TVector2<T>& vect)
+    std::ostream& operator<<(std::ostream& stream, const TVector2<T>& vector)
     {
-        stream << vect.string();
+        stream << vector.string();
 
         return stream;
     }
 
     template <class T>
-    std::istream& operator>>(std::istream& stream, TVector2<T>& vect)
+    std::istream& operator>>(std::istream& stream, TVector2<T>& vector)
     {
         std::string line;
 
@@ -507,7 +512,7 @@ namespace LibMath
             if (line[valStart] != '-' && !std::isdigit(line[valStart]))
                 break;
 
-            vect[component] = std::stof(line.substr(valStart));
+            vector[component] = std::stof(line.substr(valStart));
 
             valStart = line.find(',', valStart) + 1;
             component++;
@@ -515,7 +520,7 @@ namespace LibMath
         while (component < 2 && valStart != 0);
 
         if (component != 2)
-            vect = TVector2<T>::zero();
+            vector = TVector2<T>::zero();
 
         return stream;
     }

@@ -291,6 +291,25 @@ namespace LibMath
 
     template <class T>
     template <class U>
+    T TVector4<T>::distanceFrom(const TVector4<U>& other) const
+    {
+        return squareRoot(distanceSquaredFrom(other));
+    }
+
+    template <class T>
+    template <class U>
+    T TVector4<T>::distanceSquaredFrom(const TVector4<U>& other) const
+    {
+        const T xDist = other.m_x - this->m_x;
+        const T yDist = other.m_y - this->m_y;
+        const T zDist = other.m_z - this->m_z;
+        const T wDist = other.m_w - this->m_w;
+
+        return xDist * xDist + yDist * yDist + zDist * zDist + wDist * wDist;
+    }
+
+    template <class T>
+    template <class U>
     T TVector4<T>::dot(const TVector4<U>& other) const
     {
         return static_cast<T>(this->m_x * other.m_x +
@@ -375,9 +394,9 @@ namespace LibMath
     }
 
     template <class T>
-    void TVector4<T>::translate(const TVector3<T>& vect)
+    void TVector4<T>::translate(const TVector3<T>& other)
     {
-        *this += vect;
+        *this += other;
     }
 
     template <class T>

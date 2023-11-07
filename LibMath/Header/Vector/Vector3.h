@@ -19,305 +19,621 @@ namespace LibMath
         static_assert(std::is_arithmetic_v<T>, "Invalid vector - Data type should be an arithmetic type");
 
     public:
-        static TVector3 zero();  // return a vector with all its component set to 0
-        static TVector3 one();   // return a vector with all its component set to 1
-        static TVector3 up();    // return a unit vector pointing upward
-        static TVector3 down();  // return a unit vector pointing downward
-        static TVector3 left();  // return a unit vector pointing left
-        static TVector3 right(); // return a unit vector pointing right
-        static TVector3 front(); // return a unit vector pointing forward
-        static TVector3 back();  // return a unit vector pointing backward
+        /**
+         * \brief Returns a vector with all its components set to 0
+         */
+        static TVector3 zero();
 
+        /**
+         * \brief Returns a vector with all its components set to 1
+         */
+        static TVector3 one();
+
+        /**
+         * \brief Returns a vector pointing upward
+         */
+        static TVector3 up();
+
+        /**
+         * \brief Returns a vector pointing downward
+         */
+        static TVector3 down();
+
+        /**
+         * \brief Returns a vector pointing left
+         */
+        static TVector3 left();
+
+        /**
+         * \brief Returns a vector pointing right
+         */
+        static TVector3 right();
+
+        /**
+         * \brief Returns a vector pointing forward
+         */
+        static TVector3 front();
+
+        /**
+         * \brief Returns a vector pointing backward
+         */
+        static TVector3 back();
+
+        /**
+         * \brief Creates a default vector
+         */
         TVector3() = default;
 
         /**
-         * \brief Creates a vector with the same value for all it's components
+         * \brief Creates a vector with the given value for all its components
+         * \param value The vector's components value
          */
-        explicit TVector3(T); // set all the component to the same value
-        TVector3(T, T, T);    // set all component individually
+        explicit TVector3(T value);
 
+        /**
+         * \brief Creates a vector with the given component values
+         * \param x The vector's x value
+         * \param y The vector's y value
+         * \param z The vector's z value
+         */
+        TVector3(T x, T y, T z);
+
+        /**
+         * \brief Creates a copy of the given vector
+         * \tparam U The copied vector's data type
+         * \param other The copied vector
+         */
         template <class U>
         TVector3(const TVector3<U>& other);
 
+        /**
+         * \brief Creates a move copy of the given vector
+         * \tparam U The moved vector's data type
+         * \param other The moved vector
+         */
         template <class U>
         TVector3(TVector3<U>&& other);
 
+        /**
+         * \brief Destroys the vector
+         */
         ~TVector3() = default;
 
+        /**
+         * \brief Assigns a copy of the given vector to the current one
+         * \tparam U The copied vector's data type
+         * \param other The copied vector
+         * \return The modified vector
+         */
         template <class U>
         TVector3& operator=(const TVector3<U>& other);
 
+        /**
+         * \brief Assigns a move copy of the given vector to the current one
+         * \tparam U The moved vector's data type
+         * \param other The moved vector
+         * \return The modified vector
+         */
         template <class U>
         TVector3& operator=(TVector3<U>&& other);
 
-        T& operator[](int);       // return this vector component value
-        T  operator[](int) const; // return this vector component value
+        /**
+         * \brief Gets the vector's component at the given index (0/'x', 1/'y', 2/'z')
+         * \param index The component's index
+         * \return The component at the given index
+         */
+        T& operator[](int index);
 
+        /**
+         * \brief Gets the vector's component at the given index (0/'x', 1/'y', 2/'z')
+         * \param index The component's index
+         * \return The component at the given index
+         */
+        T operator[](int index) const;
+
+        /**
+         * \brief Adds the given vector to the current one
+         * \tparam U The other vector's data type
+         * \param other The vector to add to this one
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator+=(const TVector3<U>& other); // addition component wise
+        TVector3& operator+=(const TVector3<U>& other);
 
+        /**
+         * \brief Subtracts the given vector from the current one
+         * \tparam U The other vector's data type
+         * \param other The vector to subtract from this one
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator-=(const TVector3<U>& other); // subtraction component wise
+        TVector3& operator-=(const TVector3<U>& other);
 
+        /**
+         * \brief Multiplies the current vector by the given one
+         * \tparam U The other vector's data type
+         * \param other The vector to multiply this one by
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator*=(const TVector3<U>& other); // multiplication component wise
+        TVector3& operator*=(const TVector3<U>& other);
 
+        /**
+         * \brief Divides the current vector by the given one
+         * \tparam U The other vector's data type
+         * \param other The vector to divide this one by
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator/=(const TVector3<U>& other); // division component wise
+        TVector3& operator/=(const TVector3<U>& other);
 
+        /**
+         * \brief Adds the given value to all of the vector's components
+         * \tparam U The value's data type
+         * \param value The value to add
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator+=(U); // add a value to all components
+        TVector3& operator+=(U value);
 
+        /**
+         * \brief Subtracts the given value from all of the vector's components
+         * \tparam U The value's data type
+         * \param value The value to subtract
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator-=(U); // subtract a value from all components
+        TVector3& operator-=(U value);
 
+        /**
+         * \brief Multiplies the current vector by the given scalar
+         * \tparam U The scalar's data type
+         * \param value The scalar to multiply by
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator*=(U); // multiply all components by a value
+        TVector3& operator*=(U value);
 
+        /**
+         * \brief Divides the current vector by the given scalar
+         * \tparam U The scalar's data type
+         * \param value The scalar to divide by
+         * \return A reference to the modified vector
+         */
         template <class U>
-        TVector3& operator/=(U); // divide all components by a value
+        TVector3& operator/=(U value);
 
-        T*       getArray();
+        /**
+         * \brief Gets the vector as an array
+         * \return A pointer to the start of the vector
+         */
+        T* getArray();
+
+        /**
+         * \brief Gets the vector as an array
+         * \return A pointer to the start of the vector
+         */
         const T* getArray() const;
 
-        Radian angleFrom(const TVector3& other) const; // return smallest angle between 2 vectors
-        Radian signedAngleFrom(const TVector3& other,
-                               const TVector3& axis) const; // return signed angle between 2 vectors around
+        /**
+         * \brief Computes the smallest angle between the given vector and this one
+         * \tparam U The other vector's data type
+         * \param other The vector from which the angle should be calculated
+         * \return The angle between this vector and the other one
+         */
+        Radian angleFrom(const TVector3& other) const;
 
-        TVector3 cross(const TVector3&) const; // return a copy of the cross product result
+        /**
+         * \brief Computes the signed angle from the given vector to this one around the given axis
+         * \tparam U The other vector's data type
+         * \param other The vector from which the angle should be calculated
+         * \param axis The axis around which the angle should be calculated
+         * \return The signed angle between this vector and the other one
+         */
+        Radian signedAngleFrom(const TVector3& other, const TVector3& axis) const;
 
-        T distanceFrom(const TVector3&) const;        // return distance between 2 points
-        T distanceSquaredFrom(const TVector3&) const; // return square value of the distance between 2 points
-        T distance2DFrom(const TVector3&) const;      // return the distance between 2 points on the X-Y axis only
-        T distance2DSquaredFrom(const TVector3&) const;
-        // return the square value of the distance between 2 points points on the X-Y axis only
+        /**
+         * \brief Computes the cross product of this vector and the given one
+         * \tparam U The other vector's data type
+         * \param other The vector relative to which the cross product should be calculated
+         * \return The cross product of the two vectors
+         */
+        TVector3 cross(const TVector3& other) const;
 
+        /**
+         * \brief Computes the distance between this vector and the given one
+         * \tparam U The other vector's data type
+         * \param other The vector from which the distance should be calculated
+         * \return The distance between the two vectors
+         */
+        T distanceFrom(const TVector3& other) const;
+
+        /**
+         * \brief Computes the squared distance between this vector and the given one
+         * \tparam U The other vector's data type
+         * \param other The vector from which the squared distance should be calculated
+         * \return The squared distance between the vectors
+         */
+        T distanceSquaredFrom(const TVector3& other) const;
+
+        /**
+         * \brief Computes the distance between this vector and the given one on the x and y axis only
+         * \tparam U The other vector's data type
+         * \param other The vector from which the distance should be calculated
+         * \return The distance between the two vectors
+         */
+        T distance2DFrom(const TVector3& other) const;
+
+        /**
+         * \brief Computes the squared distance between this vector and the given one on the x and y axis only
+         * \tparam U The other vector's data type
+         * \param other The vector from which the squared distance should be calculated
+         * \return The squared distance between the vectors
+         */
+        T distance2DSquaredFrom(const TVector3& other) const;
+
+        /**
+         * \brief Computes the dot product of the current vector and the other one
+         * \tparam U The other vector's data type
+         * \param other The vector with which the dot product should be calculated
+         * \return The dot product of the two vectors
+         */
         template <class U>
-        T dot(const TVector3<U>&) const; // return dot product result
+        T dot(const TVector3<U>& other) const;
 
+        /**
+         * \brief Checks whether this vector's magnitude is greater than the given one's
+         * \tparam U The other vector's data type
+         * \param other The vector of which magnitude should be compared to this one
+         * \return True if this vector's magnitude is greater than the other's. False otherwise
+         */
         template <class U>
-        bool isLongerThan(const TVector3<U>&) const; // return true if this vector magnitude is greater than the other
+        bool isLongerThan(const TVector3<U>& other) const;
 
+        /**
+         * \brief Checks whether this vector's magnitude is smaller than the given one's
+         * \tparam U The other vector's data type
+         * \param other The vector of which magnitude should be compared to this one
+         * \return True if this vector's magnitude is smaller than the other's. False otherwise
+         */
         template <class U>
-        bool isShorterThan(const TVector3<U>&) const; // return true if this vector magnitude is less than the other
+        bool isShorterThan(const TVector3<U>& other) const;
 
-        bool isUnitVector() const; // return true if this vector magnitude is 1
+        /**
+         * \brief Checks whether this vector's magnitude is 1
+         * \return True if this vector is a unit vector. False otherwise
+         */
+        bool isUnitVector() const;
 
-        T magnitude() const;        // return vector magnitude
-        T magnitudeSquared() const; // return square value of the vector magnitude
+        /**
+         * \brief Computes this vector's magnitude
+         * \return This vector's magnitude
+         */
+        T magnitude() const;
 
-        void     normalize();        // scale this vector to have a magnitude of 1
-        TVector3 normalized() const; // returns this vector scaled to have a magnitude of 1
+        /**
+         * \brief Computes this vector's squared magnitude
+         * \return This vector's squared magnitude
+         */
+        T magnitudeSquared() const;
 
-        void projectOnto(const TVector3&); // project this vector onto an other
+        /**
+         * \brief Normalizes the vector
+         */
+        void normalize();
 
-        void reflectOnto(const TVector3&); // reflect this vector by an other
+        /**
+         * \brief Returns a normalized copy of the vector
+         * \return The normalized vector
+         */
+        TVector3 normalized() const;
 
-        void rotate(const Radian&, const Radian&,
-                    const Radian&);                  // rotate this vector using euler angle apply in the z, x, y order
-        void rotate(const Radian&, const TVector3&); // rotate this vector around an arbitrary axis
+        /**
+         * \brief Projects this vector on the given normal
+         * \param normal The normal to project the vector on
+         */
+        void projectOnto(const TVector3& normal);
 
+        /**
+         * \brief Reflects this vector on the given one
+         * \param other The vector relative to which the reflection should occur
+         */
+        void reflectOnto(const TVector3& other);
+
+        /**
+         * \brief Rotates this vector using euler angle apply in the z, x, y order
+         * \param xAngle The rotation angle around the x axis
+         * \param yAngle The rotation angle around the y axis
+         * \param zAngle The rotation angle around the z axis
+         */
+        void rotate(const Radian& xAngle, const Radian& yAngle, const Radian& zAngle);
+
+        /**
+         * \brief Rotates this vector by the given angle around the given axis
+         * \param angle The rotation angle
+         * \param axis The rotation axis
+         */
+        void rotate(const Radian& angle, const TVector3& axis);
+
+        /**
+         * \brief Rotates this vector using the given quaternion
+         * \tparam U The quaternion's data type
+         * \param quaternion The quaternion rotor
+         */
         template <class U>
-        void rotate(const TQuaternion<U>&); // rotate this vector using a quaternion rotor
+        void rotate(const TQuaternion<U>& quaternion);
 
-        void scale(const TVector3&); // scale this vector by a given factor
+        /**
+         * \brief Scales this vector by the given one
+         * \param other The vector to scale this one by
+         */
+        void scale(const TVector3& other);
 
-        void translate(const TVector3&); // offset this vector by a given distance
+        /**
+         * \brief Offsets this vector by the given one
+         * \param other The vector by which this one should be translate
+         */
+        void translate(const TVector3& other);
 
-        std::string string() const;     // return a string representation of this vector
-        std::string stringLong() const; // return a verbose string representation of this vector
+        /**
+         * \brief Gets a string representation of this vector
+         * \return The string representation of this vector
+         */
+        std::string string() const;
+
+        /**
+         * \brief Gets a verbose string representation of this vector
+         * \return The verbose string representation of this vector
+         */
+        std::string stringLong() const;
 
         T m_x = 0;
         T m_y = 0;
         T m_z = 0;
     };
 
+    /**
+     * \brief Checks whether two vectors' components are equal
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return True if the left and right vectors' components are equal. False otherwise
+     */
     template <class T, class U>
-    bool operator==(const TVector3<T>&, const TVector3<U>&);
-    // TVector3{ 1 } == TVector3::one()				// true					// return whether 2 vectors have the same components
+    bool operator==(const TVector3<T>& left, const TVector3<U>& right);
 
+    /**
+     * \brief Checks whether two vectors' components are different
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return True if the left and right vectors' components are different. False otherwise
+     */
     template <class T, class U>
-    bool operator!=(const TVector3<T>&, const TVector3<U>&);
-    // TVector3{ 1 } != TVector3::zero()				// true					// return whether 2 vectors have different components
+    bool operator!=(const TVector3<T>& left, const TVector3<U>& right);
 
+    /**
+     * \brief Checks whether the left vector's magnitude is greater than the right vector's magnitude
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return True if the left vector has a greater magnitude. False otherwise
+     */
     template <class T, class U>
-    bool operator>(const TVector3<T>&, const TVector3<U>&);
-    // TVector3{ 2 } > TVector3::one()				// true					// return whether the left vector's magnitude is greater than the right vector's magnitude
+    bool operator>(const TVector3<T>& left, const TVector3<U>& right);
 
+    /**
+     * \brief Checks whether the left vector's magnitude is smaller than the right vector's magnitude
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return True if the left vector has a smaller magnitude. False otherwise
+     */
     template <class T, class U>
-    bool operator<(const TVector3<T>&, const TVector3<U>&);
-    // TVector3::zero() < TVector3{ 1 }				// true					// return whether the left vector's magnitude is smaller than the right vector's magnitude
+    bool operator<(const TVector3<T>& left, const TVector3<U>& right);
 
+    /**
+     * \brief Checks whether the left vector's magnitude is greater than or equal to the right vector's magnitude
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return True if the left vector has a greater or equal magnitude. False otherwise
+     */
     template <class T, class U>
-    bool operator>=(const TVector3<T>&, const TVector3<U>&);
-    // TVector3{ 1 } == TVector3::one()				// true					// return whether the left vector's magnitude is greater than or equal to the right vector's magnitude
+    bool operator>=(const TVector3<T>& left, const TVector3<U>& right);
 
+    /**
+     * \brief Checks whether the left vector's magnitude is smaller than or equal the right vector's magnitude
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return True if the left vector has a smaller or equal magnitude. False otherwise
+     */
     template <class T, class U>
-    bool operator<=(const TVector3<T>&, const TVector3<U>&);
-    // TVector3{ 1 } != TVector3::zero()				// true					// return whether the left vector's magnitude is smaller than or equal to the right vector's magnitude
+    bool operator<=(const TVector3<T>& left, const TVector3<U>& right);
 
+    /**
+     * \brief Creates a copy of the given vector with all its components inverted
+     * \tparam T The vector's data type
+     * \param vector The source vector
+     * \return A copy of the vector with all its components inverted
+     */
     template <class T>
-    TVector3<T> operator-(const TVector3<T>&);
-    // -TVector3{ .5, 1.5, -2.5 }					// { -.5, -1.5, 2.5 }	// return a copy of a vector with all its component inverted
+    TVector3<T> operator-(const TVector3<T>& vector);
 
+    /**
+     * \brief Adds the right vector to the left one
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return The sum of the left and right vector
+     */
     template <class T, class U>
-    TVector3<T> operator+(TVector3<T>, const TVector3<U>&);
-    // TVector3{ .5, 1.5, -2.5 } + TVector3::one()	// { 1.5, 2.5, -1.5 }	// add 2 vectors component wise
+    TVector3<T> operator+(TVector3<T> left, const TVector3<U>& right);
 
+    /**
+     * \brief Subtract the right vector from the left one
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return The difference of the left and right vectors
+     */
     template <class T, class U>
-    TVector3<T> operator-(TVector3<T>, const TVector3<U>&);
-    // TVector3{ .5, 1.5, -2.5 } - TVector3{ 1 }		// { -.5, .5, -3.5 }	// subtract 2 vectors component wise
+    TVector3<T> operator-(TVector3<T> left, const TVector3<U>& right);
 
+    /**
+     * \brief Multiplies the left vector by the right one
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return The left vector multiplied by the right vector
+     */
     template <class T, class U>
-    TVector3<T> operator*(TVector3<T>, const TVector3<U>&);
-    // TVector3{ .5, 1.5, -2.5 } * TVector3::zero()	// { 0, 0, 0 }			// multiply 2 vectors component wise
+    TVector3<T> operator*(TVector3<T> left, const TVector3<U>& right);
 
+    /**
+     * \brief Divides the left vector by the right one
+     * \tparam T The left vector's data type
+     * \tparam U The right vector's data type
+     * \param left The left vector
+     * \param right The right vector
+     * \return The left vector divided by the right vector
+     */
     template <class T, class U>
-    TVector3<T> operator/(TVector3<T>, const TVector3<U>&);
-    // TVector3{ .5, 1.5, -2.5 } / TVector3{ 2 }		// { .25, .75, -1.25 }	// divide 2 vectors component wise
+    TVector3<T> operator/(TVector3<T> left, const TVector3<U>& right);
 
+    /**
+     * \brief Adds the given value to all of the vector's components
+     * \tparam T The vector's data type
+     * \tparam U The value's data type
+     * \param value The value to add
+     * \param vector The vector to add the value to
+     * \return The vector with the value added to all its components
+     */
     template <class T, class U>
-    TVector3<T> operator+(TVector3<T>, U);
-    // TVector3{ .5, 1.5, -2.5 } + 1					// { 1.5, 2.5, -1.5 }	// add a value to all components of a vector
+    TVector3<T> operator+(TVector3<T> vector, U value);
 
+    /**
+     * \brief Subtracts a value from all of the vector's components
+     * \tparam T The vector's data type
+     * \tparam U The value's data type
+     * \param value The value to subtract
+     * \param vector The vector to subtract the value from
+     * \return The vector with the value subtracted from all of its components
+     */
     template <class T, class U>
-    TVector3<T> operator-(TVector3<T>, U);
-    // TVector3{ .5, 1.5, -2.5 } - 1					// { -.5, .5, -3.5 }	// subtract a value from all components of a vector
+    TVector3<T> operator-(TVector3<T> vector, U value);
 
+    /**
+     * \brief Multiplies the given vector by a scalar
+     * \tparam T The vector's data type
+     * \tparam U The scalar's data type
+     * \param vector The vector to multiply
+     * \param scalar The scalar to multiply by
+     * \return The vector multiplied by the scalar
+     */
     template <class T, class U>
-    TVector3<T> operator*(TVector3<T>, U);
-    // TVector3{ .5, 1.5, -2.5 } * 0					// { 0, 0, 0 }			// multiply all components of a vector by a value
+    TVector3<T> operator*(TVector3<T> vector, U scalar);
 
+    /**
+     * \brief Multiplies the given vector by a scalar
+     * \tparam T The vector's data type
+     * \tparam U The scalar's data type
+     * \param scalar The scalar to multiply by
+     * \param vector The vector to multiply
+     * \return The vector multiplied by the scalar
+     */
     template <class T, class U>
-    TVector3<U> operator*(U, TVector3<T>);
-    // 0 * TVector3{ .5, 1.5, -2.5 }					// { 0, 0, 0 }			// multiply all components of a vector by a value
+    TVector3<U> operator*(U scalar, TVector3<T> vector);
 
+    /**
+     * \brief Divides the given vector by a scalar
+     * \tparam T The vector's data type
+     * \tparam U The scalar's data type
+     * \param scalar The scalar to divide by
+     * \param vector The vector to divide
+     * \return The vector divided by the scalar
+     */
     template <class T, class U>
-    TVector3<T> operator/(TVector3<T>, U);
-    // TVector3{ .5, 1.5, -2.5 } / 2					// { .25, .75, -1.25 }	// divide all components of a vector by a value
+    TVector3<T> operator/(TVector3<T> vector, U scalar);
 
     /**
      * \brief Adds a vector string representation to an output stream
      * \tparam T The vector's data type
      * \param stream The input stream
-     * \param vect The output vector
+     * \param vector The output vector
      * \return The modified stream
      */
     template <class T>
-    std::ostream& operator<<(std::ostream& stream, const TVector3<T>& vect);
+    std::ostream& operator<<(std::ostream& stream, const TVector3<T>& vector);
 
     /**
      * \brief Parses a string representation from an input stream into a vector
      * \tparam T The vector's data type
      * \param stream The input stream
-     * \param vect The output vector
+     * \param vector The output vector
      * \return The modified stream
      */
     template <class T>
-    std::istream& operator>>(std::istream& stream, TVector3<T>& vect);
+    std::istream& operator>>(std::istream& stream, TVector3<T>& vector);
 
+#define VEC3_ALIAS_IMPL(DataType, Alias)                                             \
+    using Alias = TVector3<DataType>;                                                \
+                                                                                     \
+    template <>                                                                      \
+    inline Alias clamp<Alias>(const Alias value, const Alias a, const Alias b)       \
+    {                                                                                \
+        return                                                                       \
+        {                                                                            \
+            clamp(value.m_x, a.m_x, b.m_x),                                          \
+            clamp(value.m_y, a.m_y, b.m_y),                                          \
+            clamp(value.m_z, a.m_z, b.m_z)                                           \
+        };                                                                           \
+    }                                                                                \
+                                                                                     \
+    template <>                                                                      \
+    inline Alias snap<Alias>(const Alias value, const Alias a, const Alias b)        \
+    {                                                                                \
+        return                                                                       \
+        {                                                                            \
+            snap(value.m_x, a.m_x, b.m_x),                                           \
+            snap(value.m_y, a.m_y, b.m_y),                                           \
+            snap(value.m_z, a.m_z, b.m_z)                                            \
+        };                                                                           \
+    }                                                                                \
+                                                                                     \
+    template <>                                                                      \
+    constexpr bool isInRange<Alias>(const Alias value, const Alias a, const Alias b) \
+    {                                                                                \
+        return isInRange(value.m_x, a.m_x, b.m_x)                                    \
+            && isInRange(value.m_y, a.m_y, b.m_y)                                    \
+            && isInRange(value.m_z, a.m_z, b.m_z);                                   \
+    }                                                                                \
+                                                                                     \
+    template <>                                                                      \
+    inline Alias min<Alias>(const Alias a, const Alias b)                            \
+    {                                                                                \
+        return {                                                                     \
+            min(a.m_x, b.m_x),                                                       \
+            min(a.m_y, b.m_y),                                                       \
+            min(a.m_z, b.m_z)                                                        \
+        };                                                                           \
+    }
+
+    VEC3_ALIAS_IMPL(float, Vector3F)
+    VEC3_ALIAS_IMPL(double, Vector3D)
+    VEC3_ALIAS_IMPL(int, Vector3I)
+    VEC3_ALIAS_IMPL(long, Vector3L)
     using Vector3 = TVector3<float>;
-    using Vector3I = TVector3<int>;
-
-    template <>
-    inline Vector3 clamp<Vector3>(const Vector3 value, const Vector3 a, const Vector3 b)
-    {
-        return
-        {
-            clamp(value.m_x, a.m_x, b.m_x),
-            clamp(value.m_y, a.m_y, b.m_y),
-            clamp(value.m_z, a.m_z, b.m_z)
-        };
-    }
-
-    template <>
-    inline Vector3 snap<Vector3>(const Vector3 value, const Vector3 a, const Vector3 b)
-    {
-        return
-        {
-            snap(value.m_x, a.m_x, b.m_x),
-            snap(value.m_y, a.m_y, b.m_y),
-            snap(value.m_z, a.m_z, b.m_z)
-        };
-    }
-
-    template <>
-    constexpr bool isInRange<Vector3>(const Vector3 value, const Vector3 a, const Vector3 b)
-    {
-        return isInRange(value.m_x, a.m_x, b.m_x)
-            && isInRange(value.m_y, a.m_y, b.m_y)
-            && isInRange(value.m_z, a.m_z, b.m_z);
-    }
-
-    template <>
-    inline Vector3 min<Vector3>(const Vector3 a, const Vector3 b)
-    {
-        return {
-            min(a.m_x, b.m_x),
-            min(a.m_y, b.m_y),
-            min(a.m_z, b.m_z)
-        };
-    }
-
-    template <>
-    inline Vector3 max<Vector3>(const Vector3 a, const Vector3 b)
-    {
-        return {
-            max(a.m_x, b.m_x),
-            max(a.m_y, b.m_y),
-            max(a.m_z, b.m_z)
-        };
-    }
-
-    template <>
-    inline Vector3I clamp<Vector3I>(const Vector3I value, const Vector3I a, const Vector3I b)
-    {
-        return
-        {
-            clamp(value.m_x, a.m_x, b.m_x),
-            clamp(value.m_y, a.m_y, b.m_y),
-            clamp(value.m_z, a.m_z, b.m_z)
-        };
-    }
-
-    template <>
-    inline Vector3I snap<Vector3I>(const Vector3I value, const Vector3I a, const Vector3I b)
-    {
-        return
-        {
-            snap(value.m_x, a.m_x, b.m_x),
-            snap(value.m_y, a.m_y, b.m_y),
-            snap(value.m_z, a.m_z, b.m_z)
-        };
-    }
-
-    template <>
-    constexpr bool isInRange<Vector3I>(const Vector3I value, const Vector3I a, const Vector3I b)
-    {
-        return isInRange(value.m_x, a.m_x, b.m_x)
-            && isInRange(value.m_y, a.m_y, b.m_y)
-            && isInRange(value.m_z, a.m_z, b.m_z);
-    }
-
-    template <>
-    inline Vector3I min<Vector3I>(const Vector3I a, const Vector3I b)
-    {
-        return {
-            min(a.m_x, b.m_x),
-            min(a.m_y, b.m_y),
-            min(a.m_z, b.m_z)
-        };
-    }
-
-    template <>
-    inline Vector3I max<Vector3I>(const Vector3I a, const Vector3I b)
-    {
-        return {
-            max(a.m_x, b.m_x),
-            max(a.m_y, b.m_y),
-            max(a.m_z, b.m_z)
-        };
-    }
 }
 
 #include "Vector/Vector3.inl"

@@ -410,9 +410,9 @@ namespace LibMath
     }
 
     template <class T>
-    void TVector3<T>::translate(const TVector3& vect)
+    void TVector3<T>::translate(const TVector3& other)
     {
-        *this += vect;
+        *this += other;
     }
 
     template <class T>
@@ -437,47 +437,47 @@ namespace LibMath
     }
 
     template <class T, class U>
-    bool operator==(const TVector3<T>& lhs, const TVector3<U>& rhs)
+    bool operator==(const TVector3<T>& left, const TVector3<U>& right)
     {
-        return floatEquals(lhs.m_x, static_cast<T>(rhs.m_x))
-            && floatEquals(lhs.m_y, static_cast<T>(rhs.m_y))
-            && floatEquals(lhs.m_z, static_cast<T>(rhs.m_z));
+        return floatEquals(left.m_x, static_cast<T>(right.m_x))
+            && floatEquals(left.m_y, static_cast<T>(right.m_y))
+            && floatEquals(left.m_z, static_cast<T>(right.m_z));
     }
 
     template <class T, class U>
-    bool operator!=(const TVector3<T>& lhs, const TVector3<U>& rhs)
+    bool operator!=(const TVector3<T>& left, const TVector3<U>& right)
     {
-        return !(lhs == rhs);
+        return !(left == right);
     }
 
     template <class T, class U>
-    bool operator>(const TVector3<T>& lhs, const TVector3<U>& rhs)
+    bool operator>(const TVector3<T>& left, const TVector3<U>& right)
     {
-        return lhs.isLongerThan(rhs);
+        return left.isLongerThan(right);
     }
 
     template <class T, class U>
-    bool operator<(const TVector3<T>& lhs, const TVector3<U>& rhs)
+    bool operator<(const TVector3<T>& left, const TVector3<U>& right)
     {
-        return rhs > lhs;
+        return right > left;
     }
 
     template <class T, class U>
-    bool operator>=(const TVector3<T>& lhs, const TVector3<U>& rhs)
+    bool operator>=(const TVector3<T>& left, const TVector3<U>& right)
     {
-        return !(lhs < rhs);
+        return !(left < right);
     }
 
     template <class T, class U>
-    bool operator<=(const TVector3<T>& lhs, const TVector3<U>& rhs)
+    bool operator<=(const TVector3<T>& left, const TVector3<U>& right)
     {
-        return !(lhs > rhs);
+        return !(left > right);
     }
 
     template <class T>
-    TVector3<T> operator-(const TVector3<T>& vect)
+    TVector3<T> operator-(const TVector3<T>& vector)
     {
-        return { -vect.m_x, -vect.m_y, -vect.m_z };
+        return { -vector.m_x, -vector.m_y, -vector.m_z };
     }
 
     template <class T, class U>
@@ -505,43 +505,43 @@ namespace LibMath
     }
 
     template <class T, class U>
-    TVector3<T> operator+(TVector3<T> vect, U val)
+    TVector3<T> operator+(TVector3<T> vector, U value)
     {
-        return vect += val;
+        return vector += value;
     }
 
     template <class T, class U>
-    TVector3<T> operator-(TVector3<T> vect, U val)
+    TVector3<T> operator-(TVector3<T> vector, U value)
     {
-        return vect -= val;
+        return vector -= value;
     }
 
     template <class T, class U>
-    TVector3<T> operator*(TVector3<T> vect, U val)
+    TVector3<T> operator*(TVector3<T> vector, U scalar)
     {
-        return vect *= val;
+        return vector *= scalar;
     }
 
     template <class T, class U>
-    TVector3<U> operator*(U val, TVector3<T> vect)
+    TVector3<U> operator*(U scalar, TVector3<T> vector)
     {
-        return vect *= val;
+        return vector *= scalar;
     }
 
     template <class T, class U>
-    TVector3<T> operator/(TVector3<T> vect, U val)
+    TVector3<T> operator/(TVector3<T> vector, U scalar)
     {
-        return vect /= val;
+        return vector /= scalar;
     }
 
     template <class T>
-    std::ostream& operator<<(std::ostream& stream, const TVector3<T>& vect)
+    std::ostream& operator<<(std::ostream& stream, const TVector3<T>& vector)
     {
-        return stream << vect.string();
+        return stream << vector.string();
     }
 
     template <class T>
-    std::istream& operator>>(std::istream& stream, TVector3<T>& vect)
+    std::istream& operator>>(std::istream& stream, TVector3<T>& vector)
     {
         std::string line;
 
@@ -564,7 +564,7 @@ namespace LibMath
             if (line[valStart] != '-' && !std::isdigit(line[valStart]))
                 break;
 
-            vect[component] = std::stof(line.substr(valStart));
+            vector[component] = std::stof(line.substr(valStart));
 
             valStart = line.find(',', valStart) + 1;
             component++;
@@ -572,7 +572,7 @@ namespace LibMath
         while (component < 3 && valStart != 0);
 
         if (component != 3)
-            vect = TVector3<T>::zero();
+            vector = TVector3<T>::zero();
 
         return stream;
     }
