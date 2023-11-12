@@ -24,7 +24,7 @@ jobs:
       - ${{ matrix.info.os }}
     steps:
       - uses: actions/checkout@v3.6.0
-      - uses: ./.github/actions/setup
+      - uses: TheEkinnox/actions-setup-cpp@main
         with:
           os: ${{ matrix.info.os }}
       - name: Configure CMake
