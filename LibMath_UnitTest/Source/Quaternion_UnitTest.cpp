@@ -149,6 +149,41 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
             * glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0));
         CHECK_QUATERNION(euler, eulerGlm);
 
+        LibMath::Quaternion matrix{ LibMath::rotation(90_deg, 75_deg, 30_deg) };
+        glm::quat           matrixGlm{ glm::yawPitchRoll(glm::radians(90.f), glm::radians(75.f), glm::radians(30.f)) };
+        CHECK_QUATERNION(matrix, matrixGlm);
+        CHECK(matrix == LibMath::Quaternion(90_deg, 75_deg, 30_deg));
+
+        LibMath::Matrix4 rotMat;
+        rotMat(0, 0) = 1;
+        rotMat(1, 1) = 1;
+        rotMat(2, 2) = 1;
+
+        glm::mat4 rotMatGlm;
+        rotMatGlm[0][0] = 1;
+        rotMatGlm[1][1] = 1;
+        rotMatGlm[2][2] = 1;
+
+        matrix = LibMath::Quaternion{ rotMat };
+        matrixGlm = glm::quat{ rotMatGlm };
+        CHECK_QUATERNION(matrix, matrixGlm);
+
+        rotMat(0, 0) = 0;
+        rotMat(1, 1) = 0;
+        rotMat(2, 2) = 0;
+
+        rotMatGlm[0][0] = 0;
+        rotMatGlm[1][1] = 0;
+        rotMatGlm[2][2] = 0;
+
+        matrix = LibMath::Quaternion{ rotMat };
+        matrixGlm = glm::quat{ rotMatGlm };
+        CHECK_QUATERNION(matrix, matrixGlm);
+
+        matrix = LibMath::Quaternion(LibMath::Matrix4(0));
+        matrixGlm = glm::quat(glm::mat4(0));
+        CHECK_QUATERNION(matrix, matrixGlm);
+
         CHECK(sizeof(LibMath::Quaternion) == sizeof(glm::quat));
     }
 

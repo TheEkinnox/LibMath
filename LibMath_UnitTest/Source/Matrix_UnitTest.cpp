@@ -570,6 +570,16 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 				// Transpose since glm matrices are column major unlike ours
 				CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
 			}
+
+			SECTION("Quaternion")
+			{
+				LibMath::Quaternion quat(LibMath::Radian{ transformation.m_x }, LibMath::Radian{ transformation.m_y }, LibMath::Radian{ transformation.m_z });
+				LibMath::Matrix4 rotate = LibMath::rotation(quat);
+				glm::mat4 rotateGlm = glm::yawPitchRoll(transformationGlm.x, transformationGlm.y, transformationGlm.z);
+
+				// Transpose since glm matrices are column major unlike ours
+				CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
+			}
 		}
 
 		SECTION("Projection")

@@ -76,7 +76,7 @@ namespace LibMath
         constexpr TQuaternion(const TVector3<U>& angles, bool isRadian);
 
         /**
-         * \brief TODO: Creates a quaternion from the given rotation matrix
+         * \brief Creates a quaternion from the given rotation matrix
          * \tparam U The rotation matrix's data type
          * \param rotationMatrix The rotation matrix
          */
@@ -308,7 +308,7 @@ namespace LibMath
 
         /**
          * \brief Gets a string representation of this quaternion
-         * \return The verbose representation of this quaternion
+         * \return The string representation of this quaternion
          */
         [[nodiscard]] constexpr std::string string() const;
 
@@ -444,7 +444,7 @@ namespace LibMath
      * \tparam U The value's data type
      * \param value The value to add
      * \param quat The quaternion to add the value to
-     * \return The quaternion with the value subtracted from it's real part
+     * \return The quaternion with the value added to it's real part
      */
     template <class T, class U>
     constexpr TQuaternion<T> operator+(TQuaternion<T> quat, U value);

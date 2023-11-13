@@ -1,10 +1,11 @@
 #ifndef __LIBMATH__MATRIX__MATRIX4_INL__
 #define __LIBMATH__MATRIX__MATRIX4_INL__
 
-#include "Vector/Vector3.h"
-#include "Matrix4.h"
 #include "Angle.h"
+#include "Matrix4.h"
+#include "Quaternion.h"
 #include "Trigonometry.h"
+#include "Vector/Vector3.h"
 
 namespace LibMath
 {
@@ -123,6 +124,39 @@ namespace LibMath
 			return rotation<DataT>(Radian(angles.m_y), Radian(angles.m_x), Radian(angles.m_z));
 
 		return rotation<DataT>(Degree(angles.m_y), Degree(angles.m_x), Degree(angles.m_z));
+	}
+
+	template <class DataT>
+	constexpr TMatrix<4, 4, DataT> rotation(const TQuaternion<DataT>& quaternion)
+	{
+		TMatrix<4, 4, DataT> mat(static_cast<DataT>(1));
+
+		DataT xSqr = quaternion.m_x * quaternion.m_x;
+		DataT ySqr = quaternion.m_y * quaternion.m_y;
+		DataT zSqr = quaternion.m_z * quaternion.m_z;
+
+		DataT wx = quaternion.m_w * quaternion.m_x;
+		DataT wy = quaternion.m_w * quaternion.m_y;
+		DataT wz = quaternion.m_w * quaternion.m_z;
+
+		DataT xy = quaternion.m_x * quaternion.m_y;
+		DataT xz = quaternion.m_x * quaternion.m_z;
+
+		DataT yz = quaternion.m_y * quaternion.m_z;
+
+		mat(0, 0) = static_cast<DataT>(1) - static_cast<DataT>(2) * ySqr - static_cast<DataT>(2) * zSqr;
+		mat(0, 1) = static_cast<DataT>(2) * xy - static_cast<DataT>(2) * wz;
+		mat(0, 2) = static_cast<DataT>(2) * xz + static_cast<DataT>(2) * wy;
+
+		mat(1, 0) = static_cast<DataT>(2) * xy + static_cast<DataT>(2) * wz;
+		mat(1, 1) = static_cast<DataT>(1) - static_cast<DataT>(2) * xSqr - static_cast<DataT>(2) * zSqr;
+		mat(1, 2) = static_cast<DataT>(2) * yz - static_cast<DataT>(2) * wx;
+
+		mat(2, 0) = static_cast<DataT>(2) * xz - static_cast<DataT>(2) * wy;
+		mat(2, 1) = static_cast<DataT>(2) * yz + static_cast<DataT>(2) * wx;
+		mat(2, 2) = static_cast<DataT>(1) - static_cast<DataT>(2) * xSqr - static_cast<DataT>(2) * ySqr;
+
+		return mat;
 	}
 
 	template <class DataT>

@@ -75,6 +75,52 @@ namespace LibMath
 
     template <class T>
     template <typename U>
+    constexpr TQuaternion<T>::TQuaternion(const TMatrix<4, 4, U>& rotationMatrix)
+    {
+        T traceW = static_cast<T>(rotationMatrix(0, 0) + rotationMatrix(1, 1) + rotationMatrix(2, 2));
+        T traceX = static_cast<T>(rotationMatrix(0, 0) - rotationMatrix(1, 1) - rotationMatrix(2, 2));
+        T traceY = static_cast<T>(-rotationMatrix(0, 0) + rotationMatrix(1, 1) - rotationMatrix(2, 2));
+        T traceZ = static_cast<T>(-rotationMatrix(0, 0) - rotationMatrix(1, 1) + rotationMatrix(2, 2));
+        T maxTrace = max(traceW, max(traceX, max(traceY, traceZ)));
+
+        T maxVal = squareRoot(maxTrace + static_cast<T>(1)) * static_cast<T>(.5);
+        T multiplier = static_cast<T>(.25) / maxVal;
+
+        if (floatEquals(traceW, maxTrace))
+        {
+            m_w = maxVal;
+            m_x = multiplier * static_cast<T>(rotationMatrix(2, 1) - rotationMatrix(1, 2));
+            m_y = multiplier * static_cast<T>(rotationMatrix(0, 2) - rotationMatrix(2, 0));
+            m_z = multiplier * static_cast<T>(rotationMatrix(1, 0) - rotationMatrix(0, 1));
+            return;
+        }
+
+        if (floatEquals(traceX, maxTrace))
+        {
+            m_w = multiplier * static_cast<T>(rotationMatrix(2, 1) - rotationMatrix(1, 2));
+            m_x = maxVal;
+            m_y = multiplier * static_cast<T>(rotationMatrix(0, 1) + rotationMatrix(1, 0));
+            m_z = multiplier * static_cast<T>(rotationMatrix(0, 2) + rotationMatrix(2, 0));
+            return;
+        }
+
+        if (floatEquals(traceY, maxTrace))
+        {
+            m_w = multiplier * static_cast<T>(rotationMatrix(0, 2) - rotationMatrix(2, 1));
+            m_x = multiplier * static_cast<T>(rotationMatrix(0, 1) + rotationMatrix(1, 0));
+            m_y = maxVal;
+            m_z = multiplier * static_cast<T>(rotationMatrix(1, 2) + rotationMatrix(2, 1));
+            return;
+        }
+
+        m_w = multiplier * static_cast<T>(rotationMatrix(1, 0) - rotationMatrix(0, 1));
+        m_x = multiplier * static_cast<T>(rotationMatrix(0, 2) + rotationMatrix(2, 0));
+        m_y = multiplier * static_cast<T>(rotationMatrix(1, 2) + rotationMatrix(2, 1));
+        m_z = maxVal;
+    }
+
+    template <class T>
+    template <typename U>
     constexpr TQuaternion<T>::TQuaternion(const TQuaternion<U>& other)
         : TQuaternion(static_cast<T>(other.m_w), static_cast<T>(other.m_x), static_cast<T>(other.m_y), static_cast<T>(other.m_z))
     {

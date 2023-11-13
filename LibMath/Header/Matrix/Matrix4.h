@@ -10,6 +10,9 @@ namespace LibMath
 	template <class T>
 	class TVector3;
 
+	template <class T>
+	class TQuaternion;
+
 	template <class DataT = float>
 	constexpr TMatrix<4, 4, DataT>	translation(DataT x, DataT y, DataT z);
 
@@ -30,6 +33,9 @@ namespace LibMath
 
 	template <class DataT = float>
 	constexpr TMatrix<4, 4, DataT>	rotation(const TVector3<DataT>& angles, bool isRadian);
+
+	template <class DataT = float>
+	constexpr TMatrix<4, 4, DataT>	rotation(const TQuaternion<DataT>& quaternion);
 
 	template <class DataT = float>
 	constexpr TMatrix<4, 4, DataT>	rotationEuler(const Radian& xAngle, const Radian& yAngle, const Radian& zAngle);
