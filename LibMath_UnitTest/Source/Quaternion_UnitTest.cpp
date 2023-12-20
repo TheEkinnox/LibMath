@@ -478,10 +478,10 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
 
                 base.toAngleAxis(angle, axis);
 
-                CHECK(isnan(angle.radian()));
-                CHECK(isnan(axis.m_x));
-                CHECK(isnan(axis.m_y));
-                CHECK(isnan(axis.m_z));
+                CHECK(std::isnan(angle.radian()));
+                CHECK(std::isnan(axis.m_x));
+                CHECK(std::isnan(axis.m_y));
+                CHECK(std::isnan(axis.m_z));
             }
 
             {
