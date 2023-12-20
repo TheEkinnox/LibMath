@@ -206,6 +206,15 @@ namespace LibMath
     }
 
     template <class T>
+    template <typename U>
+    constexpr void TQuaternion<T>::toAngleAxis(Radian& angle, TVector3<U>& axis) const
+    {
+        const Radian halfAngle = acos(m_w);
+        axis = TVector3<U>(*this) / static_cast<U>(sin(halfAngle));
+        angle = halfAngle * 2.f;
+    }
+
+    template <class T>
     constexpr TQuaternion<T>::operator TVector3<T>() const
     {
         return { m_x, m_y, m_z };

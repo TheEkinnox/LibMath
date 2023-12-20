@@ -153,6 +153,15 @@ namespace LibMath
         static constexpr TQuaternion fromEuler(const TVector3<Radian>& angles, ERotationOrder rotationOrder);
 
         /**
+         * \brief Converts the quaternion to an angle/axis representation
+         * \tparam U The axis' data type
+         * \param angle The output angle variable
+         * \param axis The output axis variable
+         */
+        template <typename U>
+        constexpr void toAngleAxis(Radian& angle, TVector3<U>& axis) const;
+
+        /**
          * \brief Extracts the vector part of the quaternion
          */
         constexpr operator TVector3<T>() const;

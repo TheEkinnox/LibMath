@@ -464,11 +464,40 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
 
         SECTION("Conversion")
         {
-            const LibMath::Vector3 vectorPart = base;
+            {
+                const LibMath::Vector3 vectorPart = base;
 
-            CHECK(vectorPart.m_x == Catch::Approx(base.m_x));
-            CHECK(vectorPart.m_y == Catch::Approx(base.m_y));
-            CHECK(vectorPart.m_z == Catch::Approx(base.m_z));
+                CHECK(vectorPart.m_x == Catch::Approx(base.m_x));
+                CHECK(vectorPart.m_y == Catch::Approx(base.m_y));
+                CHECK(vectorPart.m_z == Catch::Approx(base.m_z));
+            }
+
+            {
+                LibMath::Radian  angle;
+                LibMath::Vector3 axis;
+
+                base.toAngleAxis(angle, axis);
+
+                CHECK(isnan(angle.radian()));
+                CHECK(isnan(axis.m_x));
+                CHECK(isnan(axis.m_y));
+                CHECK(isnan(axis.m_z));
+            }
+
+            {
+                LibMath::Radian  angle;
+                LibMath::Vector3 axis;
+
+                base.normalized().toAngleAxis(angle, axis);
+
+                const float     angleGlm = glm::angle(normalize(baseGlm));
+                const glm::vec3 axisGlm = glm::axis(normalize(baseGlm));
+
+                CHECK(angle.radian() == Catch::Approx(angleGlm));
+                CHECK(axis.m_x == Catch::Approx(axisGlm.x));
+                CHECK(axis.m_y == Catch::Approx(axisGlm.y));
+                CHECK(axis.m_z == Catch::Approx(axisGlm.z));
+            }
         }
 
         SECTION("Magnitude")
