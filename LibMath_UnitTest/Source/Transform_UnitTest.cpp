@@ -35,24 +35,28 @@ using namespace LibMath::Literal;
     CHECK_LOCAL_TRANSFORM(transform, position, rotation, scale, matrix) \
     CHECK_WORLD_TRANSFORM(transform, position, rotation, scale, matrix)
 
-#define DECOMPOSE_GLM(matGlm, pos, rot, scale)        \
-{                                                     \
-    pos = { matGlm[3].x, matGlm[3].y, matGlm[3].z };  \
-                                                      \
-    scale = {                                         \
-        glm::length(glm::vec3(matGlm[0])),            \
-        glm::length(glm::vec3(matGlm[1])),            \
-        glm::length(glm::vec3(matGlm[2]))             \
-    };                                                \
-                                                      \
-    const glm::mat3 rotMtx(                           \
-        glm::vec3(matGlm[0]) / scale[0],              \
-        glm::vec3(matGlm[1]) / scale[1],              \
-        glm::vec3(matGlm[2]) / scale[2]               \
-    );                                                \
-                                                      \
-    const glm::quat rotGlm = glm::quat_cast(rotMtx);  \
-    rot = { rotGlm.w, rotGlm.x, rotGlm.y, rotGlm.z }; \
+void decomposeGlm(const glm::mat4& matGlm, LibMath::Vector3& pos, LibMath::Quaternion& rot, LibMath::Vector3& scale)
+{
+    pos = { matGlm[3].x, matGlm[3].y, matGlm[3].z };
+
+    const glm::vec3 mat0 = glm::vec3(matGlm[0]);
+    const glm::vec3 mat1 = glm::vec3(matGlm[1]);
+    const glm::vec3 mat2 = glm::vec3(matGlm[2]);
+
+    scale = {
+        glm::length(mat0),
+        glm::length(mat1),
+        glm::length(mat2)
+    };
+
+    const glm::mat3 rotMtx(
+        mat0 / scale[0],
+        mat1 / scale[1],
+        mat2 / scale[2]
+    );
+
+    const glm::quat rotGlm = glm::quat_cast(rotMtx);
+    rot = { rotGlm.w, rotGlm.x, rotGlm.y, rotGlm.z };
 }
 
 TEST_CASE("Transform", "[.all][transform]")
@@ -132,7 +136,7 @@ TEST_CASE("Transform", "[.all][transform]")
             LibMath::Vector3    productPos, productScale;
             LibMath::Quaternion productRot;
 
-            DECOMPOSE_GLM(productGlm, productPos, productRot, productScale);
+            decomposeGlm(productGlm, productPos, productRot, productScale);
 
             {
                 LibMath::Transform productAssignment = base;
@@ -258,7 +262,7 @@ TEST_CASE("Transform", "[.all][transform]")
             LibMath::Quaternion transformedRot;
 
             glm::mat4 transformedMatGlm = parentMatGlm * childMatGlm;
-            DECOMPOSE_GLM(transformedMatGlm, transformedPos, transformedRot, transformedScale);
+            decomposeGlm(transformedMatGlm, transformedPos, transformedRot, transformedScale);
 
             LibMath::Transform childLocal(childPos, childRot, childScale);
 
@@ -272,7 +276,7 @@ TEST_CASE("Transform", "[.all][transform]")
             LibMath::Transform childWorld(childPos, childRot, childScale);
 
             transformedMatGlm = glm::inverse(parentMatGlm) * childMatGlm;
-            DECOMPOSE_GLM(transformedMatGlm, transformedPos, transformedRot, transformedScale);
+            decomposeGlm(transformedMatGlm, transformedPos, transformedRot, transformedScale);
 
             childWorld.setParent(parent, true);
 
