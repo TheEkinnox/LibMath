@@ -161,7 +161,7 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
         rotMat(1, 1) = 1;
         rotMat(2, 2) = 1;
 
-        glm::mat4 rotMatGlm;
+        glm::mat4 rotMatGlm{};
         rotMatGlm[0][0] = 1;
         rotMatGlm[1][1] = 1;
         rotMatGlm[2][2] = 1;
