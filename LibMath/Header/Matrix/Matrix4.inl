@@ -144,17 +144,17 @@ namespace LibMath
 
 		DataT yz = quaternion.m_y * quaternion.m_z;
 
-		mat(0, 0) = static_cast<DataT>(1) - static_cast<DataT>(2) * ySqr - static_cast<DataT>(2) * zSqr;
-		mat(0, 1) = static_cast<DataT>(2) * xy - static_cast<DataT>(2) * wz;
-		mat(0, 2) = static_cast<DataT>(2) * xz + static_cast<DataT>(2) * wy;
+		mat(0, 0) = static_cast<DataT>(1) - static_cast<DataT>(2) * (ySqr + zSqr);
+		mat(0, 1) = static_cast<DataT>(2) * (xy - wz);
+		mat(0, 2) = static_cast<DataT>(2) * (xz + wy);
 
-		mat(1, 0) = static_cast<DataT>(2) * xy + static_cast<DataT>(2) * wz;
-		mat(1, 1) = static_cast<DataT>(1) - static_cast<DataT>(2) * xSqr - static_cast<DataT>(2) * zSqr;
-		mat(1, 2) = static_cast<DataT>(2) * yz - static_cast<DataT>(2) * wx;
+		mat(1, 0) = static_cast<DataT>(2) * (xy + wz);
+		mat(1, 1) = static_cast<DataT>(1) - static_cast<DataT>(2) * (xSqr + zSqr);
+		mat(1, 2) = static_cast<DataT>(2) * (yz - wx);
 
-		mat(2, 0) = static_cast<DataT>(2) * xz - static_cast<DataT>(2) * wy;
-		mat(2, 1) = static_cast<DataT>(2) * yz + static_cast<DataT>(2) * wx;
-		mat(2, 2) = static_cast<DataT>(1) - static_cast<DataT>(2) * xSqr - static_cast<DataT>(2) * ySqr;
+		mat(2, 0) = static_cast<DataT>(2) * (xz - wy);
+		mat(2, 1) = static_cast<DataT>(2) * (yz + wx);
+		mat(2, 2) = static_cast<DataT>(1) - static_cast<DataT>(2) * (xSqr + ySqr);
 
 		return mat;
 	}
