@@ -62,15 +62,9 @@ namespace LibMath
     }
 
     template <class T>
-    template <typename U>
-    constexpr TQuaternion<T>::TQuaternion(const TVector3<U>& angles, const bool isRadian)
+    constexpr TQuaternion<T>::TQuaternion(const TVector3<Radian>& angles)
+        : TQuaternion(angles.m_x, angles.m_y, angles.m_z)
     {
-        if (isRadian)
-            *this = TQuaternion(Radian(static_cast<float>(angles.m_x)), Radian(static_cast<float>(angles.m_y)),
-                Radian(static_cast<float>(angles.m_z)));
-        else
-            *this = TQuaternion(Degree(static_cast<float>(angles.m_x)), Degree(static_cast<float>(angles.m_y)),
-                Degree(static_cast<float>(angles.m_z)));
     }
 
     template <class T>
@@ -170,13 +164,9 @@ namespace LibMath
     }
 
     template <class T>
-    template <typename U>
-    constexpr TQuaternion<T> TQuaternion<T>::fromEuler(const TVector3<U>& angles, const bool isRadian)
+    constexpr TQuaternion<T> TQuaternion<T>::fromEuler(const TVector3<Radian>& angles)
     {
-        if (isRadian)
-            return fromEuler(Radian(angles.m_x), Radian(angles.m_y), Radian(angles.m_z));
-
-        return fromEuler(Degree(angles.m_x), Degree(angles.m_y), Degree(angles.m_z));
+        return fromEuler(angles.m_x, angles.m_y, angles.m_z);
     }
 
     template <class T>
@@ -207,14 +197,9 @@ namespace LibMath
     }
 
     template <class T>
-    template <typename U>
-    constexpr TQuaternion<T> TQuaternion<T>::fromEuler(const TVector3<U>&   angles, const bool isRadian,
-                                                       const ERotationOrder rotationOrder)
+    constexpr TQuaternion<T> TQuaternion<T>::fromEuler(const TVector3<Radian>& angles, const ERotationOrder rotationOrder)
     {
-        if (isRadian)
-            return fromEuler(Radian(angles.m_x), Radian(angles.m_y), Radian(angles.m_z), rotationOrder);
-
-        return fromEuler(Degree(angles.m_x), Degree(angles.m_y), Degree(angles.m_z), rotationOrder);
+        return fromEuler(angles.m_x, angles.m_y, angles.m_z, rotationOrder);
     }
 
     template <class T>

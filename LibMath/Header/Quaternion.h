@@ -68,12 +68,9 @@ namespace LibMath
 
         /**
          * \brief Creates a quaternion from the given rotation angles (x=yaw, y=pitch, z=roll)
-         * \tparam U The angles vector's data type
          * \param angles The rotation angles vector
-         * \param isRadian Whether the angles are in radian or not
          */
-        template <typename U>
-        constexpr TQuaternion(const TVector3<U>& angles, bool isRadian);
+        explicit constexpr TQuaternion(const TVector3<Radian>& angles);
 
         /**
          * \brief Creates a quaternion from the given rotation matrix
@@ -127,12 +124,9 @@ namespace LibMath
 
         /**
          * \brief Creates a quaternion from the given euler angles vector (assuming x=pitch, y=roll, z=yaw)
-         * \tparam U The angles vector's data type
          * \param angles The euler angles vector
-         * \param isRadian Whether the angles are in radian or not
          */
-        template <typename U>
-        static constexpr TQuaternion fromEuler(const TVector3<U>& angles, bool isRadian);
+        static constexpr TQuaternion fromEuler(const TVector3<Radian>& angles);
 
         /**
          * \brief Creates a quaternion from the given euler angles
@@ -145,13 +139,10 @@ namespace LibMath
 
         /**
          * \brief Creates a quaternion from the given euler angles vector
-         * \tparam U The angles vector's data type
          * \param angles The euler angles vector
-         * \param isRadian Whether the angles are in radian or not
          * \param rotationOrder The rotation application order
          */
-        template <typename U>
-        static constexpr TQuaternion fromEuler(const TVector3<U>& angles, bool isRadian, ERotationOrder rotationOrder);
+        static constexpr TQuaternion fromEuler(const TVector3<Radian>& angles, ERotationOrder rotationOrder);
 
         /**
          * \brief Extracts the vector part of the quaternion

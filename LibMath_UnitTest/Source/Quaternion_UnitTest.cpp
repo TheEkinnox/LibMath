@@ -94,57 +94,59 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
         CHECK_QUATERNION(dAxisAngle, dAxisAngleGlm);
 
         // yaw-pitch-roll
+        LibMath::TVector3<LibMath::Radian> angles(90_deg, 75_deg, 30_deg);
+
         LibMath::Quaternion yawPitchRoll{ 90_deg, 75_deg, 30_deg };
-        LibMath::Quaternion yawPitchRollVec{ LibMath::Vector3(90.f, 75.f, 30.f), false };
+        LibMath::Quaternion yawPitchRollVec{ angles };
         glm::quat           yawPitchRollGlm{ glm::yawPitchRoll(glm::radians(90.f), glm::radians(75.f), glm::radians(30.f)) };
         CHECK_QUATERNION(yawPitchRoll, yawPitchRollGlm);
         CHECK_QUATERNION(yawPitchRollVec, yawPitchRollGlm);
 
         LibMath::QuaternionD dYawPitchRoll{ 90_deg, 75_deg, 30_deg };
-        LibMath::QuaternionD dYawPitchRollVec{ LibMath::TVector3<double>(90., 75., 30.), false };
+        LibMath::QuaternionD dYawPitchRollVec{ angles };
         glm::dquat           dYawPitchRollGlm{ glm::yawPitchRoll(glm::radians(90.), glm::radians(75.), glm::radians(30.)) };
         CHECK_QUATERNION(dYawPitchRoll, dYawPitchRollGlm);
         CHECK_QUATERNION(dYawPitchRollVec, dYawPitchRollGlm);
 
         // euler
         LibMath::Quaternion euler = LibMath::Quaternion::fromEuler(90_deg, 75_deg, 30_deg);
-        LibMath::Quaternion eulerVec = LibMath::Quaternion::fromEuler(LibMath::Vector3(90., 75., 30.), false);
+        LibMath::Quaternion eulerVec = LibMath::Quaternion::fromEuler(angles);
         glm::quat           eulerGlm = glm::orientate4(glm::vec3(glm::radians(90.f), glm::radians(75.f), glm::radians(30.f)));
         CHECK_QUATERNION(euler, eulerGlm);
         CHECK_QUATERNION(eulerVec, eulerGlm);
 
         euler = LibMath::Quaternion::fromEuler(90_deg, 75_deg, 30_deg, LibMath::ERotationOrder::XYZ);
-        eulerVec = LibMath::Quaternion::fromEuler(LibMath::Vector3(90., 75., 30.), false, LibMath::ERotationOrder::XYZ);
+        eulerVec = LibMath::Quaternion::fromEuler(angles, LibMath::ERotationOrder::XYZ);
         eulerGlm = glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0)) * glm::angleAxis(glm::radians(75.f), glm::vec3(0, 1, 0))
             * glm::angleAxis(glm::radians(30.f), glm::vec3(0, 0, 1));
         CHECK_QUATERNION(euler, eulerGlm);
 
         euler = LibMath::Quaternion::fromEuler(90_deg, 75_deg, 30_deg, LibMath::ERotationOrder::XZY);
-        eulerVec = LibMath::Quaternion::fromEuler(LibMath::Vector3(90., 75., 30.), false, LibMath::ERotationOrder::XZY);
+        eulerVec = LibMath::Quaternion::fromEuler(angles, LibMath::ERotationOrder::XZY);
         eulerGlm = glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0)) * glm::angleAxis(glm::radians(30.f), glm::vec3(0, 0, 1))
             * glm::angleAxis(glm::radians(75.f), glm::vec3(0, 1, 0));
         CHECK_QUATERNION(euler, eulerGlm);
 
         euler = LibMath::Quaternion::fromEuler(90_deg, 75_deg, 30_deg, LibMath::ERotationOrder::YXZ);
-        eulerVec = LibMath::Quaternion::fromEuler(LibMath::Vector3(90., 75., 30.), false, LibMath::ERotationOrder::YXZ);
+        eulerVec = LibMath::Quaternion::fromEuler(angles, LibMath::ERotationOrder::YXZ);
         eulerGlm = glm::angleAxis(glm::radians(75.f), glm::vec3(0, 1, 0)) * glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0))
             * glm::angleAxis(glm::radians(30.f), glm::vec3(0, 0, 1));
         CHECK_QUATERNION(euler, eulerGlm);
 
         euler = LibMath::Quaternion::fromEuler(90_deg, 75_deg, 30_deg, LibMath::ERotationOrder::YZX);
-        eulerVec = LibMath::Quaternion::fromEuler(LibMath::Vector3(90., 75., 30.), false, LibMath::ERotationOrder::YZX);
+        eulerVec = LibMath::Quaternion::fromEuler(angles, LibMath::ERotationOrder::YZX);
         eulerGlm = glm::angleAxis(glm::radians(75.f), glm::vec3(0, 1, 0)) * glm::angleAxis(glm::radians(30.f), glm::vec3(0, 0, 1))
             * glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0));
         CHECK_QUATERNION(euler, eulerGlm);
 
         euler = LibMath::Quaternion::fromEuler(90_deg, 75_deg, 30_deg, LibMath::ERotationOrder::ZXY);
-        eulerVec = LibMath::Quaternion::fromEuler(LibMath::Vector3(90., 75., 30.), false, LibMath::ERotationOrder::ZXY);
+        eulerVec = LibMath::Quaternion::fromEuler(angles, LibMath::ERotationOrder::ZXY);
         eulerGlm = glm::angleAxis(glm::radians(30.f), glm::vec3(0, 0, 1)) * glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0))
             * glm::angleAxis(glm::radians(75.f), glm::vec3(0, 1, 0));
         CHECK_QUATERNION(euler, eulerGlm);
 
         euler = LibMath::Quaternion::fromEuler(90_deg, 75_deg, 30_deg, LibMath::ERotationOrder::ZYX);
-        eulerVec = LibMath::Quaternion::fromEuler(LibMath::Vector3(90., 75., 30.), false, LibMath::ERotationOrder::ZYX);
+        eulerVec = LibMath::Quaternion::fromEuler(angles, LibMath::ERotationOrder::ZYX);
         eulerGlm = glm::angleAxis(glm::radians(30.f), glm::vec3(0, 0, 1)) * glm::angleAxis(glm::radians(75.f), glm::vec3(0, 1, 0))
             * glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0));
         CHECK_QUATERNION(euler, eulerGlm);
