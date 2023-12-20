@@ -96,20 +96,21 @@ namespace LibMath
          * \brief Gets the transform's parent
          * \return A pointer to the parent if it exists, nullptr otherwise
          */
-        inline Transform* getParent() const;
+        inline const Transform* getParent() const;
+
+        /**
+         * \brief Gets the transform's parent
+         * \return A pointer to the parent if it exists, nullptr otherwise
+         */
+        inline Transform* getParent();
 
         /**
          * \brief Sets the transform's parent
          * \param parent The transform's new parent
          * \param keepWorld Whether the transform's world coordinates should be conserved
+         * \return True if the parent changed, false otherwise
          */
-        inline void setParent(Transform& parent, bool keepWorld = true);
-
-        /**
-         * \brief Removes the transform's current parent
-         * \return True if the parent was removed, false otherwise
-         */
-        inline bool removeParent(bool keepWorld = true);
+        inline bool setParent(Transform* parent, bool keepWorld = true);
 
         /**
          * \brief Computes the transform's forward vector
@@ -426,8 +427,9 @@ namespace LibMath
         /**
         * \brief Handles parent notifications
         * \param notificationType The notification type
+        * \param newParent The new parent after this event
         */
-        inline virtual void notificationHandler(TransformNotifier::ENotificationType notificationType);
+        inline virtual void notificationHandler(TransformNotifier::ENotificationType notificationType, Transform* newParent);
 
     private:
         Vector3    m_position;

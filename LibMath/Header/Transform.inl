@@ -34,24 +34,31 @@ namespace LibMath
     }
 
     inline Transform::Transform(const Transform& other)
-        : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale),
-        m_worldPosition(other.m_worldPosition), m_worldRotation(other.m_worldRotation), m_worldScale(other.m_worldScale),
-        m_matrix(other.m_matrix), m_worldMatrix(other.m_worldMatrix), m_parent(other.m_parent)
+        : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale), m_matrix(other.m_matrix),
+        m_parent(nullptr)
     {
-        Transform::onChange();
+        if (other.m_parent)
+            setParent(other.m_parent, false);
+        else
+            updateWorldMatrix();
     }
 
     inline Transform::Transform(Transform&& other) noexcept
         : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale),
         m_worldPosition(other.m_worldPosition), m_worldRotation(other.m_worldRotation), m_worldScale(other.m_worldScale),
-        m_matrix(other.m_matrix), m_worldMatrix(other.m_worldMatrix), m_parent(other.m_parent)
+        m_matrix(std::move(other.m_matrix)), m_worldMatrix(std::move(other.m_worldMatrix)), m_parent(other.m_parent),
+        m_notifier(std::move(other.m_notifier)), m_notificationHandlerId(other.m_notificationHandlerId)
     {
+        other.m_notificationHandlerId = 0;
         Transform::onChange();
     }
 
     inline Transform::~Transform()
     {
-        m_notifier.broadcast(TransformNotifier::ENotificationType::TRANSFORM_DESTROYED);
+        if (m_parent)
+            m_parent->m_notifier.unsubscribe(m_notificationHandlerId);
+
+        m_notifier.broadcast(TransformNotifier::ENotificationType::TRANSFORM_DESTROYED, nullptr);
     }
 
     inline Transform& Transform::operator=(const Transform& other)
@@ -236,36 +243,37 @@ namespace LibMath
         return m_parent != nullptr;
     }
 
-    inline Transform* Transform::getParent() const
+    inline const Transform* Transform::getParent() const
     {
         return m_parent;
     }
 
-    inline void Transform::setParent(Transform& parent, const bool keepWorld)
+    inline Transform* Transform::getParent()
     {
-        if (m_parent == &parent)
-            return;
-
-        m_parent = &parent;
-
-        m_notificationHandlerId = m_parent->m_notifier.subscribe([this](const TransformNotifier::ENotificationType notificationType)
-        {
-            notificationHandler(notificationType);
-        });
-
-        if (keepWorld)
-            updateLocalMatrix();
-        else
-            updateWorldMatrix();
+        return m_parent;
     }
 
-    inline bool Transform::removeParent(const bool keepWorld)
+    inline bool Transform::setParent(Transform* parent, const bool keepWorld)
     {
-        if (m_parent == nullptr)
+        if (m_parent == parent)
             return false;
 
-        m_parent->m_notifier.unsubscribe(m_notificationHandlerId);
-        m_parent = nullptr;
+        m_parent = parent;
+
+        if (m_parent)
+        {
+            m_notificationHandlerId = m_parent->m_notifier.subscribe(
+                [this](const TransformNotifier::ENotificationType notificationType, Transform* newParent)
+                {
+                    notificationHandler(notificationType, newParent);
+                }
+            );
+        }
+        else
+        {
+            m_parent->m_notifier.unsubscribe(m_notificationHandlerId);
+            m_notificationHandlerId = 0;
+        }
 
         if (keepWorld)
             updateLocalMatrix();
@@ -511,11 +519,13 @@ namespace LibMath
 
     inline void Transform::onChange()
     {
-        m_notifier.broadcast(TransformNotifier::ENotificationType::TRANSFORM_CHANGED);
+        m_notifier.broadcast(TransformNotifier::ENotificationType::TRANSFORM_CHANGED, this);
     }
 
-    inline void Transform::notificationHandler(TransformNotifier::ENotificationType notificationType)
+    inline void Transform::notificationHandler(const TransformNotifier::ENotificationType notificationType, Transform* newParent)
     {
+        m_parent = newParent;
+
         switch (notificationType)
         {
         case TransformNotifier::ENotificationType::TRANSFORM_CHANGED:
@@ -527,8 +537,7 @@ namespace LibMath
             m_scale = m_worldScale;
 
             m_matrix = generateMatrix(m_position, m_rotation, m_scale);
-
-            m_parent = nullptr;
+            m_notificationHandlerId = 0;
             updateWorldMatrix();
             break;
         default: ;

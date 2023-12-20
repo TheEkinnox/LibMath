@@ -3,6 +3,7 @@
 
 #include <ranges>
 
+#include "Transform.h"
 #include "TransformNotifier.h"
 
 namespace LibMath
@@ -13,11 +14,11 @@ namespace LibMath
         return m_currentId++;
     }
 
-    inline void TransformNotifier::broadcast(const ENotificationType notificationType)
+    inline void TransformNotifier::broadcast(const ENotificationType notificationType, Transform* newOwner)
     {
         if (!m_actions.empty())
             for (const auto& handler : m_actions | std::views::values)
-                handler(notificationType);
+                handler(notificationType, newOwner);
     }
 
     inline bool TransformNotifier::unsubscribe(const ListenerId& listener)

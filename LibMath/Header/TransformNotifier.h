@@ -6,6 +6,8 @@
 
 namespace LibMath
 {
+    class Transform;
+
     class TransformNotifier
     {
     public:
@@ -16,7 +18,7 @@ namespace LibMath
         };
 
         using ListenerId = uint64_t;
-        using Action = std::function<void(ENotificationType)>;
+        using Action = std::function<void(ENotificationType, Transform*)>;
         using ActionMap = std::unordered_map<ListenerId, Action>;
 
         /**
@@ -29,8 +31,9 @@ namespace LibMath
         /**
         * \brief Broadcasts the given notification to all subscribers
         * \param notificationType The type of notification to broadcast
+        * \param newOwner The new owner after the change is applied
         */
-        inline void broadcast(ENotificationType notificationType);
+        inline void broadcast(ENotificationType notificationType, Transform* newOwner);
 
         /**
          * \brief Unsubscribes the listener with the given id from this notifier

@@ -266,7 +266,8 @@ TEST_CASE("Transform", "[.all][transform]")
 
             LibMath::Transform childLocal(childPos, childRot, childScale);
 
-            childLocal.setParent(parent, false);
+            CHECK(childLocal.setParent(&parent, false));
+            CHECK_FALSE(childLocal.setParent(&parent, false));
 
             CHECK_TRANSFORM(parent, parentPos, parentRot, parentScale, parentMatGlm);
 
@@ -278,7 +279,8 @@ TEST_CASE("Transform", "[.all][transform]")
             transformedMatGlm = glm::inverse(parentMatGlm) * childMatGlm;
             decomposeGlm(transformedMatGlm, transformedPos, transformedRot, transformedScale);
 
-            childWorld.setParent(parent, true);
+            CHECK(childWorld.setParent(&parent, true));
+            CHECK_FALSE(childWorld.setParent(&parent, true));
 
             CHECK_TRANSFORM(parent, parentPos, parentRot, parentScale, parentMatGlm);
 
