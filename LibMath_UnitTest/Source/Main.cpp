@@ -28,6 +28,7 @@ void addGroups([[maybe_unused]] std::vector<const char*>& arguments)
     // arguments.push_back("[angle],");
     // arguments.push_back("[vector],");
     // arguments.push_back("[matrix],");
+    // arguments.push_back("[quaternion],");
 }
 
 void addTests([[maybe_unused]] std::vector<const char*>& arguments)
@@ -43,6 +44,7 @@ void addTests([[maybe_unused]] std::vector<const char*>& arguments)
     // arguments.push_back("Matrix2,");
     // arguments.push_back("Matrix3,");
     // arguments.push_back("Matrix4,");
+    // arguments.push_back("Quaternion,");
 }
 
 void addSections([[maybe_unused]] std::vector<const char*>& arguments)
