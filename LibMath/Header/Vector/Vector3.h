@@ -16,7 +16,8 @@ namespace LibMath
     template <class T>
     class TVector3
     {
-        static_assert(std::is_arithmetic_v<T>, "Invalid vector - Data type should be an arithmetic type");
+        static_assert(std::is_arithmetic_v<T> || std::is_same_v<T, Degree> || std::is_same_v<T, Radian>,
+            "Invalid vector - Data type should be an arithmetic or angle type");
 
     public:
         /**
@@ -387,9 +388,9 @@ namespace LibMath
          */
         std::string stringLong() const;
 
-        T m_x = 0;
-        T m_y = 0;
-        T m_z = 0;
+        T m_x = static_cast<T>(0);
+        T m_y = static_cast<T>(0);
+        T m_z = static_cast<T>(0);
     };
 
     /**
