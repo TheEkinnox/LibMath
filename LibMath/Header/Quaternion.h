@@ -78,6 +78,14 @@ namespace LibMath
          * \param rotationMatrix The rotation matrix
          */
         template <typename U>
+        explicit constexpr TQuaternion(const TMatrix<3, 3, U>& rotationMatrix);
+
+        /**
+         * \brief Creates a quaternion from the given rotation matrix
+         * \tparam U The rotation matrix's data type
+         * \param rotationMatrix The rotation matrix
+         */
+        template <typename U>
         explicit constexpr TQuaternion(const TMatrix<4, 4, U>& rotationMatrix);
 
         /**
