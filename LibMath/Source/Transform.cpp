@@ -7,29 +7,41 @@
 namespace LibMath
 {
     Transform::Transform()
-        : m_position(Vector3::zero()), m_rotation(Vector3::zero()),
-          m_scale(Vector3::one()), m_parent(nullptr)
+        : Transform(Vector3::zero(), Quaternion::identity(), Vector3::one())
     {
-        Transform::onChange();
     }
 
-    Transform::Transform(const Vector3& position, const Vector3& rotation,
-                         const Vector3& scale)
+    Transform::Transform(const Vector3& position, const TVector3<Radian>& euler, const Vector3& scale)
+        : Transform(position, Quaternion::fromEuler(euler, ERotationOrder::ZYX), scale)
+    {
+    }
+
+    Transform::Transform(const Vector3& position, const Quaternion& rotation, const Vector3& scale)
         : m_position(position), m_rotation(rotation), m_scale(scale), m_parent(nullptr)
     {
-        Transform::onChange();
+        m_matrix = generateMatrix(m_position, m_rotation, m_scale);
+        updateWorldMatrix();
+    }
+
+    Transform::Transform(Matrix4x4 matrix)
+        : m_matrix(std::move(matrix)), m_parent(nullptr)
+    {
+        decomposeMatrix(m_matrix, m_position, m_rotation, m_scale);
+        updateWorldMatrix();
     }
 
     Transform::Transform(const Transform& other)
-        : m_position(other.m_position), m_rotation(other.m_rotation),
-          m_scale(other.m_scale), m_parent(other.m_parent)
+        : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale),
+        m_worldPosition(other.m_worldPosition), m_worldRotation(other.m_worldRotation), m_worldScale(other.m_worldScale),
+        m_matrix(other.m_matrix), m_worldMatrix(other.m_worldMatrix), m_parent(other.m_parent)
     {
         Transform::onChange();
     }
 
     Transform::Transform(Transform&& other) noexcept
-        : m_position(other.m_position), m_rotation(other.m_rotation),
-          m_scale(other.m_scale), m_parent(other.m_parent)
+        : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale),
+        m_worldPosition(other.m_worldPosition), m_worldRotation(other.m_worldRotation), m_worldScale(other.m_worldScale),
+        m_matrix(other.m_matrix), m_worldMatrix(other.m_worldMatrix), m_parent(other.m_parent)
     {
         Transform::onChange();
     }
@@ -44,11 +56,12 @@ namespace LibMath
         if (&other == this)
             return *this;
 
-        m_position = other.m_position;
-        m_rotation = other.m_rotation;
-        m_scale = other.m_scale;
+        m_worldPosition = other.m_worldPosition;
+        m_worldRotation = other.m_worldRotation;
+        m_worldScale = other.m_worldScale;
+        m_worldMatrix = other.m_worldMatrix;
 
-        onChange();
+        updateLocalMatrix();
 
         return *this;
     }
@@ -58,11 +71,21 @@ namespace LibMath
         if (&other == this)
             return *this;
 
-        m_position = other.m_position;
-        m_rotation = other.m_rotation;
-        m_scale = other.m_scale;
+        m_worldPosition = other.m_worldPosition;
+        m_worldRotation = other.m_worldRotation;
+        m_worldScale = other.m_worldScale;
+        m_worldMatrix = other.m_worldMatrix;
 
-        onChange();
+        updateLocalMatrix();
+
+        return *this;
+    }
+
+    Transform& Transform::operator*=(const Transform& other)
+    {
+        m_matrix *= other.getWorldMatrix();
+        decomposeMatrix(m_matrix, m_position, m_rotation, m_scale);
+        updateWorldMatrix();
 
         return *this;
     }
@@ -73,21 +96,6 @@ namespace LibMath
         return result *= other;
     }
 
-    Transform& Transform::operator*=(const Transform& other)
-    {
-        const Matrix4 newMat = getMatrix() * other.getMatrix();
-
-        m_position = Vector3(newMat(0, 3), newMat(1, 3), newMat(2, 3));
-        m_rotation += other.getRotation();
-        m_rotation.m_x *= -1.f;
-        m_rotation.m_z *= -1.f;
-        m_scale *= other.getScale();
-
-        onChange();
-
-        return *this;
-    }
-
     Vector3 Transform::forward() const
     {
         return up().cross(right());
@@ -95,12 +103,16 @@ namespace LibMath
 
     Vector3 Transform::right() const
     {
-        return (m_matrix * Vector4::right()).xyz().normalized();
+        Vector3 up = Vector3::up();
+        up.rotate(m_rotation);
+        return up;
     }
 
     Vector3 Transform::up() const
     {
-        return (m_matrix * Vector4::up()).xyz().normalized();
+        Vector3 up = Vector3::up();
+        up.rotate(m_rotation);
+        return up;
     }
 
     Vector3 Transform::back() const
@@ -123,7 +135,7 @@ namespace LibMath
         return m_position;
     }
 
-    Vector3 Transform::getRotation() const
+    Quaternion Transform::getRotation() const
     {
         return m_rotation;
     }
@@ -148,7 +160,17 @@ namespace LibMath
         return *this;
     }
 
-    Transform& Transform::setRotation(const Vector3& rotation)
+    Transform& Transform::setEuler(const TVector3<Radian>& euler)
+    {
+        return setRotation(Quaternion::fromEuler(euler));
+    }
+
+    Transform& Transform::setEuler(const TVector3<Radian>& euler, const ERotationOrder rotationOrder)
+    {
+        return setRotation(Quaternion::fromEuler(euler, rotationOrder));
+    }
+
+    Transform& Transform::setRotation(const Quaternion& rotation)
     {
         m_rotation = rotation;
         m_matrix = generateMatrix(m_position, m_rotation, m_scale);
@@ -168,6 +190,16 @@ namespace LibMath
         return *this;
     }
 
+    Transform& Transform::setMatrix(const Matrix4x4& matrix)
+    {
+        m_matrix = matrix;
+        decomposeMatrix(m_matrix, m_position, m_rotation, m_scale);
+
+        updateWorldMatrix();
+
+        return *this;
+    }
+
     Transform& Transform::translate(const Vector3& translation)
     {
         setPosition(m_position + translation);
@@ -175,9 +207,16 @@ namespace LibMath
         return *this;
     }
 
-    Transform& Transform::rotate(const Vector3& rotation)
+    Transform& Transform::rotate(const TVector3<Radian>& euler)
     {
-        setRotation(m_rotation + rotation);
+        setRotation(m_rotation * Quaternion::fromEuler(euler));
+
+        return *this;
+    }
+
+    Transform& Transform::rotate(const Quaternion& rotation)
+    {
+        setRotation(m_rotation * rotation);
 
         return *this;
     }
@@ -199,24 +238,36 @@ namespace LibMath
         return m_parent;
     }
 
-    void Transform::setParent(Transform& parent)
+    void Transform::setParent(Transform& parent, const bool keepWorld)
     {
+        if (m_parent == &parent)
+            return;
+
         m_parent = &parent;
 
-        m_notificationHandlerId = m_parent->m_notifier.subscribe(std::bind(&Transform::notificationHandler, this,
-            std::placeholders::_1));
+        m_notificationHandlerId = m_parent->m_notifier.subscribe([this](const TransformNotifier::ENotificationType notificationType)
+        {
+            notificationHandler(notificationType);
+        });
 
-        updateWorldMatrix();
+        if (keepWorld)
+            updateLocalMatrix();
+        else
+            updateWorldMatrix();
     }
 
-    bool Transform::removeParent()
+    bool Transform::removeParent(const bool keepWorld)
     {
         if (m_parent == nullptr)
             return false;
 
         m_parent->m_notifier.unsubscribe(m_notificationHandlerId);
         m_parent = nullptr;
-        updateWorldMatrix();
+
+        if (keepWorld)
+            updateLocalMatrix();
+        else
+            updateWorldMatrix();
 
         return true;
     }
@@ -256,7 +307,7 @@ namespace LibMath
         return m_worldPosition;
     }
 
-    Vector3 Transform::getWorldRotation() const
+    Quaternion Transform::getWorldRotation() const
     {
         return m_worldRotation;
     }
@@ -281,7 +332,17 @@ namespace LibMath
         return *this;
     }
 
-    Transform& Transform::setWorldRotation(const Vector3& rotation)
+    Transform& Transform::setWorldEuler(const TVector3<Radian>& euler)
+    {
+        return setWorldRotation(Quaternion::fromEuler(euler));
+    }
+
+    Transform& Transform::setWorldEuler(const TVector3<Radian>& euler, const ERotationOrder rotationOrder)
+    {
+        return setWorldRotation(Quaternion::fromEuler(euler, rotationOrder));
+    }
+
+    Transform& Transform::setWorldRotation(const Quaternion& rotation)
     {
         m_worldRotation = rotation;
         m_worldMatrix = generateMatrix(m_worldPosition, m_worldRotation, m_worldScale);
@@ -301,6 +362,16 @@ namespace LibMath
         return *this;
     }
 
+    Transform& Transform::setWorldMatrix(const Matrix4x4& matrix)
+    {
+        m_worldMatrix = matrix;
+        decomposeMatrix(m_worldMatrix, m_worldPosition, m_worldRotation, m_worldScale);
+
+        updateLocalMatrix();
+
+        return *this;
+    }
+
     Transform& Transform::worldTranslate(const Vector3& translation)
     {
         setWorldPosition(m_worldPosition + translation);
@@ -308,9 +379,16 @@ namespace LibMath
         return *this;
     }
 
-    Transform& Transform::worldRotate(const Vector3& rotation)
+    Transform& Transform::worldRotate(const TVector3<Radian>& euler)
     {
-        setWorldRotation(m_worldRotation + rotation);
+        setWorldRotation(m_worldRotation * Quaternion::fromEuler(euler));
+
+        return *this;
+    }
+
+    Transform& Transform::worldRotate(const Quaternion& rotation)
+    {
+        setWorldRotation(m_worldRotation * rotation);
 
         return *this;
     }
@@ -322,40 +400,72 @@ namespace LibMath
         return *this;
     }
 
-    void Transform::onChange()
+    void Transform::invert()
     {
-        m_notifier.broadcast(TransformNotifier::ENotificationType::TRANSFORM_CHANGED);
+        m_position *= -1.f;
+        m_rotation = m_worldRotation.inverse();
+        m_scale = { 1.f / m_scale.m_x, 1.f / m_scale.m_y, 1.f / m_scale.m_z };
+        m_matrix = generateMatrix(m_position, m_rotation, m_scale);
+
+        updateWorldMatrix();
     }
 
-    void Transform::notificationHandler(TransformNotifier::ENotificationType notificationType)
+    Transform Transform::inverse() const
     {
-        switch (notificationType)
-        {
-        case TransformNotifier::ENotificationType::TRANSFORM_CHANGED:
-            updateWorldMatrix();
-            break;
-        case TransformNotifier::ENotificationType::TRANSFORM_DESTROYED:
-            m_position = m_worldPosition;
-            m_rotation = m_worldRotation;
-            m_scale = m_worldScale;
-
-            m_matrix = generateMatrix(m_position, m_rotation, m_scale);
-
-            m_parent = nullptr;
-            updateWorldMatrix();
-            break;
-        default: ;
-        }
+        Transform tmp = *this;
+        tmp.invert();
+        return tmp;
     }
 
-    Matrix4 Transform::generateMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale)
+    void Transform::invertWorld()
+    {
+        m_worldPosition *= -1.f;
+        m_worldRotation = m_worldRotation.inverse();
+        m_worldScale = { 1.f / m_worldScale.m_x, 1.f / m_worldScale.m_y, 1.f / m_worldScale.m_z };
+        m_worldMatrix = generateMatrix(m_worldPosition, m_worldRotation, m_worldScale);
+
+        updateLocalMatrix();
+    }
+
+    Transform Transform::inverseWorld() const
+    {
+        Transform tmp = *this;
+        tmp.invertWorld();
+        return tmp;
+    }
+
+    Transform Transform::interpolate(Transform from, const Transform& to, const float t)
+    {
+        from.m_position = lerp(from.m_position, to.m_position, t);
+        from.m_rotation = slerp(from.m_rotation, to.m_rotation, t);
+        from.m_scale = lerp(from.m_scale, to.m_scale, t);
+        from.m_matrix = generateMatrix(from.m_position, from.m_rotation, from.m_scale);
+
+        from.updateWorldMatrix();
+
+        return from;
+    }
+
+    Transform Transform::interpolateWorld(Transform from, const Transform& to, const float t)
+    {
+        from.m_worldPosition = lerp(from.m_worldPosition, to.m_worldPosition, t);
+        from.m_worldRotation = slerp(from.m_worldRotation, to.m_worldRotation, t);
+        from.m_worldScale = lerp(from.m_worldScale, to.m_worldScale, t);
+        from.m_worldMatrix = generateMatrix(from.m_worldPosition, from.m_worldRotation, from.m_worldScale);
+
+        from.updateLocalMatrix();
+
+        return from;
+    }
+
+    Matrix4x4 Transform::generateMatrix(const Vector3& position, const Quaternion& rotation, const Vector3& scale)
     {
         return translation(position)
-            * LibMath::rotation(rotation, false)
+            * LibMath::rotation(rotation)
             * scaling(scale);
     }
 
-    void Transform::decomposeMatrix(const Matrix4& matrix, Vector3& position, Vector3& rotation, Vector3& scale)
+    void Transform::decomposeMatrix(const Matrix4x4& matrix, Vector3& position, Quaternion& rotation, Vector3& scale)
     {
         position.m_x = matrix(0, 3);
         position.m_y = matrix(1, 3);
@@ -393,20 +503,33 @@ namespace LibMath
         rotationMatrix(2, 1) = columns[1].m_z;
         rotationMatrix(2, 2) = columns[2].m_z;
 
-        rotation.m_x = asinf(-rotationMatrix(1, 2)); // Pitch
+        rotation = Quaternion(rotationMatrix);
+    }
 
-        if (cosf(rotation.m_x) > 0.0001f) // Not at poles
-        {
-            rotation.m_y = atan2f(rotationMatrix(0, 2), rotationMatrix(2, 2)); // Yaw
-            rotation.m_z = atan2f(rotationMatrix(1, 0), rotationMatrix(1, 1)); // Roll
-        }
-        else
-        {
-            rotation.m_y = 0.0f;                                                // Yaw
-            rotation.m_z = atan2f(-rotationMatrix(0, 1), rotationMatrix(0, 0)); // Roll
-        }
+    void Transform::onChange()
+    {
+        m_notifier.broadcast(TransformNotifier::ENotificationType::TRANSFORM_CHANGED);
+    }
 
-        rotation *= g_rad2Deg;
+    void Transform::notificationHandler(TransformNotifier::ENotificationType notificationType)
+    {
+        switch (notificationType)
+        {
+        case TransformNotifier::ENotificationType::TRANSFORM_CHANGED:
+            updateWorldMatrix();
+            break;
+        case TransformNotifier::ENotificationType::TRANSFORM_DESTROYED:
+            m_position = m_worldPosition;
+            m_rotation = m_worldRotation;
+            m_scale = m_worldScale;
+
+            m_matrix = generateMatrix(m_position, m_rotation, m_scale);
+
+            m_parent = nullptr;
+            updateWorldMatrix();
+            break;
+        default: ;
+        }
     }
 
     void Transform::updateLocalMatrix()
