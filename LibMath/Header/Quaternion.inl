@@ -306,8 +306,6 @@ namespace LibMath
         m_x = static_cast<T>(s * other.m_x + a * other.m_w + b * other.m_z - c * other.m_y);
         m_y = static_cast<T>(s * other.m_y - a * other.m_z + b * other.m_w + c * other.m_x);
         m_z = static_cast<T>(s * other.m_z + a * other.m_y - b * other.m_x + c * other.m_w);
-        // m_z = static_cast<T>(s * other.m_y - a * other.m_z + b * other.m_w + c * other.m_x);
-        // m_y = static_cast<T>(s * other.m_z + a * other.m_y - b * other.m_x + c * other.m_w);
 
         return *this;
     }
