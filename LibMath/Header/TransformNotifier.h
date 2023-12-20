@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __LIBMATH__TRANSFORM_NOTIFIER_H__
+#define __LIBMATH__TRANSFORM_NOTIFIER_H__
 
 #include <functional>
 #include <cstdint>
@@ -23,22 +24,26 @@ namespace LibMath
          * \param action The action to perform when a notification is broadcast
          * \return The listener id of the subscribed action
          */
-        ListenerId subscribe(const Action& action);
+        inline ListenerId subscribe(const Action& action);
 
         /**
         * \brief Broadcasts the given notification to all subscribers
         * \param notificationType The type of notification to broadcast
         */
-        void broadcast(ENotificationType notificationType);
+        inline void broadcast(ENotificationType notificationType);
 
         /**
          * \brief Unsubscribes the listener with the given id from this notifier
          * \param listener The id of the listener to unsubscribe
          */
-        bool unsubscribe(const ListenerId& listener);
+        inline bool unsubscribe(const ListenerId& listener);
 
     private:
         ListenerId m_currentId = 1;
-        ActionMap m_actions;
+        ActionMap  m_actions;
     };
 }
+
+#include "TransformNotifier.inl"
+
+#endif // !__LIBMATH__TRANSFORM_NOTIFIER_H__

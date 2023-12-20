@@ -33,19 +33,21 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${HEADER_FILES} ${SOURCE_FIL
 #                             #
 ###############################
 
-if (BUILD_SHARED_LIBS)
-  add_library(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
+if (NOT SOURCE_FILES)
+  add_library(${TARGET_NAME} INTERFACE ${HEADER_FILES} ${SOURCE_FILES})
+  set(TARGET_COMPILE_OPTIONS_LEVEL INTERFACE)
 else()
-  add_library(${TARGET_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
+  add_library(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
+  set(TARGET_COMPILE_OPTIONS_LEVEL PRIVATE)
 endif()
 
 include_directories(${TARGET_INCLUDE_DIR})
 
 if(MSVC)
-  target_compile_options(${TARGET_NAME} PRIVATE /W4 /WX)
+  target_compile_options(${TARGET_NAME} ${TARGET_COMPILE_OPTIONS_LEVEL} /W4 /WX)
 else()
-  target_compile_options(${TARGET_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(${TARGET_NAME} ${TARGET_COMPILE_OPTIONS_LEVEL} -Wall -Wextra -Wpedantic -Werror)
 endif()
 
-SET(LIBMATH_NAME ${TARGET_NAME} PARENT_SCOPE)
+set(LIBMATH_NAME ${TARGET_NAME} PARENT_SCOPE)
 set(LIBMATH_INCLUDE_DIR ${TARGET_INCLUDE_DIR} PARENT_SCOPE)
