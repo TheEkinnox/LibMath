@@ -325,7 +325,12 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
 			SECTION("Quaternion")
 			{
-				// todo
+				LibMath::Vector3 rotate = origin;
+				rotate.rotate(LibMath::Quaternion(-3_rad, transformation));
+
+				glm::vec4 rotateGlm = glm::rotate(-3.f, transformationGlm) * originGlm;
+
+				CHECK_VECTOR3(rotate, rotateGlm);
 			}
 		}
 	}
