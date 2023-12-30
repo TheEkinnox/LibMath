@@ -22,10 +22,10 @@ namespace LibMath
         /**
          * \brief Creates a transform with the given position, rotation and scale
          * \param position The transform's initial position
-         * \param euler The transform's initial euler rotation
+         * \param angles The transform's initial angles (x = yaw, y = pitch, z = roll)
          * \param scale The transform's initial scale
          */
-        inline Transform(const Vector3& position, const TVector3<Radian>& euler, const Vector3& scale);
+        inline Transform(const Vector3& position, const TVector3<Radian>& angles, const Vector3& scale);
 
         /**
          * \brief Creates a transform with the given position, rotation and scale

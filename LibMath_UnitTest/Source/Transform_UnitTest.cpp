@@ -318,34 +318,46 @@ TEST_CASE("Transform", "[.all][transform]")
             glm::mat4 childMatGlm = glm::translate(idMatGlm, childPosGlm) * glm::toMat4(childRotGlm) *
                 glm::scale(idMatGlm, childScaleGlm);
 
-            LibMath::Vector3    transformedPos, transformedScale;
-            LibMath::Quaternion transformedRot;
+            {
+                // Keep local transform
+                LibMath::Vector3    transformedPos, transformedScale;
+                LibMath::Quaternion transformedRot;
 
-            glm::mat4 transformedMatGlm = parentMatGlm * childMatGlm;
-            decomposeGlm(transformedMatGlm, transformedPos, transformedRot, transformedScale);
+                glm::mat4 transformedMatGlm = parentMatGlm * childMatGlm;
+                decomposeGlm(transformedMatGlm, transformedPos, transformedRot, transformedScale);
 
-            LibMath::Transform childLocal(childPos, childRot, childScale);
+                LibMath::Transform childLocal(childPos, childRot, childScale);
 
-            CHECK(childLocal.setParent(&parent, false));
-            CHECK_FALSE(childLocal.setParent(&parent, false));
+                bool result = childLocal.setParent(&parent, false);
+                CHECK(result);
 
-            CHECK_TRANSFORM(parent, parentPos, parentRot, parentScale, parentMatGlm);
+                result = childLocal.setParent(&parent, false);
+                CHECK_FALSE(result);
 
-            CHECK_LOCAL_TRANSFORM(childLocal, childPos, childRot, childScale, childMatGlm);
-            CHECK_WORLD_TRANSFORM(childLocal, transformedPos, transformedRot, transformedScale, transformedMatGlm);
+                CHECK_TRANSFORM(parent, parentPos, parentRot, parentScale, parentMatGlm);
 
-            LibMath::Transform childWorld(childPos, childRot, childScale);
+                CHECK_LOCAL_TRANSFORM(childLocal, childPos, childRot, childScale, childMatGlm);
+                CHECK_WORLD_TRANSFORM(childLocal, transformedPos, transformedRot, transformedScale, transformedMatGlm);
+            }
 
-            transformedMatGlm = glm::inverse(parentMatGlm) * childMatGlm;
-            decomposeGlm(transformedMatGlm, transformedPos, transformedRot, transformedScale);
+            {
+                // Keep world transform
+                LibMath::Vector3    transformedPos, transformedScale;
+                LibMath::Quaternion transformedRot;
 
-            CHECK(childWorld.setParent(&parent, true));
-            CHECK_FALSE(childWorld.setParent(&parent, true));
+                glm::mat4 transformedMatGlm = glm::inverse(parentMatGlm) * childMatGlm;
+                decomposeGlm(transformedMatGlm, transformedPos, transformedRot, transformedScale);
 
-            CHECK_TRANSFORM(parent, parentPos, parentRot, parentScale, parentMatGlm);
+                LibMath::Transform childWorld(childPos, childRot, childScale);
 
-            CHECK_LOCAL_TRANSFORM(childWorld, transformedPos, transformedRot, transformedScale, transformedMatGlm);
-            CHECK_WORLD_TRANSFORM(childWorld, childPos, childRot, childScale, childMatGlm);
+                CHECK(childWorld.setParent(&parent, true));
+                CHECK_FALSE(childWorld.setParent(&parent, true));
+
+                CHECK_TRANSFORM(parent, parentPos, parentRot, parentScale, parentMatGlm);
+
+                CHECK_LOCAL_TRANSFORM(childWorld, transformedPos, transformedRot, transformedScale, transformedMatGlm);
+                CHECK_WORLD_TRANSFORM(childWorld, childPos, childRot, childScale, childMatGlm);
+            }
         }
     }
 }
