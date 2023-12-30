@@ -346,5 +346,28 @@ TEST_CASE("Transform", "[.all][transform]")
                 CHECK_WORLD_TRANSFORM(childWorld, positionOther, rotationOther, scaleOther, matrixOtherGlm);
             }
         }
+
+        SECTION("Matrix")
+        {
+            // Generation
+            {
+                const LibMath::Matrix4 generatedMat = LibMath::Transform::generateMatrix(position, rotation, scale);
+                CHECK_MATRIX(generatedMat, glm::transpose(matrixGlm));
+            }
+
+            // Decomposition
+            {
+                LibMath::Vector3    outPos, outScale;
+                LibMath::Quaternion outRot;
+
+                LibMath::Transform::decomposeMatrix(matrix, outPos, outRot, outScale);
+                CHECK(outPos == position);
+                CHECK(outRot == rotation);
+                CHECK(outScale == scale);
+
+                const LibMath::Matrix4 mat = LibMath::Transform::generateMatrix(outPos, outRot, outScale);
+                CHECK(mat == matrix);
+            }
+        }
     }
 }

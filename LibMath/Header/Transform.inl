@@ -536,13 +536,13 @@ namespace LibMath
         Matrix3 rotationMatrix;
 
         rotationMatrix(0, 0) = columns[0].m_x;
-        rotationMatrix(0, 1) = columns[1].m_x;
-        rotationMatrix(0, 2) = columns[2].m_x;
         rotationMatrix(1, 0) = columns[0].m_y;
-        rotationMatrix(1, 1) = columns[1].m_y;
-        rotationMatrix(1, 2) = columns[2].m_y;
         rotationMatrix(2, 0) = columns[0].m_z;
+        rotationMatrix(0, 1) = columns[1].m_x;
+        rotationMatrix(1, 1) = columns[1].m_y;
         rotationMatrix(2, 1) = columns[1].m_z;
+        rotationMatrix(0, 2) = columns[2].m_x;
+        rotationMatrix(1, 2) = columns[2].m_y;
         rotationMatrix(2, 2) = columns[2].m_z;
 
         rotation = Quaternion(rotationMatrix);
