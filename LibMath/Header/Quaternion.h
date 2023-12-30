@@ -4,6 +4,7 @@
 #include <type_traits>
 
 #include "ERotationOrder.h"
+#include "Interpolation.h"
 
 #include "Angle/Radian.h"
 #include "Matrix/Matrix4.h"
@@ -540,8 +541,34 @@ namespace LibMath
     template <class T>
     constexpr std::istream& operator>>(std::istream& stream, TQuaternion<T>& quat);
 
-    using Quaternion = TQuaternion<float>;
-    using QuaternionD = TQuaternion<double>;
+#define QUAT_ALIAS_IMPL(DataType, Alias)                               \
+    using Alias = TQuaternion<DataType>;                               \
+                                                                       \
+    template<>                                                         \
+    constexpr Alias slerp(Alias from, Alias to, DataType alpha)        \
+    {                                                                  \
+         DataType cosAngle = from.dot(to);                             \
+                                                                       \
+         if (cosAngle < DataType(0))                                   \
+         {                                                             \
+             cosAngle = -cosAngle;                                     \
+             to = Alias(-to.m_w, -to.m_x, -to.m_y, -to.m_z);           \
+         }                                                             \
+                                                                       \
+         if (cosAngle > DataType(.99985)) /* ~1deg */                  \
+             return lerp(from, to, alpha).normalized();                \
+                                                                       \
+         const Radian angle = acos(static_cast<float>(cosAngle));      \
+         const DataType invSinAngle = DataType(1) / sin(angle);        \
+                                                                       \
+         from *= sin(angle * static_cast<float>(DataType(1) - alpha)); \
+         to *= sin(angle * static_cast<float>(alpha));                 \
+                                                                       \
+         return (from + to) * invSinAngle;                             \
+    }
+
+    QUAT_ALIAS_IMPL(float, Quaternion);
+    QUAT_ALIAS_IMPL(double, QuaternionD);
 }
 
 #include "Quaternion.inl"
