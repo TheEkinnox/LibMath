@@ -206,6 +206,39 @@ namespace LibMath
     }
 
     template <class T>
+    constexpr TVector3<Radian> TQuaternion<T>::toYawPitchRoll() const
+    {
+        Radian yaw = asin(clamp(static_cast<T>(-2) * (m_x * m_z - m_w * m_y), static_cast<T>(-1), static_cast<T>(1)));
+        Radian roll = atan(static_cast<T>(2) * (m_x * m_y + m_w * m_z), m_w * m_w + m_x * m_x - m_y * m_y - m_z * m_z);
+
+        Radian pitch;
+
+        const T y = static_cast<T>(2) * (m_y * m_z + m_w * m_x);
+        const T x = m_w * m_w - m_x * m_x - m_y * m_y + m_z * m_z;
+
+        if (floatEquals(static_cast<T>(0), x) && floatEquals(static_cast<T>(0), y))
+            pitch = atan(m_x, m_w) * static_cast<T>(2);
+        else
+            pitch = atan(y, x);
+
+        return { yaw, pitch, roll };
+    }
+
+    template <class T>
+    constexpr TVector3<Radian> TQuaternion<T>::toEuler() const
+    {
+        auto [yaw, pitch, roll] = toYawPitchRoll();
+
+        return { pitch, yaw, roll };
+    }
+
+    template <class T>
+    constexpr TVector3<Radian> TQuaternion<T>::toEuler(const ERotationOrder rotationOrder) const
+    {
+        return LibMath::toEuler(rotation(*this), rotationOrder);
+    }
+
+    template <class T>
     template <typename U>
     constexpr void TQuaternion<T>::toAngleAxis(Radian& angle, TVector3<U>& axis) const
     {

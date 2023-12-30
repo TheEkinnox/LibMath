@@ -161,6 +161,19 @@ namespace LibMath
         inline Quaternion getRotation() const;
 
         /**
+         * \brief Gets a euler angles representation of the transform's current local rotation
+         * \return A euler angles representation of the transform's current local rotation
+         */
+        inline TVector3<Radian> getEuler() const;
+
+        /**
+         * \brief Gets a euler angles representation of the transform's current local rotation
+         * \param rotationOrder The rotation application order
+         * \return A euler angles representation of the transform's current local rotation
+         */
+        inline TVector3<Radian> getEuler(ERotationOrder rotationOrder) const;
+
+        /**
          * \brief Gets the transform's current scale
          * \return The transform's scale
          */
@@ -290,6 +303,19 @@ namespace LibMath
          * \return The transform's global rotation
          */
         inline Quaternion getWorldRotation() const;
+
+        /**
+         * \brief Gets a euler angles representation of the transform's current global rotation
+         * \return A euler angles representation of the transform's current global rotation
+         */
+        inline TVector3<Radian> getWorldEuler() const;
+
+        /**
+         * \brief Gets a euler angles representation of the transform's current global rotation
+         * \param rotationOrder The rotation application order
+         * \return A euler angles representation of the transform's current global rotation
+         */
+        inline TVector3<Radian> getWorldEuler(ERotationOrder rotationOrder) const;
 
         /**
          * \brief Gets the transform's current global scale

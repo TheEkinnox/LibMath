@@ -150,6 +150,16 @@ namespace LibMath
         return m_rotation;
     }
 
+    inline TVector3<Radian> Transform::getEuler() const
+    {
+        return m_rotation.toEuler();
+    }
+
+    inline TVector3<Radian> Transform::getEuler(const ERotationOrder rotationOrder) const
+    {
+        return m_rotation.toEuler(rotationOrder);
+    }
+
     inline Vector3 Transform::getScale() const
     {
         return m_scale;
@@ -321,6 +331,16 @@ namespace LibMath
     inline Quaternion Transform::getWorldRotation() const
     {
         return m_worldRotation;
+    }
+
+    inline TVector3<Radian> Transform::getWorldEuler() const
+    {
+        return m_worldRotation.toEuler();
+    }
+
+    inline TVector3<Radian> Transform::getWorldEuler(const ERotationOrder rotationOrder) const
+    {
+        return m_worldRotation.toEuler(rotationOrder);
     }
 
     inline Vector3 Transform::getWorldScale() const

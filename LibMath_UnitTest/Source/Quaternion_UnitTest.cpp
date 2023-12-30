@@ -151,6 +151,7 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
             * glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0));
         CHECK_QUATERNION(euler, eulerGlm);
 
+        // matrix
         LibMath::Quaternion matrix{ LibMath::rotation(90_deg, 75_deg, 30_deg) };
         glm::quat           matrixGlm{ glm::yawPitchRoll(glm::radians(90.f), glm::radians(75.f), glm::radians(30.f)) };
         CHECK_QUATERNION(matrix, matrixGlm);
@@ -497,6 +498,36 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
                 CHECK(axis.m_x == Catch::Approx(axisGlm.x));
                 CHECK(axis.m_y == Catch::Approx(axisGlm.y));
                 CHECK(axis.m_z == Catch::Approx(axisGlm.z));
+            }
+
+            {
+                const LibMath::TVector3<LibMath::Radian> euler = base.toEuler();
+
+                const glm::vec3 eulerGlm = glm::eulerAngles(baseGlm);
+
+                CHECK(euler.m_x.radian() == Catch::Approx(eulerGlm.x));
+                CHECK(euler.m_y.radian() == Catch::Approx(eulerGlm.y));
+                CHECK(euler.m_z.radian() == Catch::Approx(eulerGlm.z));
+            }
+
+            {
+                const LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler();
+
+                const glm::vec3 eulerGlm = glm::eulerAngles(normalize(baseGlm));
+
+                CHECK(euler.m_x.radian() == Catch::Approx(eulerGlm.x));
+                CHECK(euler.m_y.radian() == Catch::Approx(eulerGlm.y));
+                CHECK(euler.m_z.radian() == Catch::Approx(eulerGlm.z));
+            }
+
+            {
+                const LibMath::TVector3<LibMath::Radian> euler = LibMath::Quaternion(0_deg, 60_deg, 0_deg).toYawPitchRoll();
+
+                const glm::quat quatGlm = glm::quat(glm::yawPitchRoll(0.f, glm::radians(60.f), 0.f));
+
+                CHECK(euler.m_x.radian() == Catch::Approx(glm::yaw(quatGlm)));
+                CHECK(euler.m_y.radian() == Catch::Approx(glm::pitch(quatGlm)));
+                CHECK(euler.m_z.radian() == Catch::Approx(glm::roll(quatGlm)));
             }
         }
 

@@ -9,8 +9,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/detail/type_quat.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/compatibility.hpp>
 
 using namespace LibMath::Literal;
 
@@ -64,25 +64,29 @@ TEST_CASE("Transform", "[.all][transform]")
     const LibMath::Vector3 position{ 2.5f, .5f, 2.f };
     constexpr glm::vec3    positionGlm{ 2.5f, .5f, 2.f };
 
-    const LibMath::Quaternion rotation{ LibMath::cos(45_deg), 0.f, LibMath::sin(45_deg), 0.f };
-    const glm::quat           rotationGlm{ glm::cos(glm::radians(45.f)), 0.f, glm::sin(glm::radians(45.f)), 0.f };
+    const LibMath::TVector3<LibMath::Radian> angles{ 45_deg, 30_deg, 65_deg };
+
+    const LibMath::Quaternion rotation{ angles };
+    const glm::quat           rotationGlm{ glm::yawPitchRoll(glm::radians(45.f), glm::radians(30.f), glm::radians(65.f)) };
 
     const LibMath::Vector3 scale{ 3.f, .75f, 3.75f };
     constexpr glm::vec3    scaleGlm{ 3.f, .75f, 3.75f };
 
+    const LibMath::Matrix4 matrix = LibMath::translation(position) * LibMath::rotation(rotation) * LibMath::scaling(scale);
+
     const LibMath::Vector3 positionOther{ 4.5f, .9f, 5.4f };
     constexpr glm::vec3    positionOtherGlm{ 4.5f, .9f, 5.4f };
 
-    const LibMath::Quaternion rotationOther{ LibMath::cos(60_deg), LibMath::sin(60_deg), 0.f, 0.f };
-    const glm::quat           rotationOtherGlm{ glm::cos(glm::radians(60.f)), glm::sin(glm::radians(60.f)), 0.f, 0.f };
+    const LibMath::Quaternion rotationOther{ 60_deg, 25_deg, 80_deg };
+    const glm::quat           rotationOtherGlm{ glm::yawPitchRoll(glm::radians(60.f), glm::radians(25.f), glm::radians(80.f)) };
 
     const LibMath::Vector3 scaleOther{ 8.4f, 2.1f, 10.5f };
     constexpr glm::vec3    scaleOtherGlm{ 8.4f, 2.1f, 10.5f };
 
     constexpr glm::mat4 idMatGlm{ 1.f };
-    glm::mat4 matrixGlm = glm::translate(idMatGlm, positionGlm) * glm::toMat4(rotationGlm) * glm::scale(idMatGlm, scaleGlm);
-    glm::mat4 matrixOtherGlm = glm::translate(idMatGlm, positionOtherGlm) * glm::toMat4(rotationOtherGlm) * glm::scale(idMatGlm,
-        scaleOtherGlm);
+    const glm::mat4 matrixGlm = glm::translate(idMatGlm, positionGlm) * glm::toMat4(rotationGlm) * glm::scale(idMatGlm, scaleGlm);
+    const glm::mat4 matrixOtherGlm = glm::translate(idMatGlm, positionOtherGlm) * glm::toMat4(rotationOtherGlm)
+        * glm::scale(idMatGlm, scaleOtherGlm);
 
     SECTION("Instantiation")
     {
@@ -96,13 +100,11 @@ TEST_CASE("Transform", "[.all][transform]")
         }
 
         // basic constructor
-
         LibMath::Transform allParam(position, rotation, scale);
         CHECK_TRANSFORM(allParam, position, rotation, scale, matrixGlm);
 
         // euler angles
-        LibMath::TVector3<LibMath::Radian> angles{ 0_deg, 90_deg, 0_deg };
-        LibMath::Transform                 euler(position, angles, scale);
+        LibMath::Transform euler(position, angles, scale);
         CHECK_TRANSFORM(euler, position, rotation, scale, matrixGlm);
 
         // copy constructor
@@ -113,15 +115,73 @@ TEST_CASE("Transform", "[.all][transform]")
         empty = allParam;
         CHECK_TRANSFORM(empty, position, rotation, scale, matrixGlm);
 
-        LibMath::Matrix4 matrix = LibMath::translation(position) * LibMath::rotation(rotation) * LibMath::scaling(scale);
-
         LibMath::Transform fromMat(matrix);
         CHECK_TRANSFORM(fromMat, position, rotation, scale, matrixGlm);
     }
 
     SECTION("Accessor")
     {
-        // TODO: Transform accessors tests
+        {
+            const LibMath::Transform transform{ position, rotation, scale };
+
+            CHECK(transform.getPosition() == position);
+            CHECK(transform.getRotation() == rotation);
+            CHECK(transform.getScale() == scale);
+            CHECK_MATRIX(transform.getMatrix(), glm::transpose(matrixGlm));
+
+            CHECK(transform.getWorldPosition() == position);
+            CHECK(transform.getWorldRotation() == rotation);
+            CHECK(transform.getWorldScale() == scale);
+            CHECK_MATRIX(transform.getWorldMatrix(), glm::transpose(matrixGlm));
+        }
+
+        {
+            LibMath::Transform transform{ {}, rotation, scale };
+            transform.setPosition(position);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ position, LibMath::Quaternion(), scale };
+            transform.setRotation(rotation);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ position, rotation, LibMath::Vector3::one() };
+            transform.setScale(scale);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ LibMath::Matrix4(1.f) };
+            transform.setMatrix(matrix);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ {}, rotation, scale };
+            transform.setWorldPosition(position);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ position, LibMath::Quaternion(), scale };
+            transform.setWorldRotation(rotation);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ position, rotation, LibMath::Vector3::one() };
+            transform.setWorldScale(scale);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ LibMath::Matrix4(1.f) };
+            transform.setWorldMatrix(matrix);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
     }
 
     SECTION("Arithmetic")

@@ -556,7 +556,7 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
                 // Transpose since glm matrices are column major unlike ours
                 CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
 
-                rotate = LibMath::rotation(transformation, true);
+                rotate = LibMath::rotation(transformation);
 
                 rotateGlm = glm::yawPitchRoll(transformationGlm.y, transformationGlm.x, transformationGlm.z);
 
@@ -571,10 +571,93 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
                 // Transpose since glm matrices are column major unlike ours
                 CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
 
-                rotate = LibMath::rotationEuler(transformation, true);
+                rotate = LibMath::rotationEuler(transformation);
 
                 // Transpose since glm matrices are column major unlike ours
                 CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
+
+                // Default
+                {
+                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate);
+
+                    glm::vec3 eulerGlm = glm::eulerAngles(glm::quat(rotateGlm));
+
+                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+                }
+
+                // XYZ
+                {
+                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate, LibMath::ERotationOrder::XYZ);
+
+                    glm::vec3 eulerGlm;
+                    glm::extractEulerAngleXYZ(rotateGlm, eulerGlm.x, eulerGlm.y, eulerGlm.z);
+
+                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+                }
+
+                // XZY
+                {
+                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate, LibMath::ERotationOrder::XZY);
+
+                    glm::vec3 eulerGlm;
+                    glm::extractEulerAngleXZY(rotateGlm, eulerGlm.x, eulerGlm.z, eulerGlm.y);
+
+                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+                }
+
+                // YXZ
+                {
+                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate, LibMath::ERotationOrder::YXZ);
+
+                    glm::vec3 eulerGlm;
+                    glm::extractEulerAngleYXZ(rotateGlm, eulerGlm.y, eulerGlm.x, eulerGlm.z);
+
+                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+                }
+
+                // YZX
+                {
+                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate, LibMath::ERotationOrder::YZX);
+
+                    glm::vec3 eulerGlm;
+                    glm::extractEulerAngleYZX(rotateGlm, eulerGlm.y, eulerGlm.z, eulerGlm.x);
+
+                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+                }
+
+                // ZXY
+                {
+                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate, LibMath::ERotationOrder::ZXY);
+
+                    glm::vec3 eulerGlm;
+                    glm::extractEulerAngleZXY(rotateGlm, eulerGlm.z, eulerGlm.x, eulerGlm.y);
+
+                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+                }
+
+                // ZYX
+                {
+                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate, LibMath::ERotationOrder::ZYX);
+
+                    glm::vec3 eulerGlm;
+                    glm::extractEulerAngleZYX(rotateGlm, eulerGlm.z, eulerGlm.y, eulerGlm.x);
+
+                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+                }
             }
 
             SECTION("Quaternion")

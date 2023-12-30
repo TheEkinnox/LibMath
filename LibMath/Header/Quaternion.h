@@ -153,6 +153,25 @@ namespace LibMath
         static constexpr TQuaternion fromEuler(const TVector3<Radian>& angles, ERotationOrder rotationOrder);
 
         /**
+         * \brief Computes a euler representation of the quaternion (x = yaw, y = pitch, z = roll)
+         * \return A euler representation of the quaternion
+         */
+        constexpr TVector3<Radian> toYawPitchRoll() const;
+
+        /**
+         * \brief Computes a euler representation of the quaternion (x = pitch, y = yaw, z = roll)
+         * \return A euler representation of the quaternion
+         */
+        constexpr TVector3<Radian> toEuler() const;
+
+        /**
+         * \brief Computes a euler representation of the quaternion
+         * \param rotationOrder The rotation application order
+         * \return A euler representation of the quaternion
+         */
+        constexpr TVector3<Radian> toEuler(ERotationOrder rotationOrder) const;
+
+        /**
          * \brief Converts the quaternion to an angle/axis representation
          * \tparam U The axis' data type
          * \param angle The output angle variable
