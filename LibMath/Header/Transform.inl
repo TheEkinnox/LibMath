@@ -117,14 +117,14 @@ namespace LibMath
 
     inline Vector3 Transform::forward() const
     {
-        return up().cross(right());
+        return right().cross(up());
     }
 
     inline Vector3 Transform::right() const
     {
-        Vector3 up = Vector3::up();
-        up.rotate(m_rotation);
-        return up;
+        Vector3 right = Vector3::right();
+        right.rotate(m_rotation);
+        return right;
     }
 
     inline Vector3 Transform::up() const
@@ -306,17 +306,21 @@ namespace LibMath
 
     inline Vector3 Transform::worldForward() const
     {
-        return worldUp().cross(worldRight());
+        return worldRight().cross(worldUp());
     }
 
     inline Vector3 Transform::worldRight() const
     {
-        return (m_worldMatrix * Vector4::right()).xyz().normalized();
+        Vector3 right = Vector3::right();
+        right.rotate(m_worldRotation);
+        return right;
     }
 
     inline Vector3 Transform::worldUp() const
     {
-        return (m_worldMatrix * Vector4::up()).xyz().normalized();
+        Vector3 up = Vector3::up();
+        up.rotate(m_worldRotation);
+        return up;
     }
 
     inline Vector3 Transform::worldBack() const

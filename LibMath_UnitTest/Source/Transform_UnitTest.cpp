@@ -369,5 +369,76 @@ TEST_CASE("Transform", "[.all][transform]")
                 CHECK(mat == matrix);
             }
         }
+
+        SECTION("Direction")
+        {
+            const LibMath::Transform transform(position, rotation, scale);
+
+            {
+                const LibMath::Vector3 right = transform.right();
+                const LibMath::Vector3 worldRight = transform.worldRight();
+                const glm::vec3        rightGlm = glm::rotate(rotationGlm, glm::vec3{ 1, 0, 0 });
+
+                CHECK(right.m_x == Catch::Approx(rightGlm.x));
+                CHECK(right.m_y == Catch::Approx(rightGlm.y));
+                CHECK(right.m_z == Catch::Approx(rightGlm.z));
+                CHECK(worldRight == right);
+            }
+
+            {
+                const LibMath::Vector3 left = transform.left();
+                const LibMath::Vector3 worldLeft = transform.worldLeft();
+                const glm::vec3        leftGlm = glm::rotate(rotationGlm, glm::vec3{ -1, 0, 0 });
+
+                CHECK(left.m_x == Catch::Approx(leftGlm.x));
+                CHECK(left.m_y == Catch::Approx(leftGlm.y));
+                CHECK(left.m_z == Catch::Approx(leftGlm.z));
+                CHECK(worldLeft == left);
+            }
+
+            {
+                const LibMath::Vector3 up = transform.up();
+                const LibMath::Vector3 worldUp = transform.worldUp();
+                const glm::vec3        upGlm = glm::rotate(rotationGlm, glm::vec3{ 0, 1, 0 });
+
+                CHECK(up.m_x == Catch::Approx(upGlm.x));
+                CHECK(up.m_y == Catch::Approx(upGlm.y));
+                CHECK(up.m_z == Catch::Approx(upGlm.z));
+                CHECK(worldUp == up);
+            }
+
+            {
+                const LibMath::Vector3 down = transform.down();
+                const LibMath::Vector3 worldDown = transform.worldDown();
+                const glm::vec3        downGlm = glm::rotate(rotationGlm, glm::vec3{ 0, -1, 0 });
+
+                CHECK(down.m_x == Catch::Approx(downGlm.x));
+                CHECK(down.m_y == Catch::Approx(downGlm.y));
+                CHECK(down.m_z == Catch::Approx(downGlm.z));
+                CHECK(worldDown == down);
+            }
+
+            {
+                const LibMath::Vector3 fwd = transform.forward();
+                const LibMath::Vector3 worldFwd = transform.worldForward();
+                const glm::vec3        fwdGlm = glm::rotate(rotationGlm, glm::vec3{ 0, 0, 1 });
+
+                CHECK(fwd.m_x == Catch::Approx(fwdGlm.x));
+                CHECK(fwd.m_y == Catch::Approx(fwdGlm.y));
+                CHECK(fwd.m_z == Catch::Approx(fwdGlm.z));
+                CHECK(worldFwd == fwd);
+            }
+
+            {
+                const LibMath::Vector3 back = transform.back();
+                const LibMath::Vector3 worldBack = transform.worldBack();
+                const glm::vec3        backGlm = glm::rotate(rotationGlm, glm::vec3{ 0, 0, -1 });
+
+                CHECK(back.m_x == Catch::Approx(backGlm.x));
+                CHECK(back.m_y == Catch::Approx(backGlm.y));
+                CHECK(back.m_z == Catch::Approx(backGlm.z));
+                CHECK(worldBack == back);
+            }
+        }
     }
 }
