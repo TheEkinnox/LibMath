@@ -219,6 +219,18 @@ namespace LibMath
         return *this;
     }
 
+    inline Transform& Transform::setAll(const Vector3& position, const Quaternion& rotation, const Vector3& scale)
+    {
+        m_position = position;
+        m_rotation = rotation;
+        m_scale = scale;
+        m_matrix = generateMatrix(m_position, m_rotation, m_scale);
+
+        updateWorldMatrix();
+
+        return *this;
+    }
+
     inline Transform& Transform::setMatrix(const Matrix4x4& matrix)
     {
         m_matrix = matrix;
@@ -400,6 +412,18 @@ namespace LibMath
 
     inline Transform& Transform::setWorldScale(const Vector3& scale)
     {
+        m_worldScale = scale;
+        m_worldMatrix = generateMatrix(m_worldPosition, m_worldRotation, m_worldScale);
+
+        updateLocalMatrix();
+
+        return *this;
+    }
+
+    inline Transform& Transform::setAllWorld(const Vector3& position, const Quaternion& rotation, const Vector3& scale)
+    {
+        m_worldPosition = position;
+        m_worldRotation = rotation;
         m_worldScale = scale;
         m_worldMatrix = generateMatrix(m_worldPosition, m_worldRotation, m_worldScale);
 

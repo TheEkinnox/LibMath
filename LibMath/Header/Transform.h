@@ -222,6 +222,15 @@ namespace LibMath
         inline Transform& setScale(const Vector3& scale);
 
         /**
+         * \brief Sets the transform's current local position, rotation and scale
+         * \param position The transform's new local position
+         * \param rotation The transform's new local rotation
+         * \param scale The transform's new local scale
+         * \return A reference to the current transform
+         */
+        inline Transform& setAll(const Vector3& position, const Quaternion& rotation, const Vector3& scale);
+
+        /**
          * \brief Sets the transform's current local matrix
          * \param matrix The transform's new local matrix
          * \return A reference to the current transform
@@ -364,6 +373,15 @@ namespace LibMath
          * \return A reference to the current transform
          */
         inline Transform& setWorldScale(const Vector3& scale);
+
+        /**
+         * \brief Sets the transform's current global position, rotation and scale
+         * \param position The transform's new global position
+         * \param rotation The transform's new global rotation
+         * \param scale The transform's new global scale
+         * \return A reference to the current transform
+         */
+        inline Transform& setAllWorld(const Vector3& position, const Quaternion& rotation, const Vector3& scale);
 
         /**
          * \brief Sets the transform's current world matrix
