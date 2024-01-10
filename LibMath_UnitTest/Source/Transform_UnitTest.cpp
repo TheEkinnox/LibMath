@@ -155,6 +155,12 @@ TEST_CASE("Transform", "[.all][transform]")
 
         {
             LibMath::Transform transform{ LibMath::Matrix4(1.f) };
+            transform.setAll(position, rotation, scale);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ LibMath::Matrix4(1.f) };
             transform.setMatrix(matrix);
             CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
         }
@@ -174,6 +180,12 @@ TEST_CASE("Transform", "[.all][transform]")
         {
             LibMath::Transform transform{ position, rotation, LibMath::Vector3::one() };
             transform.setWorldScale(scale);
+            CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
+        }
+
+        {
+            LibMath::Transform transform{ LibMath::Matrix4(1.f) };
+            transform.setAllWorld(position, rotation, scale);
             CHECK_TRANSFORM(transform, position, rotation, scale, matrixGlm);
         }
 
