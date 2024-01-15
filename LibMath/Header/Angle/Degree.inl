@@ -91,6 +91,46 @@ namespace LibMath
         return this->m_value;
     }
 
+    constexpr bool operator<(const Degree& lhs, const Degree& rhs)
+    {
+        return lhs.raw() < rhs.raw();
+    }
+
+    constexpr bool operator<(const Degree& lhs, const Radian& rhs)
+    {
+        return lhs.degree() < rhs.degree();
+    }
+
+    constexpr bool operator<=(const Degree& lhs, const Degree& rhs)
+    {
+        return rhs >= lhs;
+    }
+
+    constexpr bool operator<=(const Degree& lhs, const Radian& rhs)
+    {
+        return rhs >= lhs;
+    }
+
+    constexpr bool operator>(const Degree& lhs, const Degree& rhs)
+    {
+        return rhs < lhs;
+    }
+
+    constexpr bool operator>(const Degree& lhs, const Radian& rhs)
+    {
+        return rhs < lhs;
+    }
+
+    constexpr bool operator>=(const Degree& lhs, const Degree& rhs)
+    {
+        return !(lhs < rhs);
+    }
+
+    constexpr bool operator>=(const Degree& lhs, const Radian& rhs)
+    {
+        return !(lhs < rhs);
+    }
+
     constexpr bool operator==(const Degree& lhs, const Degree& rhs)
     {
         return floatEquals(lhs.degree(), rhs.degree());
@@ -124,6 +164,20 @@ namespace LibMath
     constexpr Degree operator/(Degree degree, const float x)
     {
         return degree /= x;
+    }
+
+    inline std::ostream& operator<<(std::ostream& stream, const Degree& degrees)
+    {
+        return stream << degrees.raw();
+    }
+
+    inline std::istream& operator>>(std::istream& stream, Degree& degrees)
+    {
+        float val;
+        stream >> val;
+        degrees = Degree(val);
+
+        return stream;
     }
 
     constexpr Degree Literal::operator ""_deg(const long double angle)

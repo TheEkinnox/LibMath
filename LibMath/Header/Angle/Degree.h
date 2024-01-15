@@ -1,5 +1,6 @@
 #ifndef __LIBMATH__ANGLE__DEGREE_H__
 #define __LIBMATH__ANGLE__DEGREE_H__
+#include <iostream>
 
 namespace LibMath
 {
@@ -33,7 +34,19 @@ namespace LibMath
         float m_value;
     };
 
-    constexpr bool operator==(const Degree&, const Degree&); // bool isEqual = Degree{45} == Degree{45};		// true
+    constexpr bool operator<(const Degree& lhs, const Degree& rhs); // bool isLess = Degree{45} < Degree{365};	// true
+    constexpr bool operator<(const Degree& lhs, const Radian& rhs); // bool isLess = Degree{60} < Radian{0.5};	// false
+
+    constexpr bool operator<=(const Degree& lhs, const Degree& rhs); // bool isLessEqual = Degree{45} <= Degree{45};	// true
+    constexpr bool operator<=(const Degree& lhs, const Radian& rhs); // bool isLessEqual = Degree{60} <= Radian{0.5};	// false
+
+    constexpr bool operator>(const Degree& lhs, const Degree& rhs); // bool isGreater = Degree{45} > Degree{365};	// false
+    constexpr bool operator>(const Degree& lhs, const Radian& rhs); // bool isGreater = Degree{60} > Radian{0.5};	// true
+
+    constexpr bool operator>=(const Degree& lhs, const Degree& rhs); // bool isGreaterEqual = Degree{45} >= Degree{45};		// true
+    constexpr bool operator>=(const Degree& lhs, const Radian& rhs); // bool isGreaterEqual = Degree{60} >= Radian{0.5};	// true
+
+    constexpr bool operator==(const Degree&, const Degree&); // bool isEqual = Degree{45} == Degree{45};	// true
     constexpr bool operator==(const Degree&, const Radian&); // bool isEqual = Degree{60} == Radian{0.5};	// false
 
     constexpr Degree operator-(const Degree&); // Degree angle = - Degree{45};					// Degree{-45}
@@ -42,6 +55,22 @@ namespace LibMath
     constexpr Degree operator-(Degree, const Degree&); // Degree angle = Degree{45} - Degree{45};		// Degree{0}
     constexpr Degree operator*(Degree, float);         // Degree angle = Degree{45} * 3;				// Degree{135}
     constexpr Degree operator/(Degree, float);         // Degree angle = Degree{45} / 3;				// Degree{15}
+
+    /**
+     * \brief Adds a degrees string representation to an output stream
+     * \param stream The output stream
+     * \param degrees The input degrees
+     * \return The modified stream
+     */
+    inline std::ostream& operator<<(std::ostream& stream, const Degree& degrees);
+
+    /**
+     * \brief Parses a string representation from an input stream into degrees
+     * \param stream The input stream
+     * \param degrees The output degrees
+     * \return The modified stream
+     */
+    inline std::istream& operator>>(std::istream& stream, Degree& degrees);
 
     inline namespace Literal
     {

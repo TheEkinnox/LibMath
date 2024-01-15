@@ -92,6 +92,46 @@ namespace LibMath
         return this->m_value;
     }
 
+    constexpr bool operator<(const Radian& lhs, const Radian& rhs)
+    {
+        return lhs.raw() < rhs.raw();
+    }
+
+    constexpr bool operator<(const Radian& lhs, const Degree& rhs)
+    {
+        return lhs.radian() < rhs.radian();
+    }
+
+    constexpr bool operator<=(const Radian& lhs, const Radian& rhs)
+    {
+        return rhs >= lhs;
+    }
+
+    constexpr bool operator<=(const Radian& lhs, const Degree& rhs)
+    {
+        return rhs >= lhs;
+    }
+
+    constexpr bool operator>(const Radian& lhs, const Radian& rhs)
+    {
+        return rhs < lhs;
+    }
+
+    constexpr bool operator>(const Radian& lhs, const Degree& rhs)
+    {
+        return rhs < lhs;
+    }
+
+    constexpr bool operator>=(const Radian& lhs, const Radian& rhs)
+    {
+        return !(lhs < rhs);
+    }
+
+    constexpr bool operator>=(const Radian& lhs, const Degree& rhs)
+    {
+        return !(lhs < rhs);
+    }
+
     constexpr bool operator==(const Radian& lhs, const Radian& rhs)
     {
         return floatEquals(lhs.radian(), rhs.radian());
@@ -125,6 +165,20 @@ namespace LibMath
     constexpr Radian operator/(Radian radian, const float x)
     {
         return radian /= x;
+    }
+
+    inline std::ostream& operator<<(std::ostream& stream, const Radian& radian)
+    {
+        return stream << radian.raw();
+    }
+
+    inline std::istream& operator>>(std::istream& stream, Radian& radian)
+    {
+        float val;
+        stream >> val;
+        radian = Radian(val);
+
+        return stream;
     }
 
     constexpr Radian Literal::operator ""_rad(const long double angle)

@@ -1,5 +1,6 @@
 #ifndef __LIBMATH__ANGLE__RADIAN_H__
 #define __LIBMATH__ANGLE__RADIAN_H__
+#include <iostream>
 
 namespace LibMath
 {
@@ -33,6 +34,18 @@ namespace LibMath
         float m_value;
     };
 
+    constexpr bool operator<(const Radian& lhs, const Radian& rhs); // bool isLess = Radian{.5} < Radian{1.5};	// true
+    constexpr bool operator<(const Radian& lhs, const Degree& rhs); // bool isLess = Radian{.5} < Degree{60};	// true
+
+    constexpr bool operator<=(const Radian& lhs, const Radian& rhs); // bool isLessEqual = Radian{.5} <= Radian{.5};	// true
+    constexpr bool operator<=(const Radian& lhs, const Degree& rhs); // bool isLessEqual = Radian{.5} <= Degree{60};	// true
+
+    constexpr bool operator>(const Radian& lhs, const Radian& rhs); // bool isGreater = Radian{.5} > Radian{1.5};	// false
+    constexpr bool operator>(const Radian& lhs, const Degree& rhs); // bool isGreater = Radian{.5} > Degree{60};	// false
+
+    constexpr bool operator>=(const Radian& lhs, const Radian& rhs); // bool isGreaterEqual = Radian{45} >= Radian{45};	// true
+    constexpr bool operator>=(const Radian& lhs, const Degree& rhs); // bool isGreaterEqual = Radian{.5} >= Degree{60};	// false
+
     constexpr bool operator==(const Radian&, const Radian&); // bool isEqual = Radian{0.5} == Radian{0.5};	// true
     constexpr bool operator==(const Radian&, const Degree&); // bool isEqual = Radian{0.5} == Degree{60};	// false
 
@@ -42,6 +55,22 @@ namespace LibMath
     constexpr Radian operator-(Radian, const Radian&); // Radian angle = Radian{0.5} - Radian{0.5};	// Radian{0}
     constexpr Radian operator*(Radian, float);         // Radian angle = Radian{0.5} * 3;				// Radian{1.5}
     constexpr Radian operator/(Radian, float);         // Radian angle = Radian{0.5} / 3;				// Radian{0.166...}
+
+    /**
+     * \brief Adds a radian string representation to an output stream
+     * \param stream The output stream
+     * \param radian The input radian
+     * \return The modified stream
+     */
+    inline std::ostream& operator<<(std::ostream& stream, const Radian& radian);
+
+    /**
+     * \brief Parses a string representation from an input stream into radian
+     * \param stream The input stream
+     * \param radian The output radian
+     * \return The modified stream
+     */
+    inline std::istream& operator>>(std::istream& stream, Radian& radian);
 
     inline namespace Literal
     {
