@@ -186,17 +186,15 @@ namespace LibMath
     template <typename T>
     constexpr bool floatEquals(const T a, const T b, const T scale)
     {
-        static_assert(std::is_arithmetic_v<T>);
-
-        if constexpr (std::is_integral_v<T>)
-        {
-            return a == b;
-        }
-        else
+        if constexpr (std::is_floating_point_v<T>)
         {
             const T maxXYOne = max(max(static_cast<T>(1), abs(a)), abs(b));
 
             return abs(a - b) <= std::numeric_limits<T>::epsilon() * scale * maxXYOne;
+        }
+        else
+        {
+            return a == b;
         }
     }
 

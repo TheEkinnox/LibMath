@@ -124,8 +124,8 @@ namespace LibMath
 	 * \param scale The comparison's epsilon's scale
 	 * \return True if a can be considered equal to b. False otherwise.
 	 */
-    template <typename T>
-	constexpr bool	floatEquals(T a, T b, T scale = 100);
+	template <typename T>
+	constexpr bool	floatEquals(T a, T b, T scale = T(100));
 
 	/**
 	 * \brief Checks whether a given value is in the given range.
