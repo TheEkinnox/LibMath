@@ -93,6 +93,21 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
         glm::dquat           dAxisAngleGlm{ glm::angleAxis<double>(glm::radians(180.f), glm::dvec3(1, 0, 0)) };
         CHECK_QUATERNION(dAxisAngle, dAxisAngleGlm);
 
+        // from-to
+        LibMath::Quaternion fromTo = LibMath::Quaternion::fromTo(LibMath::Vector3::front(), LibMath::Vector3::right());
+        glm::quat           fromToGlm = glm::angleAxis(glm::radians(90.f), glm::vec3{ 0, -1, 0 });
+        CHECK_QUATERNION(fromTo, fromToGlm);
+
+        LibMath::Quaternion fromToParallel = LibMath::Quaternion::fromTo(LibMath::Vector3::front(), LibMath::Vector3::front());
+        CHECK(fromToParallel == LibMath::Quaternion::identity());
+
+        LibMath::Quaternion fromToOpposite = LibMath::Quaternion::fromTo(LibMath::Vector3::front(), LibMath::Vector3::back());
+        LibMath::Vector3    fromToOppositeVec{ fromToOpposite.m_x, fromToOpposite.m_y, fromToOpposite.m_z };
+        CHECK(LibMath::floatEquals(fromToOpposite.m_w, 0.f));
+        CHECK(fromToOppositeVec != LibMath::Vector3::front());
+        CHECK(fromToOppositeVec != LibMath::Vector3::back());
+        CHECK(fromToOppositeVec != LibMath::Vector3::zero());
+
         // yaw-pitch-roll
         LibMath::TVector3<LibMath::Radian> angles(90_deg, 75_deg, 30_deg);
 

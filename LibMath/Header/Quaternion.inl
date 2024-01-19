@@ -206,6 +206,22 @@ namespace LibMath
     }
 
     template <class T>
+    template <class U>
+    constexpr TQuaternion<T> TQuaternion<T>::fromTo(const TVector3<U>& from, const TVector3<U>& to)
+    {
+        if (from != -to)
+        {
+            const TVector3<U> cross = to.cross(from);
+            return TQuaternion{
+                squareRoot(from.magnitudeSquared() * to.magnitudeSquared()) + from.dot(to),
+                cross.m_x, cross.m_y, cross.m_z
+            }.normalized();
+        }
+
+        return TQuaternion(0, sign(from.m_x), -sign(from.m_z), sign(from.m_x)).normalized();
+    }
+
+    template <class T>
     constexpr TVector3<Radian> TQuaternion<T>::toYawPitchRoll() const
     {
         Radian yaw = asin(clamp(static_cast<T>(-2) * (m_x * m_z - m_w * m_y), static_cast<T>(-1), static_cast<T>(1)));

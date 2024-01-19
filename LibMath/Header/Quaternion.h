@@ -154,6 +154,16 @@ namespace LibMath
         static constexpr TQuaternion fromEuler(const TVector3<Radian>& angles, ERotationOrder rotationOrder);
 
         /**
+         * \brief Computes the quaternion representing the rotation from the origin vector to the destination vector
+         * \tparam U The vectors' data type
+         * \param from The origin vector
+         * \param to The destination vector
+         * \return The quaternion representing the rotation from the origin vector to the destination vector
+         */
+        template <class U>
+        static constexpr TQuaternion fromTo(const TVector3<U>& from, const TVector3<U>& to);
+
+        /**
          * \brief Computes a euler representation of the quaternion (x = yaw, y = pitch, z = roll)
          * \return A euler representation of the quaternion
          */
