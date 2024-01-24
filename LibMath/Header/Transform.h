@@ -162,12 +162,6 @@ namespace LibMath
 
         /**
          * \brief Gets a euler angles representation of the transform's current local rotation
-         * \return A euler angles representation of the transform's current local rotation
-         */
-        inline TVector3<Radian> getEuler() const;
-
-        /**
-         * \brief Gets a euler angles representation of the transform's current local rotation
          * \param rotationOrder The rotation application order
          * \return A euler angles representation of the transform's current local rotation
          */
@@ -191,13 +185,6 @@ namespace LibMath
          * \return A reference to the current transform
          */
         inline Transform& setPosition(const Vector3& position);
-
-        /**
-         * \brief Sets the transform's current local rotation
-         * \param euler The transform's new local euler angles in degrees
-         * \return A reference to the current transform
-         */
-        inline Transform& setEuler(const TVector3<Radian>& euler);
 
         /**
          * \brief Sets the transform's current local rotation
@@ -247,9 +234,10 @@ namespace LibMath
         /**
          * \brief Adds the given vector to the transform's current local rotation
          * \param euler The rotation euler angles to apply
+         * \param rotationOrder The rotation application order
          * \return A reference to the current transform
          */
-        inline Transform& rotate(const TVector3<Radian>& euler);
+        inline Transform& rotate(const TVector3<Radian>& euler, ERotationOrder rotationOrder);
 
         /**
          * \brief Applies the given rotation to the transform's current local rotation
@@ -315,12 +303,6 @@ namespace LibMath
 
         /**
          * \brief Gets a euler angles representation of the transform's current global rotation
-         * \return A euler angles representation of the transform's current global rotation
-         */
-        inline TVector3<Radian> getWorldEuler() const;
-
-        /**
-         * \brief Gets a euler angles representation of the transform's current global rotation
          * \param rotationOrder The rotation application order
          * \return A euler angles representation of the transform's current global rotation
          */
@@ -344,13 +326,6 @@ namespace LibMath
          * \return A reference to the current transform
          */
         inline Transform& setWorldPosition(const Vector3& position);
-
-        /**
-         * \brief Sets the transform's current global rotation
-         * \param euler The transform's new global euler angles in degrees
-         * \return A reference to the current transform
-         */
-        inline Transform& setWorldEuler(const TVector3<Radian>& euler);
 
         /**
          * \brief Sets the transform's current global rotation
@@ -400,9 +375,10 @@ namespace LibMath
         /**
          * \brief Adds the given euler angles to the transform's current global rotation
          * \param euler The rotation euler angles to apply
+         * \param rotationOrder The rotation application order
          * \return A reference to the current transform
          */
-        inline Transform& worldRotate(const TVector3<Radian>& euler);
+        inline Transform& worldRotate(const TVector3<Radian>& euler, ERotationOrder rotationOrder);
 
         /**
          * \brief Adds the given vector to the transform's current global rotation

@@ -161,18 +161,6 @@ namespace LibMath
     }
 
     template <class T>
-    constexpr TQuaternion<T> TQuaternion<T>::fromEuler(const Radian& x, const Radian& y, const Radian& z)
-    {
-        return TQuaternion(z, x, y);
-    }
-
-    template <class T>
-    constexpr TQuaternion<T> TQuaternion<T>::fromEuler(const TVector3<Radian>& angles)
-    {
-        return fromEuler(angles.m_x, angles.m_y, angles.m_z);
-    }
-
-    template <class T>
     constexpr TQuaternion<T> TQuaternion<T>::fromEuler(const Radian&        x, const Radian& y, const Radian& z,
                                                        const ERotationOrder rotationOrder)
     {
@@ -238,14 +226,6 @@ namespace LibMath
             pitch = atan(y, x);
 
         return { yaw, pitch, roll };
-    }
-
-    template <class T>
-    constexpr TVector3<Radian> TQuaternion<T>::toEuler() const
-    {
-        auto [yaw, pitch, roll] = toYawPitchRoll();
-
-        return { pitch, yaw, roll };
     }
 
     template <class T>

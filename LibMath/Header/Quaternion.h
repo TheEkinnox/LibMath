@@ -124,20 +124,6 @@ namespace LibMath
         constexpr TQuaternion& operator=(TQuaternion<U>&& other) noexcept;
 
         /**
-         * \brief Creates a quaternion from the given euler angles (assuming x=pitch, y=roll, z=yaw)
-         * \param x The x angle
-         * \param y The y angle
-         * \param z The z angle
-         */
-        static constexpr TQuaternion fromEuler(const Radian& x, const Radian& y, const Radian& z);
-
-        /**
-         * \brief Creates a quaternion from the given euler angles vector (assuming x=pitch, y=roll, z=yaw)
-         * \param angles The euler angles vector
-         */
-        static constexpr TQuaternion fromEuler(const TVector3<Radian>& angles);
-
-        /**
          * \brief Creates a quaternion from the given euler angles
          * \param x The x angle
          * \param y The y angle
@@ -168,12 +154,6 @@ namespace LibMath
          * \return A euler representation of the quaternion
          */
         constexpr TVector3<Radian> toYawPitchRoll() const;
-
-        /**
-         * \brief Computes a euler representation of the quaternion (x = pitch, y = yaw, z = roll)
-         * \return A euler representation of the quaternion
-         */
-        constexpr TVector3<Radian> toEuler() const;
 
         /**
          * \brief Computes a euler representation of the quaternion

@@ -58,9 +58,6 @@ namespace LibMath
     constexpr TMatrix<4, 4, DataT> lookAt(const TVector3<DataT>& eye, const TVector3<DataT>& center, const TVector3<DataT>& up);
 
     template <class DataT>
-    constexpr TVector3<Radian> toEuler(const TMatrix<4, 4, DataT>& matrix);
-
-    template <class DataT>
     constexpr TVector3<Radian> toEuler(const TMatrix<4, 4, DataT>& matrix, ERotationOrder rotationOrder);
 
     using Matrix4x2 = TMatrix<4, 2, float>;

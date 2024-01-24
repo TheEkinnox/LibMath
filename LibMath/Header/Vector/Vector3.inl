@@ -386,7 +386,7 @@ namespace LibMath
     template <class T>
     void TVector3<T>::rotate(const Radian& xAngle, const Radian& yAngle, const Radian& zAngle)
     {
-        rotate(TQuaternion<T>::fromEuler(xAngle, yAngle, zAngle));
+        rotate(TQuaternion<T>(zAngle, xAngle, yAngle));
     }
 
     template <class T>

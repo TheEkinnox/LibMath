@@ -278,12 +278,6 @@ namespace LibMath
     }
 
     template <class DataT>
-    constexpr TVector3<Radian> toEuler(const TMatrix<4, 4, DataT>& matrix)
-    {
-        return TQuaternion<DataT>(matrix).toEuler();
-    }
-
-    template <class DataT>
     constexpr TVector3<Radian> toEuler(const TMatrix<4, 4, DataT>& matrix, const ERotationOrder rotationOrder)
     {
         TVector3<Radian> angles;

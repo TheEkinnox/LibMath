@@ -5,8 +5,6 @@
 
 #include "Matrix/Matrix3.h"
 
-#include "Vector/Vector4.h"
-
 namespace LibMath
 {
     inline Transform::Transform()
@@ -159,11 +157,6 @@ namespace LibMath
         return m_rotation;
     }
 
-    inline TVector3<Radian> Transform::getEuler() const
-    {
-        return m_rotation.toEuler();
-    }
-
     inline TVector3<Radian> Transform::getEuler(const ERotationOrder rotationOrder) const
     {
         return m_rotation.toEuler(rotationOrder);
@@ -187,11 +180,6 @@ namespace LibMath
         updateWorldMatrix();
 
         return *this;
-    }
-
-    inline Transform& Transform::setEuler(const TVector3<Radian>& euler)
-    {
-        return setRotation(Quaternion::fromEuler(euler));
     }
 
     inline Transform& Transform::setEuler(const TVector3<Radian>& euler, const ERotationOrder rotationOrder)
@@ -248,9 +236,9 @@ namespace LibMath
         return *this;
     }
 
-    inline Transform& Transform::rotate(const TVector3<Radian>& euler)
+    inline Transform& Transform::rotate(const TVector3<Radian>& euler, const ERotationOrder rotationOrder)
     {
-        setRotation(m_rotation * Quaternion::fromEuler(euler));
+        setRotation(m_rotation * Quaternion::fromEuler(euler, rotationOrder));
 
         return *this;
     }
@@ -360,11 +348,6 @@ namespace LibMath
         return m_worldRotation;
     }
 
-    inline TVector3<Radian> Transform::getWorldEuler() const
-    {
-        return m_worldRotation.toEuler();
-    }
-
     inline TVector3<Radian> Transform::getWorldEuler(const ERotationOrder rotationOrder) const
     {
         return m_worldRotation.toEuler(rotationOrder);
@@ -388,11 +371,6 @@ namespace LibMath
         updateLocalMatrix();
 
         return *this;
-    }
-
-    inline Transform& Transform::setWorldEuler(const TVector3<Radian>& euler)
-    {
-        return setWorldRotation(Quaternion::fromEuler(euler));
     }
 
     inline Transform& Transform::setWorldEuler(const TVector3<Radian>& euler, const ERotationOrder rotationOrder)
@@ -449,9 +427,9 @@ namespace LibMath
         return *this;
     }
 
-    inline Transform& Transform::worldRotate(const TVector3<Radian>& euler)
+    inline Transform& Transform::worldRotate(const TVector3<Radian>& euler, const ERotationOrder rotationOrder)
     {
-        setWorldRotation(m_worldRotation * Quaternion::fromEuler(euler));
+        setWorldRotation(m_worldRotation * Quaternion::fromEuler(euler, rotationOrder));
 
         return *this;
     }

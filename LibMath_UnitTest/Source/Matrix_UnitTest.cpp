@@ -451,7 +451,7 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 
         SECTION("Array")
         {
-            const size_t matSize = big.getSize();
+            constexpr size_t matSize = big.getSize();
 
             for (size_t i = 0; i < matSize; i++)
                 CHECK(big.getArray()[i] == Catch::Approx(glm::value_ptr(bigGlm)[i]));
@@ -575,17 +575,6 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 
                 // Transpose since glm matrices are column major unlike ours
                 CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
-
-                // Default
-                {
-                    LibMath::TVector3<LibMath::Radian> euler = LibMath::toEuler(rotate);
-
-                    glm::vec3 eulerGlm = glm::eulerAngles(glm::quat(rotateGlm));
-
-                    CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
-                    CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
-                    CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
-                }
 
                 // XYZ
                 {
