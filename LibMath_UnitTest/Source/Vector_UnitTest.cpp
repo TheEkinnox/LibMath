@@ -1,11 +1,12 @@
 #include <Vector/Vector3.h>
 #include <Angle/Radian.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_XYZW_ONLY
 #include <glm/glm.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/projection.hpp>
-#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/vector_angle.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>

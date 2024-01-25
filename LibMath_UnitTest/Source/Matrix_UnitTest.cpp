@@ -2,10 +2,10 @@
 #include <Vector/Vector3.h>
 #include <Angle/Radian.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_XYZW_ONLY
 #include <glm/glm.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
@@ -509,6 +509,8 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 
 TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 {
+    constexpr glm::mat4 idMatGlm{ 1 };
+
     SECTION("Transformation")
     {
         const LibMath::Vector3 transformation{ -2.f, 0.f, 1.25f };
@@ -519,7 +521,7 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
         {
             LibMath::Matrix4 translate = LibMath::translation(transformation.m_x, transformation.m_y, transformation.m_z);
 
-            glm::mat4 translateGlm = glm::translate(transformationGlm);
+            glm::mat4 translateGlm = glm::translate(idMatGlm, transformationGlm);
 
             // Transpose since glm matrices are column major unlike ours
             CHECK_MATRIX(translate, glm::transpose(translateGlm));
@@ -529,7 +531,7 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
         {
             LibMath::Matrix4 scale = LibMath::scaling(transformation.m_x, transformation.m_y, transformation.m_z);
 
-            glm::mat4 scaleGlm = glm::scale(transformationGlm);
+            glm::mat4 scaleGlm = glm::scale(idMatGlm, transformationGlm);
 
             // Transpose since glm matrices are column major unlike ours
             CHECK_MATRIX(scale, glm::transpose(scaleGlm));
@@ -540,7 +542,7 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
             SECTION("Axis")
             {
                 LibMath::Matrix4 rotate = LibMath::rotation(-3_rad, transformation);
-                glm::mat4        rotateGlm = glm::rotate(-3.f, transformationGlm);
+                glm::mat4        rotateGlm = glm::rotate(idMatGlm, -3.f, transformationGlm);
 
                 // Transpose since glm matrices are column major unlike ours
                 CHECK_MATRIX(rotate, glm::transpose(rotateGlm));
@@ -558,7 +560,7 @@ TEST_CASE("Matrix4", "[.all][matrix][Matrix4]")
 
                 rotate = LibMath::rotation(transformation);
 
-                rotateGlm = glm::yawPitchRoll(transformationGlm.y, transformationGlm.x, transformationGlm.z);
+                rotateGlm = glm::yawPitchRoll(transformationGlm.x, transformationGlm.y, transformationGlm.z);
 
                 // Transpose since glm matrices are column major unlike ours
                 CHECK_MATRIX(rotate, glm::transpose(rotateGlm));

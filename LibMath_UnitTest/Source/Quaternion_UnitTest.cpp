@@ -2,6 +2,7 @@
 
 #include <Angle/Degree.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_XYZW_ONLY
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
@@ -9,7 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/detail/type_quat.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 using namespace LibMath::Literal;
 
@@ -475,6 +476,9 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
         constexpr glm::quat baseGlm{ 2.5f, .5f, 2.f, 3.f };
         constexpr glm::quat otherGlm{ 3.75f, 3.f, .75f, 4.5f };
 
+        const glm::mat4 baseMatGlm = glm::mat4_cast(baseGlm);
+        const glm::mat4 baseMatNormGlm = glm::mat4_cast(glm::normalize(baseGlm));
+
         SECTION("Conversion")
         {
             {
@@ -515,24 +519,148 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
                 CHECK(fromAngleAxis == base.normalized());
             }
 
+            // XYZ
             {
-                const LibMath::TVector3<LibMath::Radian> euler = base.toEuler();
+                LibMath::TVector3<LibMath::Radian> euler = base.toEuler(LibMath::ERotationOrder::XYZ);
 
-                const glm::vec3 eulerGlm = glm::eulerAngles(baseGlm);
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleXYZ(baseMatGlm, eulerGlm.x, eulerGlm.y, eulerGlm.z);
 
-                CHECK(euler.m_x.radian() == Catch::Approx(eulerGlm.x));
-                CHECK(euler.m_y.radian() == Catch::Approx(eulerGlm.y));
-                CHECK(euler.m_z.radian() == Catch::Approx(eulerGlm.z));
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
             }
 
+            // XZY
             {
-                const LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler();
+                LibMath::TVector3<LibMath::Radian> euler = base.toEuler(LibMath::ERotationOrder::XZY);
 
-                const glm::vec3 eulerGlm = glm::eulerAngles(normalize(baseGlm));
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleXZY(baseMatGlm, eulerGlm.x, eulerGlm.z, eulerGlm.y);
 
-                CHECK(euler.m_x.radian() == Catch::Approx(eulerGlm.x));
-                CHECK(euler.m_y.radian() == Catch::Approx(eulerGlm.y));
-                CHECK(euler.m_z.radian() == Catch::Approx(eulerGlm.z));
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // YXZ
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.toEuler(LibMath::ERotationOrder::YXZ);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleYXZ(baseMatGlm, eulerGlm.y, eulerGlm.x, eulerGlm.z);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // YZX
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.toEuler(LibMath::ERotationOrder::YZX);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleYZX(baseMatGlm, eulerGlm.y, eulerGlm.z, eulerGlm.x);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // ZXY
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.toEuler(LibMath::ERotationOrder::ZXY);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleZXY(baseMatGlm, eulerGlm.z, eulerGlm.x, eulerGlm.y);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // ZYX
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.toEuler(LibMath::ERotationOrder::ZYX);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleZYX(baseMatGlm, eulerGlm.z, eulerGlm.y, eulerGlm.x);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // XYZ
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler(LibMath::ERotationOrder::XYZ);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleXYZ(baseMatNormGlm, eulerGlm.x, eulerGlm.y, eulerGlm.z);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // XZY
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler(LibMath::ERotationOrder::XZY);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleXZY(baseMatNormGlm, eulerGlm.x, eulerGlm.z, eulerGlm.y);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // YXZ
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler(LibMath::ERotationOrder::YXZ);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleYXZ(baseMatNormGlm, eulerGlm.y, eulerGlm.x, eulerGlm.z);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // YZX
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler(LibMath::ERotationOrder::YZX);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleYZX(baseMatNormGlm, eulerGlm.y, eulerGlm.z, eulerGlm.x);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // ZXY
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler(LibMath::ERotationOrder::ZXY);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleZXY(baseMatNormGlm, eulerGlm.z, eulerGlm.x, eulerGlm.y);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
+            }
+
+            // ZYX
+            {
+                LibMath::TVector3<LibMath::Radian> euler = base.normalized().toEuler(LibMath::ERotationOrder::ZYX);
+
+                glm::vec3 eulerGlm;
+                glm::extractEulerAngleZYX(baseMatNormGlm, eulerGlm.z, eulerGlm.y, eulerGlm.x);
+
+                CHECK(LibMath::floatEquals(euler.m_x.raw(), eulerGlm.x));
+                CHECK(LibMath::floatEquals(euler.m_y.raw(), eulerGlm.y));
+                CHECK(LibMath::floatEquals(euler.m_z.raw(), eulerGlm.z));
             }
 
             {
@@ -560,7 +688,7 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
             {
                 float magnitudeSquare = base.magnitudeSquared();
 
-                float magnitudeSquareGlm = glm::length2(baseGlm);
+                float magnitudeSquareGlm = glm::dot(baseGlm, baseGlm);
 
                 CHECK(magnitudeSquare == Catch::Approx(magnitudeSquareGlm));
             }

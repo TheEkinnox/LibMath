@@ -2,6 +2,7 @@
 
 #include <Angle/Degree.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_XYZW_ONLY
 
 #include <catch2/catch_approx.hpp>
@@ -10,7 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/detail/type_quat.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 using namespace LibMath::Literal;
 
@@ -68,6 +69,7 @@ TEST_CASE("Transform", "[.all][transform]")
 
     const LibMath::Quaternion rotation{ angles };
     const glm::quat           rotationGlm{ glm::yawPitchRoll(glm::radians(45.f), glm::radians(30.f), glm::radians(65.f)) };
+    const glm::quat           rotationMatGlm{ glm::mat4_cast(rotationGlm) };
 
     const LibMath::Vector3 scale{ 3.f, .75f, 3.75f };
     constexpr glm::vec3    scaleGlm{ 3.f, .75f, 3.75f };
@@ -84,8 +86,9 @@ TEST_CASE("Transform", "[.all][transform]")
     constexpr glm::vec3    scaleOtherGlm{ 8.4f, 2.1f, 10.5f };
 
     constexpr glm::mat4 idMatGlm{ 1.f };
-    const glm::mat4 matrixGlm = glm::translate(idMatGlm, positionGlm) * glm::toMat4(rotationGlm) * glm::scale(idMatGlm, scaleGlm);
-    const glm::mat4 matrixOtherGlm = glm::translate(idMatGlm, positionOtherGlm) * glm::toMat4(rotationOtherGlm)
+    const glm::mat4     matrixGlm = glm::translate(idMatGlm, positionGlm) * glm::mat4_cast(rotationGlm) *
+        glm::scale(idMatGlm, scaleGlm);
+    const glm::mat4 matrixOtherGlm = glm::translate(idMatGlm, positionOtherGlm) * glm::mat4_cast(rotationOtherGlm)
         * glm::scale(idMatGlm, scaleOtherGlm);
 
     SECTION("Instantiation")
@@ -235,7 +238,7 @@ TEST_CASE("Transform", "[.all][transform]")
             LibMath::Transform inverse = base.inverse();
             LibMath::Vector3   invScale = { 1.f / scale.m_x, 1.f / scale.m_y, 1.f / scale.m_z };
 
-            glm::mat4 inverseGlm = glm::translate(idMatGlm, -positionGlm) * glm::toMat4(glm::inverse(rotationGlm)) *
+            glm::mat4 inverseGlm = glm::translate(idMatGlm, -positionGlm) * glm::mat4_cast(glm::inverse(rotationGlm)) *
                 glm::scale(idMatGlm, { 1.f / scaleGlm.x, 1.f / scaleGlm.y, 1.f / scaleGlm.z });
 
             CHECK_TRANSFORM(inverse, -position, rotation.inverse(), invScale, inverseGlm);
@@ -268,7 +271,7 @@ TEST_CASE("Transform", "[.all][transform]")
                     const LibMath::Vector3 lerpScale = LibMath::lerp(scale, scaleOther, alpha);
                     const glm::vec3        lerpScaleGlm = glm::lerp(scaleGlm, scaleOtherGlm, alpha);
 
-                    glm::mat4 lerpMatrixGlm = glm::translate(idMatGlm, lerpPosGlm) * glm::toMat4(slerpRotationGlm) *
+                    glm::mat4 lerpMatrixGlm = glm::translate(idMatGlm, lerpPosGlm) * glm::mat4_cast(slerpRotationGlm) *
                         glm::scale(idMatGlm, lerpScaleGlm);
 
                     CHECK_TRANSFORM(lerpTransform, lerpPos, slerpRotation, lerpScale, lerpMatrixGlm);
@@ -298,7 +301,7 @@ TEST_CASE("Transform", "[.all][transform]")
                     const LibMath::Vector3 lerpScale = LibMath::lerp(scale, scaleOther, alpha);
                     const glm::vec3        lerpScaleGlm = glm::lerp(scaleGlm, scaleOtherGlm, alpha);
 
-                    glm::mat4 lerpMatrixGlm = glm::translate(idMatGlm, lerpPosGlm) * glm::toMat4(slerpRotationGlm) *
+                    glm::mat4 lerpMatrixGlm = glm::translate(idMatGlm, lerpPosGlm) * glm::mat4_cast(slerpRotationGlm) *
                         glm::scale(idMatGlm, lerpScaleGlm);
 
                     CHECK_TRANSFORM(lerpTransform, lerpPos, slerpRotation, lerpScale, lerpMatrixGlm);
@@ -389,7 +392,7 @@ TEST_CASE("Transform", "[.all][transform]")
             {
                 const LibMath::Vector3 right = transform.right();
                 const LibMath::Vector3 worldRight = transform.worldRight();
-                const glm::vec3        rightGlm = glm::rotate(rotationGlm, glm::vec3{ 1, 0, 0 });
+                const glm::vec3        rightGlm = rotationGlm * glm::vec3{ 1, 0, 0 };
 
                 CHECK(right.m_x == Catch::Approx(rightGlm.x));
                 CHECK(right.m_y == Catch::Approx(rightGlm.y));
@@ -400,7 +403,7 @@ TEST_CASE("Transform", "[.all][transform]")
             {
                 const LibMath::Vector3 left = transform.left();
                 const LibMath::Vector3 worldLeft = transform.worldLeft();
-                const glm::vec3        leftGlm = glm::rotate(rotationGlm, glm::vec3{ -1, 0, 0 });
+                const glm::vec3        leftGlm = rotationGlm * glm::vec3{ -1, 0, 0 };
 
                 CHECK(left.m_x == Catch::Approx(leftGlm.x));
                 CHECK(left.m_y == Catch::Approx(leftGlm.y));
@@ -411,7 +414,7 @@ TEST_CASE("Transform", "[.all][transform]")
             {
                 const LibMath::Vector3 up = transform.up();
                 const LibMath::Vector3 worldUp = transform.worldUp();
-                const glm::vec3        upGlm = glm::rotate(rotationGlm, glm::vec3{ 0, 1, 0 });
+                const glm::vec3        upGlm = rotationGlm * glm::vec3{ 0, 1, 0 };
 
                 CHECK(up.m_x == Catch::Approx(upGlm.x));
                 CHECK(up.m_y == Catch::Approx(upGlm.y));
@@ -422,7 +425,7 @@ TEST_CASE("Transform", "[.all][transform]")
             {
                 const LibMath::Vector3 down = transform.down();
                 const LibMath::Vector3 worldDown = transform.worldDown();
-                const glm::vec3        downGlm = glm::rotate(rotationGlm, glm::vec3{ 0, -1, 0 });
+                const glm::vec3        downGlm = rotationGlm * glm::vec3{ 0, -1, 0 };
 
                 CHECK(down.m_x == Catch::Approx(downGlm.x));
                 CHECK(down.m_y == Catch::Approx(downGlm.y));
@@ -433,7 +436,7 @@ TEST_CASE("Transform", "[.all][transform]")
             {
                 const LibMath::Vector3 fwd = transform.forward();
                 const LibMath::Vector3 worldFwd = transform.worldForward();
-                const glm::vec3        fwdGlm = glm::rotate(rotationGlm, glm::vec3{ 0, 0, 1 });
+                const glm::vec3        fwdGlm = rotationGlm * glm::vec3{ 0, 0, 1 };
 
                 CHECK(fwd.m_x == Catch::Approx(fwdGlm.x));
                 CHECK(fwd.m_y == Catch::Approx(fwdGlm.y));
@@ -444,7 +447,7 @@ TEST_CASE("Transform", "[.all][transform]")
             {
                 const LibMath::Vector3 back = transform.back();
                 const LibMath::Vector3 worldBack = transform.worldBack();
-                const glm::vec3        backGlm = glm::rotate(rotationGlm, glm::vec3{ 0, 0, -1 });
+                const glm::vec3        backGlm = rotationGlm * glm::vec3{ 0, 0, -1 };
 
                 CHECK(back.m_x == Catch::Approx(backGlm.x));
                 CHECK(back.m_y == Catch::Approx(backGlm.y));
