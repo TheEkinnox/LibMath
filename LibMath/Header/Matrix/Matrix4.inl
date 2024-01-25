@@ -118,7 +118,7 @@ namespace LibMath
     template <class DataT>
     constexpr TMatrix<4, 4, DataT> rotation(const TVector3<Radian>& angles)
     {
-        return rotation<DataT>(angles.m_y, angles.m_x, angles.m_z);
+        return rotation<DataT>(angles.m_x, angles.m_y, angles.m_z);
     }
 
     template <class DataT>
@@ -280,40 +280,84 @@ namespace LibMath
     template <class DataT>
     constexpr TVector3<Radian> toEuler(const TMatrix<4, 4, DataT>& matrix, const ERotationOrder rotationOrder)
     {
+        using T = floating_t<DataT>;
         TVector3<Radian> angles;
 
         switch (rotationOrder)
         {
         case ERotationOrder::XYZ:
+        {
             angles.m_x = -atan(matrix(1, 2), matrix(2, 2));
-            angles.m_y = asin(matrix(0, 2));
-            angles.m_z = atan(-matrix(0, 1), matrix(0, 0));
+
+            const T c2 = squareRoot(matrix(0, 0) * matrix(0, 0) + matrix(0, 1) * matrix(0, 1));
+            angles.m_y = -atan(-matrix(0, 2), c2);
+
+            const T s1 = sin(-angles.m_x);
+            const T c1 = cos(-angles.m_x);
+            angles.m_z = -atan(s1 * matrix(2, 0) - c1 * matrix(1, 0), c1 * matrix(1, 1) - s1 * matrix(2, 1));
             break;
+        }
         case ERotationOrder::XZY:
+        {
             angles.m_x = atan(matrix(2, 1), matrix(1, 1));
-            angles.m_z = asin(-matrix(0, 1));
-            angles.m_y = atan(matrix(0, 2), matrix(0, 0));
+
+            T c2 = squareRoot(matrix(0, 0) * matrix(0, 0) + matrix(0, 2) * matrix(0, 2));
+            angles.m_z = atan(-matrix(0, 1), c2);
+
+            T s1 = sin(angles.m_x);
+            T c1 = cos(angles.m_x);
+            angles.m_y = atan(s1 * matrix(1, 0) - c1 * matrix(2, 0), c1 * matrix(2, 2) - s1 * matrix(1, 2));
             break;
+        }
         case ERotationOrder::YXZ:
+        {
             angles.m_y = atan(matrix(0, 2), matrix(2, 2));
-            angles.m_x = asin(-matrix(1, 2));
-            angles.m_z = -atan(matrix(1, 0), matrix(1, 1));
+
+            const T c2 = squareRoot(matrix(1, 0) * matrix(1, 0) + matrix(1, 1) * matrix(1, 1));
+            angles.m_x = atan(-matrix(1, 2), c2);
+
+            const T s1 = sin(angles.m_y);
+            const T c1 = cos(angles.m_y);
+            angles.m_z = atan(s1 * matrix(2, 1) - c1 * matrix(0, 1), c1 * matrix(0, 0) - s1 * matrix(2, 0));
+
             break;
+        }
         case ERotationOrder::YZX:
+        {
             angles.m_y = atan(-matrix(2, 0), matrix(0, 0));
-            angles.m_z = asin(matrix(1, 0));
-            angles.m_x = atan(-matrix(1, 2), matrix(1, 1));
+
+            T c2 = squareRoot(matrix(1, 1) * matrix(1, 1) + matrix(1, 2) * matrix(1, 2));
+            angles.m_z = atan(matrix(1, 0), c2);
+
+            T s1 = sin(angles.m_y);
+            T c1 = cos(angles.m_y);
+            angles.m_x = atan(s1 * matrix(0, 1) + c1 * matrix(2, 1), s1 * matrix(0, 2) + c1 * matrix(2, 2));
             break;
+        }
         case ERotationOrder::ZXY:
+        {
             angles.m_z = atan(-matrix(0, 1), matrix(1, 1));
-            angles.m_x = asin(matrix(2, 1));
-            angles.m_y = atan(-matrix(2, 0), matrix(2, 2));
+
+            T c2 = squareRoot(matrix(2, 0) * matrix(2, 0) + matrix(2, 2) * matrix(2, 2));
+            angles.m_x = atan(matrix(2, 1), c2);
+
+            T s1 = sin(angles.m_z);
+            T c1 = cos(angles.m_z);
+            angles.m_y = atan(c1 * matrix(0, 2) + s1 * matrix(1, 2), c1 * matrix(0, 0) + s1 * matrix(1, 0));
             break;
+        }
         case ERotationOrder::ZYX:
+        {
             angles.m_z = atan(matrix(1, 0), matrix(0, 0));
-            angles.m_y = asin(-matrix(2, 0));
-            angles.m_x = atan(matrix(2, 1), matrix(2, 2));
+
+            T c2 = squareRoot(matrix(2, 1) * matrix(2, 1) + matrix(2, 2) * matrix(2, 2));
+            angles.m_y = atan(-matrix(2, 0), c2);
+
+            T s1 = sin(angles.m_z);
+            T c1 = cos(angles.m_z);
+            angles.m_x = atan(s1 * matrix(0, 2) - c1 * matrix(1, 2), c1 * matrix(1, 1) - s1 * matrix(0, 1));
             break;
+        }
         }
 
         return angles;
