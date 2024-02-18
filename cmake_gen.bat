@@ -1,1 +1,0 @@
-cmake -B _solution
