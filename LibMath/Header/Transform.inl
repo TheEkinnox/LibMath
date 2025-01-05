@@ -471,7 +471,7 @@ namespace LibMath
         updateLocalMatrix();
     }
 
-    inline Transform Transform::inverseWorld() const
+    inline Transform Transform::worldInverse() const
     {
         Transform tmp = *this;
         tmp.invertWorld();

@@ -421,11 +421,11 @@ namespace LibMath
          * \brief Computes the inverse of the transform
          * \return The resulting inverse transform
          */
-        [[nodiscard]] inline Transform inverseWorld() const;
+        [[nodiscard]] inline Transform worldInverse() const;
 
-        static inline Transform interpolate(Transform from, const Transform& to, const float t);
+        static inline Transform interpolate(Transform from, const Transform& to, float t);
 
-        static inline Transform interpolateWorld(Transform from, const Transform& to, const float t);
+        static inline Transform interpolateWorld(Transform from, const Transform& to, float t);
 
         /**
          * \brief Generates a transformation matrix from the given position, rotation and scale
