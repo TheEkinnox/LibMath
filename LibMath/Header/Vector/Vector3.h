@@ -23,53 +23,53 @@ namespace LibMath
         /**
          * \brief Returns a vector with all its components set to 0
          */
-        static TVector3 zero();
+        static constexpr TVector3 zero();
 
         /**
          * \brief Returns a vector with all its components set to 1
          */
-        static TVector3 one();
+        static constexpr TVector3 one();
 
         /**
          * \brief Returns a vector pointing upward
          */
-        static TVector3 up();
+        static constexpr TVector3 up();
 
         /**
          * \brief Returns a vector pointing downward
          */
-        static TVector3 down();
+        static constexpr TVector3 down();
 
         /**
          * \brief Returns a vector pointing left
          */
-        static TVector3 left();
+        static constexpr TVector3 left();
 
         /**
          * \brief Returns a vector pointing right
          */
-        static TVector3 right();
+        static constexpr TVector3 right();
 
         /**
          * \brief Returns a vector pointing forward
          */
-        static TVector3 front();
+        static constexpr TVector3 front();
 
         /**
          * \brief Returns a vector pointing backward
          */
-        static TVector3 back();
+        static constexpr TVector3 back();
 
         /**
          * \brief Creates a default vector
          */
-        TVector3() = default;
+        constexpr TVector3() = default;
 
         /**
          * \brief Creates a vector with the given value for all its components
          * \param value The vector's components value
          */
-        explicit TVector3(T value);
+        explicit constexpr TVector3(T value);
 
         /**
          * \brief Creates a vector with the given component values
@@ -77,7 +77,7 @@ namespace LibMath
          * \param y The vector's y value
          * \param z The vector's z value
          */
-        TVector3(T x, T y, T z);
+        constexpr TVector3(T x, T y, T z);
 
         /**
          * \brief Creates a copy of the given vector
@@ -85,7 +85,7 @@ namespace LibMath
          * \param other The copied vector
          */
         template <class U>
-        TVector3(const TVector3<U>& other);
+        constexpr TVector3(const TVector3<U>& other);
 
         /**
          * \brief Creates a move copy of the given vector
@@ -93,12 +93,12 @@ namespace LibMath
          * \param other The moved vector
          */
         template <class U>
-        TVector3(TVector3<U>&& other);
+        constexpr TVector3(TVector3<U>&& other);
 
         /**
          * \brief Destroys the vector
          */
-        ~TVector3() = default;
+        constexpr ~TVector3() = default;
 
         /**
          * \brief Assigns a copy of the given vector to the current one
@@ -107,7 +107,7 @@ namespace LibMath
          * \return The modified vector
          */
         template <class U>
-        TVector3& operator=(const TVector3<U>& other);
+        constexpr TVector3& operator=(const TVector3<U>& other);
 
         /**
          * \brief Assigns a move copy of the given vector to the current one
@@ -116,21 +116,21 @@ namespace LibMath
          * \return The modified vector
          */
         template <class U>
-        TVector3& operator=(TVector3<U>&& other);
+        constexpr TVector3& operator=(TVector3<U>&& other);
 
         /**
          * \brief Gets the vector's component at the given index (0/'x', 1/'y', 2/'z')
          * \param index The component's index
          * \return The component at the given index
          */
-        T& operator[](int index);
+        constexpr T& operator[](int index);
 
         /**
          * \brief Gets the vector's component at the given index (0/'x', 1/'y', 2/'z')
          * \param index The component's index
          * \return The component at the given index
          */
-        T operator[](int index) const;
+        constexpr T operator[](int index) const;
 
         /**
          * \brief Adds the given vector to the current one
@@ -139,7 +139,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator+=(const TVector3<U>& other);
+        constexpr TVector3& operator+=(const TVector3<U>& other);
 
         /**
          * \brief Subtracts the given vector from the current one
@@ -148,7 +148,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator-=(const TVector3<U>& other);
+        constexpr TVector3& operator-=(const TVector3<U>& other);
 
         /**
          * \brief Multiplies the current vector by the given one
@@ -157,7 +157,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator*=(const TVector3<U>& other);
+        constexpr TVector3& operator*=(const TVector3<U>& other);
 
         /**
          * \brief Divides the current vector by the given one
@@ -166,7 +166,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator/=(const TVector3<U>& other);
+        constexpr TVector3& operator/=(const TVector3<U>& other);
 
         /**
          * \brief Adds the given value to all of the vector's components
@@ -175,7 +175,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator+=(U value);
+        constexpr TVector3& operator+=(U value);
 
         /**
          * \brief Subtracts the given value from all of the vector's components
@@ -184,7 +184,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator-=(U value);
+        constexpr TVector3& operator-=(U value);
 
         /**
          * \brief Multiplies the current vector by the given scalar
@@ -193,7 +193,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator*=(U value);
+        constexpr TVector3& operator*=(U value);
 
         /**
          * \brief Divides the current vector by the given scalar
@@ -202,7 +202,7 @@ namespace LibMath
          * \return A reference to the modified vector
          */
         template <class U>
-        TVector3& operator/=(U value);
+        constexpr TVector3& operator/=(U value);
 
         /**
          * \brief Gets the vector as an array
@@ -239,7 +239,7 @@ namespace LibMath
          * \param other The vector relative to which the cross product should be calculated
          * \return The cross product of the two vectors
          */
-        TVector3 cross(const TVector3& other) const;
+        constexpr TVector3 cross(const TVector3& other) const;
 
         /**
          * \brief Computes the distance between this vector and the given one
@@ -247,7 +247,7 @@ namespace LibMath
          * \param other The vector from which the distance should be calculated
          * \return The distance between the two vectors
          */
-        T distanceFrom(const TVector3& other) const;
+        constexpr T distanceFrom(const TVector3& other) const;
 
         /**
          * \brief Computes the squared distance between this vector and the given one
@@ -255,7 +255,7 @@ namespace LibMath
          * \param other The vector from which the squared distance should be calculated
          * \return The squared distance between the vectors
          */
-        T distanceSquaredFrom(const TVector3& other) const;
+        constexpr T distanceSquaredFrom(const TVector3& other) const;
 
         /**
          * \brief Computes the distance between this vector and the given one on the x and y axis only
@@ -263,7 +263,7 @@ namespace LibMath
          * \param other The vector from which the distance should be calculated
          * \return The distance between the two vectors
          */
-        T distance2DFrom(const TVector3& other) const;
+        constexpr T distance2DFrom(const TVector3& other) const;
 
         /**
          * \brief Computes the squared distance between this vector and the given one on the x and y axis only
@@ -271,7 +271,7 @@ namespace LibMath
          * \param other The vector from which the squared distance should be calculated
          * \return The squared distance between the vectors
          */
-        T distance2DSquaredFrom(const TVector3& other) const;
+        constexpr T distance2DSquaredFrom(const TVector3& other) const;
 
         /**
          * \brief Computes the dot product of the current vector and the other one
@@ -280,7 +280,7 @@ namespace LibMath
          * \return The dot product of the two vectors
          */
         template <class U>
-        T dot(const TVector3<U>& other) const;
+        constexpr T dot(const TVector3<U>& other) const;
 
         /**
          * \brief Checks whether this vector's magnitude is greater than the given one's
@@ -289,7 +289,7 @@ namespace LibMath
          * \return True if this vector's magnitude is greater than the other's. False otherwise
          */
         template <class U>
-        bool isLongerThan(const TVector3<U>& other) const;
+        constexpr bool isLongerThan(const TVector3<U>& other) const;
 
         /**
          * \brief Checks whether this vector's magnitude is smaller than the given one's
@@ -298,25 +298,25 @@ namespace LibMath
          * \return True if this vector's magnitude is smaller than the other's. False otherwise
          */
         template <class U>
-        bool isShorterThan(const TVector3<U>& other) const;
+        constexpr bool isShorterThan(const TVector3<U>& other) const;
 
         /**
          * \brief Checks whether this vector's magnitude is 1
          * \return True if this vector is a unit vector. False otherwise
          */
-        bool isUnitVector() const;
+        constexpr bool isUnitVector() const;
 
         /**
          * \brief Computes this vector's magnitude
          * \return This vector's magnitude
          */
-        T magnitude() const;
+        constexpr T magnitude() const;
 
         /**
          * \brief Computes this vector's squared magnitude
          * \return This vector's squared magnitude
          */
-        T magnitudeSquared() const;
+        constexpr T magnitudeSquared() const;
 
         /**
          * \brief Normalizes the vector
@@ -327,7 +327,7 @@ namespace LibMath
          * \brief Returns a normalized copy of the vector
          * \return The normalized vector
          */
-        TVector3 normalized() const;
+        constexpr TVector3 normalized() const;
 
         /**
          * \brief Projects this vector on the given normal
@@ -368,13 +368,13 @@ namespace LibMath
          * \brief Scales this vector by the given one
          * \param other The vector to scale this one by
          */
-        void scale(const TVector3& other);
+        constexpr void scale(const TVector3& other);
 
         /**
          * \brief Offsets this vector by the given one
-         * \param other The vector by which this one should be translate
+         * \param other The vector by which this one should be translated
          */
-        void translate(const TVector3& other);
+        constexpr void translate(const TVector3& other);
 
         /**
          * \brief Gets a string representation of this vector
@@ -402,7 +402,7 @@ namespace LibMath
      * \return True if the left and right vectors' components are equal. False otherwise
      */
     template <class T, class U>
-    bool operator==(const TVector3<T>& left, const TVector3<U>& right);
+    constexpr bool operator==(const TVector3<T>& left, const TVector3<U>& right);
 
     /**
      * \brief Checks whether two vectors' components are different
@@ -413,7 +413,7 @@ namespace LibMath
      * \return True if the left and right vectors' components are different. False otherwise
      */
     template <class T, class U>
-    bool operator!=(const TVector3<T>& left, const TVector3<U>& right);
+    constexpr bool operator!=(const TVector3<T>& left, const TVector3<U>& right);
 
     /**
      * \brief Checks whether the left vector's magnitude is greater than the right vector's magnitude
@@ -424,7 +424,7 @@ namespace LibMath
      * \return True if the left vector has a greater magnitude. False otherwise
      */
     template <class T, class U>
-    bool operator>(const TVector3<T>& left, const TVector3<U>& right);
+    constexpr bool operator>(const TVector3<T>& left, const TVector3<U>& right);
 
     /**
      * \brief Checks whether the left vector's magnitude is smaller than the right vector's magnitude
@@ -435,7 +435,7 @@ namespace LibMath
      * \return True if the left vector has a smaller magnitude. False otherwise
      */
     template <class T, class U>
-    bool operator<(const TVector3<T>& left, const TVector3<U>& right);
+    constexpr bool operator<(const TVector3<T>& left, const TVector3<U>& right);
 
     /**
      * \brief Checks whether the left vector's magnitude is greater than or equal to the right vector's magnitude
@@ -446,7 +446,7 @@ namespace LibMath
      * \return True if the left vector has a greater or equal magnitude. False otherwise
      */
     template <class T, class U>
-    bool operator>=(const TVector3<T>& left, const TVector3<U>& right);
+    constexpr bool operator>=(const TVector3<T>& left, const TVector3<U>& right);
 
     /**
      * \brief Checks whether the left vector's magnitude is smaller than or equal the right vector's magnitude
@@ -457,7 +457,7 @@ namespace LibMath
      * \return True if the left vector has a smaller or equal magnitude. False otherwise
      */
     template <class T, class U>
-    bool operator<=(const TVector3<T>& left, const TVector3<U>& right);
+    constexpr bool operator<=(const TVector3<T>& left, const TVector3<U>& right);
 
     /**
      * \brief Creates a copy of the given vector with all its components inverted
@@ -466,7 +466,7 @@ namespace LibMath
      * \return A copy of the vector with all its components inverted
      */
     template <class T>
-    TVector3<T> operator-(const TVector3<T>& vector);
+    constexpr TVector3<T> operator-(const TVector3<T>& vector);
 
     /**
      * \brief Adds the right vector to the left one
@@ -477,7 +477,7 @@ namespace LibMath
      * \return The sum of the left and right vector
      */
     template <class T, class U>
-    TVector3<T> operator+(TVector3<T> left, const TVector3<U>& right);
+    constexpr TVector3<T> operator+(TVector3<T> left, const TVector3<U>& right);
 
     /**
      * \brief Subtract the right vector from the left one
@@ -488,7 +488,7 @@ namespace LibMath
      * \return The difference of the left and right vectors
      */
     template <class T, class U>
-    TVector3<T> operator-(TVector3<T> left, const TVector3<U>& right);
+    constexpr TVector3<T> operator-(TVector3<T> left, const TVector3<U>& right);
 
     /**
      * \brief Multiplies the left vector by the right one
@@ -499,7 +499,7 @@ namespace LibMath
      * \return The left vector multiplied by the right vector
      */
     template <class T, class U>
-    TVector3<T> operator*(TVector3<T> left, const TVector3<U>& right);
+    constexpr TVector3<T> operator*(TVector3<T> left, const TVector3<U>& right);
 
     /**
      * \brief Divides the left vector by the right one
@@ -510,7 +510,7 @@ namespace LibMath
      * \return The left vector divided by the right vector
      */
     template <class T, class U>
-    TVector3<T> operator/(TVector3<T> left, const TVector3<U>& right);
+    constexpr TVector3<T> operator/(TVector3<T> left, const TVector3<U>& right);
 
     /**
      * \brief Adds the given value to all of the vector's components
@@ -521,7 +521,7 @@ namespace LibMath
      * \return The vector with the value added to all its components
      */
     template <class T, class U>
-    TVector3<T> operator+(TVector3<T> vector, U value);
+    constexpr TVector3<T> operator+(TVector3<T> vector, U value);
 
     /**
      * \brief Subtracts a value from all of the vector's components
@@ -532,7 +532,7 @@ namespace LibMath
      * \return The vector with the value subtracted from all of its components
      */
     template <class T, class U>
-    TVector3<T> operator-(TVector3<T> vector, U value);
+    constexpr TVector3<T> operator-(TVector3<T> vector, U value);
 
     /**
      * \brief Multiplies the given vector by a scalar
@@ -543,7 +543,7 @@ namespace LibMath
      * \return The vector multiplied by the scalar
      */
     template <class T, class U>
-    TVector3<T> operator*(TVector3<T> vector, U scalar);
+    constexpr TVector3<T> operator*(TVector3<T> vector, U scalar);
 
     /**
      * \brief Multiplies the given vector by a scalar
@@ -554,7 +554,7 @@ namespace LibMath
      * \return The vector multiplied by the scalar
      */
     template <class T, class U>
-    TVector3<U> operator*(U scalar, TVector3<T> vector);
+    constexpr TVector3<U> operator*(U scalar, TVector3<T> vector);
 
     /**
      * \brief Divides the given vector by a scalar
@@ -565,7 +565,7 @@ namespace LibMath
      * \return The vector divided by the scalar
      */
     template <class T, class U>
-    TVector3<T> operator/(TVector3<T> vector, U scalar);
+    constexpr TVector3<T> operator/(TVector3<T> vector, U scalar);
 
     /**
      * \brief Adds a vector string representation to an output stream

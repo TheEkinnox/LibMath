@@ -1,5 +1,4 @@
 #include <Vector/Vector3.h>
-#include <Angle/Radian.h>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_XYZW_ONLY
@@ -30,114 +29,181 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
         }
 
         // basic constructor
-        LibMath::Vector3 oneParam{ 2.5f };
-        glm::vec3        oneParamGlm{ 2.5f };
+        constexpr LibMath::Vector3 oneParam{ 2.5f };
+        constexpr glm::vec3        oneParamGlm{ 2.5f };
         CHECK_VECTOR3(oneParam, oneParamGlm);
 
-        LibMath::Vector3 allParam{ 2.5f, .5f, 2.f };
-        glm::vec3        allParamGlm{ 2.5f, .5f, 2.f };
+        constexpr LibMath::Vector3 allParam{ 2.5f, .5f, 2.f };
+        constexpr glm::vec3        allParamGlm{ 2.5f, .5f, 2.f };
         CHECK_VECTOR3(allParam, allParamGlm);
 
         // copy constructor
-        LibMath::Vector3 copy{ allParam };
-        glm::vec3        copyGlm{ allParamGlm };
+        constexpr LibMath::Vector3 copy{ allParam };
+        constexpr glm::vec3        copyGlm{ allParamGlm };
         CHECK_VECTOR3(copy, copyGlm);
 
-        LibMath::Vector3I iCopy{ allParam };
-        glm::ivec3        iCopyGlm{ allParamGlm };
+        constexpr LibMath::Vector3I iCopy{ allParam };
+        constexpr glm::ivec3        iCopyGlm{ allParamGlm };
         CHECK_VECTOR3(iCopy, iCopyGlm);
 
         // assignment operator
-        empty = allParam;
+        empty    = allParam;
         emptyGlm = allParamGlm;
         CHECK_VECTOR3(empty, emptyGlm);
 
-        empty = iCopy;
+        empty    = iCopy;
         emptyGlm = iCopyGlm;
         CHECK_VECTOR3(empty, emptyGlm);
 
-        CHECK(sizeof(LibMath::Vector3) == sizeof(glm::vec3));
+        STATIC_CHECK(sizeof(LibMath::Vector3) == sizeof(glm::vec3));
     }
 
     SECTION("Accessor")
     {
-        constexpr float  x = 2.5f;
-        constexpr float  y = .5f;
-        constexpr float  z = 2.f;
-        LibMath::Vector3 vector{ x, y, z };
+        constexpr float x = 2.5f;
+        constexpr float y = .5f;
+        constexpr float z = 2.f;
 
         {
-            const LibMath::Vector3& vectorConst = vector;
-            CHECK(vectorConst[0] == Catch::Approx(x));
-            CHECK(vectorConst[1] == Catch::Approx(y));
-            CHECK(vectorConst[2] == Catch::Approx(z));
+            constexpr LibMath::Vector3 vector{ x, y, z };
+            CHECK(vector[0] == Catch::Approx(x));
+            CHECK(vector['x'] == Catch::Approx(x));
+            CHECK(vector['X'] == Catch::Approx(x));
+
+            CHECK(vector[1] == Catch::Approx(y));
+            CHECK(vector['y'] == Catch::Approx(y));
+            CHECK(vector['Y'] == Catch::Approx(y));
+
+            CHECK(vector[2] == Catch::Approx(z));
+            CHECK(vector['z'] == Catch::Approx(z));
+            CHECK(vector['Z'] == Catch::Approx(z));
         }
 
         {
+            LibMath::Vector3 vector{ x, y, z };
+            CHECK(vector[0] == Catch::Approx(x));
+            CHECK(vector['x'] == Catch::Approx(x));
+            CHECK(vector['X'] == Catch::Approx(x));
+
+            CHECK(vector[1] == Catch::Approx(y));
+            CHECK(vector['y'] == Catch::Approx(y));
+            CHECK(vector['Y'] == Catch::Approx(y));
+
+            CHECK(vector[2] == Catch::Approx(z));
+            CHECK(vector['z'] == Catch::Approx(z));
+            CHECK(vector['Z'] == Catch::Approx(z));
+
             vector[0] += 1.f;
             vector[1] += 1.f;
             vector[2] += 1.f;
+
             CHECK(vector[0] == Catch::Approx(x + 1.f));
+            CHECK(vector['x'] == Catch::Approx(x + 1.f));
+            CHECK(vector['X'] == Catch::Approx(x + 1.f));
+
             CHECK(vector[1] == Catch::Approx(y + 1.f));
+            CHECK(vector['y'] == Catch::Approx(y + 1.f));
+            CHECK(vector['Y'] == Catch::Approx(y + 1.f));
+
             CHECK(vector[2] == Catch::Approx(z + 1.f));
+            CHECK(vector['z'] == Catch::Approx(z + 1.f));
+            CHECK(vector['Z'] == Catch::Approx(z + 1.f));
         }
     }
 
     SECTION("Comparator")
     {
         // compare with self
-        LibMath::Vector3 self{ 2.5f, .5f, 2.f };
-        CHECK(self == self);
+        constexpr LibMath::Vector3 self{ 2.5f, .5f, 2.f };
+        STATIC_CHECK(self == self);
+        STATIC_CHECK_FALSE(self != self);
 
         // compare with same
-        CHECK(LibMath::Vector3{ 2.5f, .5f, 2.f } == LibMath::Vector3{ 2.5f, .5f, 2.f });
+        STATIC_CHECK(LibMath::Vector3{ 2.5f, .5f, 2.f } == LibMath::Vector3{ 2.5f, .5f, 2.f });
+        STATIC_CHECK_FALSE(LibMath::Vector3{ 2.5f, .5f, 2.f } != LibMath::Vector3{ 2.5f, .5f, 2.f });
 
         // trying to find copy/paste mistake
-        LibMath::Vector3 twos{ 2.f, 2.f, 2.f };
-        CHECK_FALSE(LibMath::Vector3{ .5f, 2.f, 2.f } == twos);
-        CHECK_FALSE(LibMath::Vector3{ 2.f, .5f, 2.f } == twos);
-        CHECK_FALSE(LibMath::Vector3{ 2.f, 2.f, .5f } == twos);
-        CHECK_FALSE(twos == LibMath::Vector3{ .5f, 2.f, 2.f });
-        CHECK_FALSE(twos == LibMath::Vector3{ 2.f, .5f, 2.f });
-        CHECK_FALSE(twos == LibMath::Vector3{ 2.f, 2.f, .5f });
+        constexpr LibMath::Vector3 twos{ 2.f, 2.f, 2.f };
+        STATIC_CHECK_FALSE(LibMath::Vector3{ .5f, 2.f, 2.f } == twos);
+        STATIC_CHECK_FALSE(LibMath::Vector3{ 2.f, .5f, 2.f } == twos);
+        STATIC_CHECK_FALSE(LibMath::Vector3{ 2.f, 2.f, .5f } == twos);
+        STATIC_CHECK_FALSE(twos == LibMath::Vector3{ .5f, 2.f, 2.f });
+        STATIC_CHECK_FALSE(twos == LibMath::Vector3{ 2.f, .5f, 2.f });
+        STATIC_CHECK_FALSE(twos == LibMath::Vector3{ 2.f, 2.f, .5f });
 
-        // testing comparaision fonctionnality
-        LibMath::Vector3 small{ 2.5f, .5f, 2.f };
-        LibMath::Vector3 big{ 3.75f, 3.f, .75f };
+        STATIC_CHECK(LibMath::Vector3{ .5f, 2.f, 2.f } != twos);
+        STATIC_CHECK(LibMath::Vector3{ 2.f, .5f, 2.f } != twos);
+        STATIC_CHECK(LibMath::Vector3{ 2.f, 2.f, .5f } != twos);
+        STATIC_CHECK(twos != LibMath::Vector3{ .5f, 2.f, 2.f });
+        STATIC_CHECK(twos != LibMath::Vector3{ 2.f, .5f, 2.f });
+        STATIC_CHECK(twos != LibMath::Vector3{ 2.f, 2.f, .5f });
 
-        CHECK(big.isLongerThan(small));
-        CHECK_FALSE(small.isLongerThan(big));
+        // testing comparision functionality
+        constexpr LibMath::Vector3 small{ 2.5f, .5f, 2.f };
+        constexpr LibMath::Vector3 big{ 3.75f, 3.f, .75f };
+        constexpr LibMath::Vector3 big2{ 3.f, 3.75f, .75f };
 
-        CHECK(small.isShorterThan(big));
-        CHECK_FALSE(big.isShorterThan(small));
+        STATIC_CHECK_FALSE(big2 == big);
 
-        CHECK_FALSE(self.isUnitVector());
-        CHECK(LibMath::Vector3{ 0.771516740f, 0.154303357f, 0.617213428f }.isUnitVector());
+        {
+            STATIC_CHECK(big.isLongerThan(small));
+            STATIC_CHECK_FALSE(small.isLongerThan(big));
+
+            STATIC_CHECK(big > small);
+            STATIC_CHECK_FALSE(small > big);
+            STATIC_CHECK_FALSE(big2 > big);
+        }
+
+        {
+            STATIC_CHECK(small.isShorterThan(big));
+            STATIC_CHECK_FALSE(big.isShorterThan(small));
+
+            STATIC_CHECK(small < big);
+            STATIC_CHECK_FALSE(big < small);
+            STATIC_CHECK_FALSE(big2 < big);
+        }
+
+        {
+            STATIC_CHECK(small <= big);
+            STATIC_CHECK(big <= big);
+            STATIC_CHECK(big2 <= big);
+            STATIC_CHECK_FALSE(big <= small);
+        }
+
+        {
+            STATIC_CHECK(big >= small);
+            STATIC_CHECK(big >= big);
+            STATIC_CHECK(big2 >= big);
+            STATIC_CHECK_FALSE(small >= big);
+        }
+
+        STATIC_CHECK_FALSE(self.isUnitVector());
+        STATIC_CHECK(LibMath::Vector3{ 0.771516740f, 0.154303357f, 0.617213428f }.isUnitVector());
     }
 
     SECTION("Constant")
     {
-        CHECK_VECTOR3(LibMath::Vector3::back(), glm::vec3(0.f, 0.f, -1.f));
-
-        CHECK_VECTOR3(LibMath::Vector3::down(), glm::vec3(0.f, -1.f, 0.f));
-
-        CHECK_VECTOR3(LibMath::Vector3::front(), glm::vec3(0.f, 0.f, 1.f));
-
-        CHECK_VECTOR3(LibMath::Vector3::left(), glm::vec3(-1.f, 0.f, 0.f));
+        CHECK_VECTOR3(LibMath::Vector3::zero(), glm::vec3(0.f, 0.f, 0.f));
 
         CHECK_VECTOR3(LibMath::Vector3::one(), glm::vec3(1.f, 1.f, 1.f));
 
-        CHECK_VECTOR3(LibMath::Vector3::right(), glm::vec3(1.f, 0.f, 0.f));
-
         CHECK_VECTOR3(LibMath::Vector3::up(), glm::vec3(0.f, 1.f, 0.f));
 
-        CHECK_VECTOR3(LibMath::Vector3::zero(), glm::vec3(0.f, 0.f, 0.f));
+        CHECK_VECTOR3(LibMath::Vector3::down(), glm::vec3(0.f, -1.f, 0.f));
+
+        CHECK_VECTOR3(LibMath::Vector3::left(), glm::vec3(-1.f, 0.f, 0.f));
+
+        CHECK_VECTOR3(LibMath::Vector3::right(), glm::vec3(1.f, 0.f, 0.f));
+
+        CHECK_VECTOR3(LibMath::Vector3::front(), glm::vec3(0.f, 0.f, 1.f));
+
+        CHECK_VECTOR3(LibMath::Vector3::back(), glm::vec3(0.f, 0.f, -1.f));
     }
 
     SECTION("Arithmetic")
     {
-        const LibMath::Vector3 small{ 2.5f, .5f, 2.f };
-        const LibMath::Vector3 big{ 3.75f, 3.f, .75f };
+        constexpr LibMath::Vector3 small{ 2.5f, .5f, 2.f };
+        constexpr LibMath::Vector3 big{ 3.75f, 3.f, .75f };
 
         constexpr glm::vec3 smallGlm{ 2.5f, .5f, 2.f };
         constexpr glm::vec3 bigGlm{ 3.75f, 3.f, .75f };
@@ -157,9 +223,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
             }
 
             {
-                LibMath::Vector3 sum = big + small;
-
-                glm::vec3 sumGlm = bigGlm + smallGlm;
+                constexpr LibMath::Vector3 sum    = big + small;
+                constexpr glm::vec3        sumGlm = bigGlm + smallGlm;
 
                 CHECK_VECTOR3(sum, sumGlm);
             }
@@ -167,9 +232,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
         SECTION("Inverse")
         {
-            LibMath::Vector3 inverse = -LibMath::Vector3{ 3.7f, 3.f, .7f };
-
-            glm::vec3 inverseGlm = -glm::vec3{ 3.7f, 3.f, .7f };
+            constexpr LibMath::Vector3 inverse    = -LibMath::Vector3{ 3.7f, 3.f, .7f };
+            constexpr glm::vec3        inverseGlm = -glm::vec3{ 3.7f, 3.f, .7f };
 
             CHECK_VECTOR3(inverse, inverseGlm);
         }
@@ -187,9 +251,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
             }
 
             {
-                LibMath::Vector3 difference = big - small;
-
-                glm::vec3 differenceGlm = bigGlm - smallGlm;
+                constexpr LibMath::Vector3 difference    = big - small;
+                constexpr glm::vec3        differenceGlm = bigGlm - smallGlm;
 
                 CHECK_VECTOR3(difference, differenceGlm);
             }
@@ -208,9 +271,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
             }
 
             {
-                LibMath::Vector3 product = big * small;
-
-                glm::vec3 productGlm = bigGlm * smallGlm;
+                constexpr LibMath::Vector3 product    = big * small;
+                constexpr glm::vec3        productGlm = bigGlm * smallGlm;
 
                 CHECK_VECTOR3(product, productGlm);
             }
@@ -226,9 +288,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
             }
 
             {
-                LibMath::Vector3 product = big * scalar;
-
-                glm::vec3 productGlm = bigGlm * scalar;
+                constexpr LibMath::Vector3 product    = big * scalar;
+                constexpr glm::vec3        productGlm = bigGlm * scalar;
 
                 CHECK_VECTOR3(product, productGlm);
             }
@@ -247,9 +308,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
             }
 
             {
-                LibMath::Vector3 quotient = big / small;
-
-                glm::vec3 quotientGlm = bigGlm / smallGlm;
+                constexpr LibMath::Vector3 quotient    = big / small;
+                constexpr glm::vec3        quotientGlm = bigGlm / smallGlm;
 
                 CHECK_VECTOR3(quotient, quotientGlm);
             }
@@ -265,9 +325,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
             }
 
             {
-                LibMath::Vector3 quotient = big / scalar;
-
-                glm::vec3 quotientGlm = bigGlm / scalar;
+                constexpr LibMath::Vector3 quotient    = big / scalar;
+                constexpr glm::vec3        quotientGlm = bigGlm / scalar;
 
                 CHECK_VECTOR3(quotient, quotientGlm);
             }
@@ -276,8 +335,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
     SECTION("Transformation")
     {
-        const LibMath::Vector3 origin{ 2.5f, .5f, 2.f };
-        const LibMath::Vector3 transformation{ -2.f, 0.f, 1.25f };
+        constexpr LibMath::Vector3 origin{ 2.5f, .5f, 2.f };
+        constexpr LibMath::Vector3 transformation{ -2.f, 0.f, 1.25f };
 
         constexpr glm::vec4 originGlm{ 2.5f, .5f, 2.f, 1.f };
         constexpr glm::vec3 transformationGlm{ -2.f, 0.f, 1.25f };
@@ -339,8 +398,8 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
     SECTION("Functionality")
     {
-        const LibMath::Vector3 base{ 2.5f, .5f, 2.f };
-        const LibMath::Vector3 other{ 3.75f, 3.f, .75f };
+        constexpr LibMath::Vector3 base{ 2.5f, .5f, 2.f };
+        constexpr LibMath::Vector3 other{ 3.75f, 3.f, .75f };
 
         constexpr glm::vec3 baseGlm{ 2.5f, .5f, 2.f };
         constexpr glm::vec3 otherGlm{ 3.75f, 3.f, .75f };
@@ -359,18 +418,16 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
         SECTION("Cross")
         {
-            LibMath::Vector3 cross = base.cross(other);
-
-            glm::vec3 crossGlm = glm::cross(baseGlm, otherGlm);
+            constexpr LibMath::Vector3 cross    = base.cross(other);
+            constexpr glm::vec3        crossGlm = glm::cross(baseGlm, otherGlm);
 
             CHECK_VECTOR3(cross, crossGlm);
         }
 
         SECTION("Dot")
         {
-            float dot = base.dot(other);
-
-            float dotGlm = glm::dot(baseGlm, otherGlm);
+            constexpr float dot    = base.dot(other);
+            constexpr float dotGlm = glm::dot(baseGlm, otherGlm);
 
             CHECK(dot == Catch::Approx(dotGlm));
         }
@@ -378,33 +435,29 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
         SECTION("Distance")
         {
             {
-                float distance = base.distanceFrom(other);
-
-                float distanceGlm = glm::distance(baseGlm, otherGlm);
+                constexpr float distance    = base.distanceFrom(other);
+                float           distanceGlm = glm::distance(baseGlm, otherGlm);
 
                 CHECK(distance == Catch::Approx(distanceGlm));
             }
 
             {
-                float distanceSquare = base.distanceSquaredFrom(other);
-
-                float distanceSquareGlm = glm::distance2(baseGlm, otherGlm);
+                constexpr float distanceSquare    = base.distanceSquaredFrom(other);
+                float           distanceSquareGlm = glm::distance2(baseGlm, otherGlm);
 
                 CHECK(distanceSquare == Catch::Approx(distanceSquareGlm));
             }
 
             {
-                float distance2D = base.distance2DFrom(other);
-
-                float distance2DGlm = glm::distance(glm::vec2(baseGlm), glm::vec2(otherGlm));
+                constexpr float distance2D    = base.distance2DFrom(other);
+                float           distance2DGlm = glm::distance(glm::vec2(baseGlm), glm::vec2(otherGlm));
 
                 CHECK(distance2D == Catch::Approx(distance2DGlm));
             }
 
             {
-                float distance2DSquare = base.distance2DSquaredFrom(other);
-
-                float distance2DSquareGlm = glm::distance2(glm::vec2(baseGlm), glm::vec2(otherGlm));
+                constexpr float distance2DSquare    = base.distance2DSquaredFrom(other);
+                float           distance2DSquareGlm = glm::distance2(glm::vec2(baseGlm), glm::vec2(otherGlm));
 
                 CHECK(distance2DSquare == Catch::Approx(distance2DSquareGlm));
             }
@@ -413,17 +466,15 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
         SECTION("Magnitude")
         {
             {
-                float magnitude = base.magnitude();
-
-                float magnitudeGlm = glm::length(baseGlm);
+                constexpr float magnitude    = base.magnitude();
+                float           magnitudeGlm = glm::length(baseGlm);
 
                 CHECK(magnitude == Catch::Approx(magnitudeGlm));
             }
 
             {
-                float magnitudeSquare = base.magnitudeSquared();
-
-                float magnitudeSquareGlm = glm::length2(baseGlm);
+                constexpr float magnitudeSquare    = base.magnitudeSquared();
+                float           magnitudeSquareGlm = glm::length2(baseGlm);
 
                 CHECK(magnitudeSquare == Catch::Approx(magnitudeSquareGlm));
             }
@@ -431,12 +482,14 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
         SECTION("Normal")
         {
-            LibMath::Vector3 normalize = base;
+            constexpr LibMath::Vector3 normalized = base.normalized();
+            LibMath::Vector3           normalize  = base;
             normalize.normalize();
 
             glm::vec3 normalizeGlm = glm::normalize(baseGlm);
 
             CHECK_VECTOR3(normalize, normalizeGlm);
+            CHECK_VECTOR3(normalized, normalizeGlm);
         }
 
         SECTION("ProjectOnto")
@@ -462,7 +515,7 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
 
     SECTION("Extra")
     {
-        const LibMath::Vector3 input{ 2.5f, -.5f, 2.f };
+        constexpr LibMath::Vector3 input{ 2.5f, -.5f, 2.f };
         {
             std::stringstream buffer;
             buffer << input;
@@ -489,10 +542,12 @@ TEST_CASE("Vector3", "[.all][vector][Vector3]")
     SECTION("Debug")
     {
 #if (defined _DEBUG) || (! defined NDEBUG)
-        LibMath::Vector3 vector{ 2.5f, .5f, 2.f };
+        constexpr LibMath::Vector3 vector{ 2.5f, .5f, 2.f };
 
         CHECK_THROWS(vector[-1]);
         CHECK_THROWS(vector[3]);
+        CHECK_THROWS(vector['w']);
+        CHECK_THROWS(vector['W']);
 #endif // DEBUG
     }
 }
