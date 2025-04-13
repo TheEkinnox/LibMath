@@ -27,6 +27,7 @@ file(GLOB_RECURSE HEADER_FILES
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${TARGET_FILES})
 
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 ###############################
 #                             #
@@ -39,8 +40,12 @@ Include(FetchContent)
 FetchContent_Declare(
 	Catch2
 	GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-	GIT_TAG        v3.0.1 # or a later release
+	GIT_TAG        v3.8.1
 )
+
+set(CATCH_DEVELOPMENT_BUILD OFF)
+set(CATCH_INSTALL_DOCS OFF)
+set(CATCH_INSTALL_EXTRAS OFF)
 
 FetchContent_MakeAvailable(Catch2)
 
@@ -55,13 +60,15 @@ FetchContent_MakeAvailable(Catch2)
 FetchContent_Declare(
 	glm
 	GIT_REPOSITORY https://github.com/g-truc/glm.git
-	GIT_TAG		   1.0.0
+	GIT_TAG        1.0.1
 )
+
+set(GLM_BUILD_TESTS OFF)
+set(GLM_TEST_ENABLE OFF)
 
 FetchContent_GetProperties(glm)
 if(NOT glm_POPULATED)
 	FetchContent_Populate(glm)
-	set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
 	add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
 endif()
 
