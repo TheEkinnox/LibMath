@@ -480,7 +480,7 @@ TEST_CASE("Vector2", "[.all][vector][Vector2]")
 
     SECTION("Debug")
     {
-#if (defined _DEBUG) || (! defined NDEBUG)
+#if defined(_DEBUG) || defined(DEBUG) || !defined(NDEBUG)
         constexpr LibMath::Vector2 vector{ 2.5f, .5f };
 
         CHECK_THROWS(vector[-1]);

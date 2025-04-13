@@ -507,7 +507,7 @@ TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 
     SECTION("Debug")
     {
-#if (defined _DEBUG) || (! defined NDEBUG)
+#if defined(_DEBUG) || defined(DEBUG) || !defined(NDEBUG)
         LibMath::Matrix3 matrix{};
 
         CHECK_THROWS(matrix[matrix.getIndex(-1, 0)]);

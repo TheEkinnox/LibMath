@@ -791,7 +791,7 @@ TEST_CASE("Quaternion", "[.all][quaternion]")
 
     SECTION("Debug")
     {
-#if (defined _DEBUG) || (! defined NDEBUG)
+#if defined(_DEBUG) || defined(DEBUG) || !defined(NDEBUG)
         LibMath::Quaternion quaternion{ 2.5f };
 
         CHECK_THROWS(quaternion[-1]);
