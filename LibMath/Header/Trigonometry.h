@@ -5,9 +5,9 @@ namespace LibMath
 {
     class Radian;
 
-    constexpr float g_pi = 3.14159265358979323846264338327950288f; // useful constant pi -> 3.141592...
-    constexpr float g_rad2Deg = 180.f / g_pi;
-    constexpr float g_deg2Rad = g_pi / 180.f;
+    inline constexpr float g_pi = 3.14159265358979323846264338327950288f; // useful constant pi -> 3.141592...
+    inline constexpr float g_rad2Deg = 180.f / g_pi;
+    inline constexpr float g_deg2Rad = g_pi / 180.f;
 
     inline float sin(const Radian& angle); // float result = sin(Radian{0.5});		// 0.479426
     inline float cos(const Radian& angle); // float result = sin(Degree{45});		// 0.707107			// this make use implicit conversion
