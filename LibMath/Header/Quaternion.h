@@ -328,13 +328,13 @@ namespace LibMath
          * \brief Gets a string representation of this quaternion
          * \return The string representation of this quaternion
          */
-        [[nodiscard]] constexpr std::string string() const;
+        [[nodiscard]] std::string string() const;
 
         /**
          * \brief Gets a long string representation of this quaternion
          * \return The verbose string representation of this quaternion
          */
-        [[nodiscard]] constexpr std::string stringLong() const;
+        [[nodiscard]] std::string stringLong() const;
     };
 
     /**

@@ -459,7 +459,7 @@ namespace LibMath
     }
 
     template <class T>
-    constexpr std::string TQuaternion<T>::string() const
+    std::string TQuaternion<T>::string() const
     {
         std::ostringstream oss;
 
@@ -469,7 +469,7 @@ namespace LibMath
     }
 
     template <class T>
-    constexpr std::string TQuaternion<T>::stringLong() const
+    std::string TQuaternion<T>::stringLong() const
     {
         std::ostringstream oss;
 
