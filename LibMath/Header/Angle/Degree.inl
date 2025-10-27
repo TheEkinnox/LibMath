@@ -191,7 +191,7 @@ namespace LibMath
     }
 
     template <>
-    constexpr Degree LibMath::abs(const Degree angle)
+    constexpr Degree abs(const Degree angle)
     {
         return Degree(abs(angle.raw()));
     }

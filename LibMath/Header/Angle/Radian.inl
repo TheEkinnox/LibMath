@@ -192,7 +192,7 @@ namespace LibMath
     }
 
     template <>
-    constexpr Radian LibMath::abs(const Radian angle)
+    constexpr Radian abs(const Radian angle)
     {
         return Radian(abs(angle.raw()));
     }
