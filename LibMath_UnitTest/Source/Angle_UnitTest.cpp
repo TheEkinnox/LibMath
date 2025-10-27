@@ -17,7 +17,7 @@ TEST_CASE("Degree", "[.all][angle]")
 
         // destructor
         {
-            LibMath::Degree temp;
+            [[maybe_unused]] LibMath::Degree temp;
         }
 
         // basic constructor
@@ -212,7 +212,7 @@ TEST_CASE("Radian", "[.all][angle]")
 
         // destructor
         {
-            LibMath::Radian temp;
+            [[maybe_unused]] LibMath::Radian temp;
         }
 
         // basic constructor

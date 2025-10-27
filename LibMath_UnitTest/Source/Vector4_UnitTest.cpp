@@ -24,7 +24,7 @@ TEST_CASE("Vector4", "[.all][vector][Vector4]")
 
         // destructor
         {
-            LibMath::Vector4 temp;
+            [[maybe_unused]] LibMath::Vector4 temp;
         }
 
         // basic constructor
