@@ -18,7 +18,7 @@ using namespace LibMath::Literal;
 #define CHECK_MATRIX(matrix, matrixGlm) \
     for (LibMath::length_t i = 0; i < (matrix).getRowCount(); i++) \
         for(LibMath::length_t j = 0; j < (matrix).getColumnCount(); j++) \
-            CHECK((matrix)[(matrix).getIndex(i, j)] == Catch::Approx((matrixGlm)[i][j]))
+            CHECK((matrix)[(matrix).getIndex(i, j)] == Catch::Approx((matrixGlm)[i][j]).scale(1))
 
 TEST_CASE("Matrix3", "[.all][matrix][Matrix3]")
 {
