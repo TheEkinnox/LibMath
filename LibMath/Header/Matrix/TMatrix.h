@@ -59,7 +59,7 @@ namespace LibMath
 
         constexpr bool operator==(const TMatrix& other) const;
         constexpr bool operator!=(const TMatrix& other) const;
-        constexpr bool isIdentity() const;
+        [[nodiscard]] constexpr bool isIdentity() const;
 
         static constexpr length_t getRowCount();
         static constexpr length_t getColumnCount();
