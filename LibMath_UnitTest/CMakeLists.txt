@@ -66,11 +66,7 @@ FetchContent_Declare(
 set(GLM_BUILD_TESTS OFF)
 set(GLM_TEST_ENABLE OFF)
 
-FetchContent_GetProperties(glm)
-if(NOT glm_POPULATED)
-	FetchContent_Populate(glm)
-	add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
-endif()
+FetchContent_MakeAvailable(glm)
 
 
 ###############################
