@@ -579,13 +579,13 @@ namespace LibMath
     }
 
     template <class T>
-    constexpr std::ostream& operator<<(std::ostream& stream, const TQuaternion<T>& quat)
+    std::ostream& operator<<(std::ostream& stream, const TQuaternion<T>& quat)
     {
         return stream << quat.string();
     }
 
     template <class T>
-    constexpr std::istream& operator>>(std::istream& stream, TQuaternion<T>& quat)
+    std::istream& operator>>(std::istream& stream, TQuaternion<T>& quat)
     {
         std::string line;
 

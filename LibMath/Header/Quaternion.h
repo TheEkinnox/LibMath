@@ -519,7 +519,7 @@ namespace LibMath
      * \return The modified stream
      */
     template <class T>
-    constexpr std::ostream& operator<<(std::ostream& stream, const TQuaternion<T>& quat);
+    std::ostream& operator<<(std::ostream& stream, const TQuaternion<T>& quat);
 
     /**
      * \brief Parses a string representation from an input stream into a quaternion
@@ -529,7 +529,7 @@ namespace LibMath
      * \return The modified stream
      */
     template <class T>
-    constexpr std::istream& operator>>(std::istream& stream, TQuaternion<T>& quat);
+    std::istream& operator>>(std::istream& stream, TQuaternion<T>& quat);
 
 #define QUAT_ALIAS_IMPL(DataType, Alias)                               \
     using Alias = TQuaternion<DataType>;                               \
